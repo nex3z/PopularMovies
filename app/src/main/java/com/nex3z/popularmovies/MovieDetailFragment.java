@@ -30,7 +30,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
     static final String DETAIL_URI = "URI";
-    private static final String MOVIE_SHARE_HASHTAG = " #SunshineApp";
+    private static final String MOVIE_SHARE_HASHTAG = " #PopularMoviesApp";
     private static final int DETAIL_LOADER = 0;
     private Uri mUri;
     private String mMovie;
@@ -137,8 +137,11 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
             String title = data.getString(COL_MOVIE_TITLE);
             mAppBarLayout.setTitle(title);
-            mReleaseDateView.setText(data.getString(COL_MOVIE_RELEASE_DATE));
-            mRateView.setText(data.getString(COL_MOVIE_VOTE_AVERAGE) + "/10");
+
+            String releaseDate = data.getString(COL_MOVIE_RELEASE_DATE);
+            Log.v(LOG_TAG, "onLoadFinished(): releaseDate = " + releaseDate);
+            mReleaseDateView.setText(getString(R.string.release_date) + releaseDate);
+            mRateView.setText(getString(R.string.rate) + data.getString(COL_MOVIE_VOTE_AVERAGE) + "/10");
             String overview = data.getString(COL_MOVIE_OVERVIEW);
             mOverviewView.setText(overview);
 

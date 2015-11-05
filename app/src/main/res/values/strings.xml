@@ -14,4 +14,8 @@
     <string name="pref_sort_label_popularity">Popularity</string>
     <string name="pref_sort_label_date">Release Date</string>
 
+    <string name="overview">Overview</string>
+    <string name="rate">Rate : </string>
+    <string name="release_date">Release Date : </string>
+
 </resources>
