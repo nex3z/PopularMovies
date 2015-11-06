@@ -78,10 +78,11 @@ public class MovieListActivity extends AppCompatActivity
         Log.v(LOG_TAG, "onResume(): sortBy = " + sortBy + " mSortBy = " + mSortBy);
 
         if (sortBy != null && !sortBy.equals(mSortBy)) {
-            MovieListFragment movieListFragmentf = (MovieListFragment)getFragmentManager().findFragmentById(R.id.movie_list);
-            if (movieListFragmentf != null) {
+            MovieListFragment movieListFragment =
+                    (MovieListFragment)getSupportFragmentManager().findFragmentById(R.id.movie_list);
+            if (movieListFragment != null) {
                 Log.v(LOG_TAG, "onResume(): Found DiscoveryFragment.");
-                movieListFragmentf.onSortPrefChanged(sortBy);
+                movieListFragment.onSortPrefChanged(sortBy);
             }
             mSortBy = sortBy;
         }
@@ -96,7 +97,7 @@ public class MovieListActivity extends AppCompatActivity
             MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setArguments(args);
 
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();
         } else {
