@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:columnWidth="150dp"
     android:numColumns="auto_fit"
-    android:verticalSpacing="0dp"
-    android:horizontalSpacing="0dp"
+    android:verticalSpacing="4dp"
+    android:horizontalSpacing="4dp"
     android:stretchMode="columnWidth"
     tools:context=".DiscoveryFragment"
     android:id="@+id/posters_grid">
