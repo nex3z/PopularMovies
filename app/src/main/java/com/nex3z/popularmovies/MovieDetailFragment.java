@@ -139,17 +139,24 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         if (data != null && data.moveToFirst()) {
             String backdropUrl = Utility.convertPosterImagePath(data.getString(COL_MOVIE_BACKDROP_PATH));
             Log.v(LOG_TAG, "onLoadFinished(): backdropUrl = " + backdropUrl);
-            Log.v(LOG_TAG, "mBackdropView =" + mBackdropView);
-            Picasso.with(getActivity()).load(backdropUrl).into(mBackdropView);
+
+            // mBackdropView might be null when in two pane mode.
+            if (mBackdropView != null) {
+                Picasso.with(getActivity()).load(backdropUrl).into(mBackdropView);
+            }
 
             String title = data.getString(COL_MOVIE_TITLE);
-            mAppBarLayout.setTitle(title);
+            // mAppBarLayout might be null when in two pane mode.
+            if (mAppBarLayout != null) {
+                mAppBarLayout.setTitle(title);
+            }
             mTitleView.setText(title);
 
             String releaseDate = data.getString(COL_MOVIE_RELEASE_DATE);
             Log.v(LOG_TAG, "onLoadFinished(): releaseDate = " + releaseDate);
             mReleaseDateView.setText(releaseDate);
             mRateView.setText(data.getString(COL_MOVIE_VOTE_AVERAGE) + "/10");
+
             String overview = data.getString(COL_MOVIE_OVERVIEW);
             mOverviewView.setText(overview);
 
