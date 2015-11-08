@@ -40,6 +40,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.COLUMN_ID,
             MovieContract.MovieEntry.COLUMN_BACKDROP_PATH,
+            MovieContract.MovieEntry.COLUMN_POSTER_PATH,
             MovieContract.MovieEntry.COLUMN_TITLE,
             MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
             MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE,
@@ -51,13 +52,17 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public static final int COL_MOVIE_ID = 0;
     public static final int COL_MOVIE_MOVIE_ID = 1;
     public static final int COL_MOVIE_BACKDROP_PATH = 2;
-    public static final int COL_MOVIE_TITLE = 3;
-    public static final int COL_MOVIE_RELEASE_DATE = 4;
-    public static final int COL_MOVIE_VOTE_AVERAGE = 5;
-    public static final int COL_MOVIE_OVERVIEW = 6;
+    public static final int COL_MOVIE_POSTER_PATH = 3;
+    public static final int COL_MOVIE_TITLE = 4;
+    public static final int COL_MOVIE_RELEASE_DATE = 5;
+    public static final int COL_MOVIE_VOTE_AVERAGE = 6;
+    public static final int COL_MOVIE_OVERVIEW = 7;
+
 
     CollapsingToolbarLayout mAppBarLayout;
     ImageView mBackdropView;
+    ImageView mPosterView;
+    private TextView mTitleView;
     private TextView mReleaseDateView;
     private TextView mRateView;
     private TextView mOverviewView;
@@ -87,9 +92,11 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         Log.v(LOG_TAG, "onCreateView()");
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
+        mTitleView = (TextView)rootView.findViewById(R.id.detail_title_textview);
         mReleaseDateView = (TextView)rootView.findViewById(R.id.detail_release_date_textview);
         mRateView = (TextView)rootView.findViewById(R.id.detail_rate_textview);
         mOverviewView = (TextView)rootView.findViewById(R.id.detail_overview_textview);
+        mPosterView = (ImageView)rootView.findViewById(R.id.detail_poster_imageview);
 
         Log.v(LOG_TAG, "onCreateView(): mBackdropView = " + mBackdropView);
 
@@ -130,20 +137,24 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            String imageUrl = Utility.convertPosterImagePath(data.getString(COL_MOVIE_BACKDROP_PATH));
-            Log.v(LOG_TAG, "onLoadFinished(): imageUrl = " + imageUrl);
+            String backdropUrl = Utility.convertPosterImagePath(data.getString(COL_MOVIE_BACKDROP_PATH));
+            Log.v(LOG_TAG, "onLoadFinished(): backdropUrl = " + backdropUrl);
             Log.v(LOG_TAG, "mBackdropView =" + mBackdropView);
-            Picasso.with(getActivity()).load(imageUrl).into(mBackdropView);
+            Picasso.with(getActivity()).load(backdropUrl).into(mBackdropView);
 
             String title = data.getString(COL_MOVIE_TITLE);
             mAppBarLayout.setTitle(title);
+            mTitleView.setText(title);
 
             String releaseDate = data.getString(COL_MOVIE_RELEASE_DATE);
             Log.v(LOG_TAG, "onLoadFinished(): releaseDate = " + releaseDate);
-            mReleaseDateView.setText(getString(R.string.release_date) + releaseDate);
-            mRateView.setText(getString(R.string.rate) + data.getString(COL_MOVIE_VOTE_AVERAGE) + "/10");
+            mReleaseDateView.setText(releaseDate);
+            mRateView.setText(data.getString(COL_MOVIE_VOTE_AVERAGE) + "/10");
             String overview = data.getString(COL_MOVIE_OVERVIEW);
             mOverviewView.setText(overview);
+
+            String posterUrl = Utility.convertPosterImagePath(data.getString(COL_MOVIE_POSTER_PATH));
+            Picasso.with(getContext()).load(posterUrl).into(mPosterView);
 
             mMovie = String.format("%s - %s", title, overview);
 
