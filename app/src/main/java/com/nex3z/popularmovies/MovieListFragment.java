@@ -100,6 +100,7 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
                     mCallbacks.onItemSelected(MovieContract.MovieEntry.buildMovieUri(
                             cursor.getLong(COL_MOVIE_MOVIE_ID)
                     ));
+                    setActivatedPosition(position);
                 }
                 mPosition = position;
             }
@@ -182,18 +183,20 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
         getLoaderManager().restartLoader(MOVIE_LOADER, bundle, this);
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-
-    //    @Override
-//    public void onViewCreated(View view, Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//        // Restore the previously serialized activated item position.
-//        if (savedInstanceState != null
-//                && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-//            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
-//        }
-//    }
+        Log.v(LOG_TAG, "onViewCreated(): savedInstanceState = " + savedInstanceState);
+        // Restore the previously serialized activated item position.
+        if (savedInstanceState != null
+                && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+            int position = savedInstanceState.getInt(STATE_ACTIVATED_POSITION);
+            Log.v(LOG_TAG, "onViewCreated(): STATE_ACTIVATED_POSITION  = " + position);
+            setActivatedPosition(position);
+            mGridView.smoothScrollToPosition(position);
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -215,18 +218,10 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
         mCallbacks = sDummyCallbacks;
     }
 
-//    @Override
-//    public void onListItemClick(ListView listView, View view, int position, long id) {
-//        super.onListItemClick(listView, view, position, id);
-//
-//        // Notify the active callbacks interface (the activity, if the
-//        // fragment is attached to one) that an item has been selected.
-//        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
-//    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Log.v(LOG_TAG, "onSaveInstanceState(): mActivatedPosition = " + mActivatedPosition);
         if (mActivatedPosition != ListView.INVALID_POSITION) {
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
@@ -237,21 +232,22 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
      * Turns on activate-on-click mode. When this mode is on, list items will be
      * given the 'activated' state when touched.
      */
-//    public void setActivateOnItemClick(boolean activateOnItemClick) {
-//        // When setting CHOICE_MODE_SINGLE, ListView will automatically
-//        // give items the 'activated' state when touched.
-//        getListView().setChoiceMode(activateOnItemClick
-//                ? ListView.CHOICE_MODE_SINGLE
-//                : ListView.CHOICE_MODE_NONE);
-//    }
+    public void setActivateOnItemClick(boolean activateOnItemClick) {
+        // When setting CHOICE_MODE_SINGLE, ListView will automatically
+        // give items the 'activated' state when touched.
+        mGridView.setChoiceMode(activateOnItemClick
+                ? GridView.CHOICE_MODE_SINGLE
+                : GridView.CHOICE_MODE_NONE);
+    }
 
-//    private void setActivatedPosition(int position) {
-//        if (position == ListView.INVALID_POSITION) {
-//            getListView().setItemChecked(mActivatedPosition, false);
-//        } else {
-//            getListView().setItemChecked(position, true);
-//        }
-//
-//        mActivatedPosition = position;
-//    }
+    private void setActivatedPosition(int position) {
+        Log.v(LOG_TAG, "setActivatedPosition(): position = " + position);
+        if (position == ListView.INVALID_POSITION) {
+            mGridView.setItemChecked(mActivatedPosition, false);
+        } else {
+            mGridView.setItemChecked(position, true);
+        }
+
+        mActivatedPosition = position;
+    }
 }

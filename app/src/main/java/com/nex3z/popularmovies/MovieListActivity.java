@@ -42,14 +42,10 @@ public class MovieListActivity extends AppCompatActivity
         if (findViewById(R.id.movie_detail_container) != null) {
             mTwoPane = true;
 
-            // In two-pane mode, list items should be given the
-            // 'activated' state when touched.
-//            ((MovieListFragment) getSupportFragmentManager()
-//                    .findFragmentById(R.id.movie_list))
-//                    .setActivateOnItemClick(true);
-
-
+            ((MovieListFragment) getSupportFragmentManager().findFragmentById(R.id.movie_list))
+                    .setActivateOnItemClick(true);
         }
+        Log.v(LOG_TAG, "onCreate(): mTwoPane = " + mTwoPane);
     }
 
     @Override
