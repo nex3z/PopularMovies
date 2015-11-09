@@ -22,7 +22,6 @@ import android.widget.ListView;
 
 import com.nex3z.popularmovies.data.MovieContract;
 import com.nex3z.popularmovies.service.MovieService;
-import com.nex3z.popularmovies.util.Utility;
 
 
 public class MovieListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
@@ -113,11 +112,6 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        String sortBy = Utility.getPreferredSortOrder(getActivity());
-        Bundle bundle = new Bundle();
-        bundle.putString("sort_by", sortBy);
-        getLoaderManager().restartLoader(MOVIE_LOADER, bundle, this);
-
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
         Log.v(LOG_TAG, "onActivityCreated(): Loader initiated.");
 
