@@ -28,13 +28,22 @@ public class MovieService extends IntentService {
     private static final String LOG_TAG = MovieService.class.getSimpleName();
 
     private static final String ACTION_FETCH_NEW_MOVIES = "com.nex3z.movie.service.action.FETCH_NEW_MOVIES";
+    private static final String ACTION_FETCH_VIDEO = "com.nex3z.movie.service.action.FETCH_VIDEO";
 
-    private static final String EXTRA_SORT_ORDER = "com.nex3z.movie.service.extra.PARAM1";
+    private static final String EXTRA_SORT_ORDER = "com.nex3z.movie.service.extra.SORT_ORDER";
+    private static final String EXTRA_MOVIE_ID = "com.nex3z.movie.service.extra.MOVIE_ID";
 
     public static void startActionFetchNewMovies(Context context, String param1) {
         Intent intent = new Intent(context, MovieService.class);
         intent.setAction(ACTION_FETCH_NEW_MOVIES);
         intent.putExtra(EXTRA_SORT_ORDER, param1);
+        context.startService(intent);
+    }
+
+    public static void startActionFetchVideo(Context context, long movieId) {
+        Intent intent = new Intent(context, MovieService.class);
+        intent.setAction(ACTION_FETCH_VIDEO);
+        intent.putExtra(EXTRA_MOVIE_ID, movieId);
         context.startService(intent);
     }
 
@@ -52,6 +61,10 @@ public class MovieService extends IntentService {
                 Log.v(LOG_TAG, "onHandleIntent(): Handle ACTION_FETCH_NEW_MOVIES");
                 final String sortOrder = intent.getStringExtra(EXTRA_SORT_ORDER);
                 handleActionFetchNewMovies(sortOrder);
+            } else if (ACTION_FETCH_VIDEO.equals(action)) {
+                Log.v(LOG_TAG, "onHandleIntent(): Handle ACTION_FETCH_VIDEO");
+                final long movieId = intent.getLongExtra(EXTRA_MOVIE_ID, 0);
+                handleActionFetchVideo(movieId);
             }
         }
     }
@@ -59,6 +72,11 @@ public class MovieService extends IntentService {
     private void handleActionFetchNewMovies(String param) {
         Log.v(LOG_TAG, "handleActionFetchNewMovies(): param = " + param);
         fetchNewMovies();
+    }
+
+    private void handleActionFetchVideo(long movieId) {
+        Log.v(LOG_TAG, "handleActionFetchVideo(): movieId = " + movieId);
+        fetchVideo(movieId);
     }
 
     private void fetchNewMovies() {
@@ -208,6 +226,67 @@ public class MovieService extends IntentService {
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
+        }
+    }
+
+    private void fetchVideo(long movieId) {
+        Log.v(LOG_TAG, "fetchVideo()");
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+
+        String movieJsonStr = null;
+        String sort = "popularity.desc";
+
+        try {
+            final String MOVIE_BASE_URL =
+                    "http://api.themoviedb.org/3/movie/"+ movieId + "/videos?";
+            final String API_KEY_PARAM = "api_key";
+
+            Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                    .appendQueryParameter(API_KEY_PARAM, this.getString(R.string.api_key))
+                    .build();
+
+            URL url = new URL(builtUri.toString());
+            Log.v(LOG_TAG, "fetchVideo(): URL = " + url);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
+                return;
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line + "\n");
+            }
+
+            if (buffer.length() == 0) {
+                return;
+            }
+            movieJsonStr = buffer.toString();
+            Log.v(LOG_TAG, "fetchVideo(): buffer = " + buffer);
+            // getMovieFromJson(movieJsonStr);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error ", e);
+//        } catch (JSONException e) {
+//            Log.e(LOG_TAG, e.getMessage(), e);
+//            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e(LOG_TAG, "Error closing stream", e);
+                }
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nex3z.popularmovies.data.MovieContract;
+import com.nex3z.popularmovies.service.MovieService;
 import com.nex3z.popularmovies.util.Utility;
 import com.squareup.picasso.Picasso;
 
@@ -78,8 +79,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(MovieDetailFragment.DETAIL_URI);
-            Log.v(LOG_TAG, "onCreate(): mUri = " + mUri);
-
+            Log.v(LOG_TAG, "onCreate(): mUri = " + mUri + "movie id = " + mUri.getLastPathSegment());
+            MovieService.startActionFetchVideo(getActivity(), Long.parseLong(mUri.getLastPathSegment()));
         }
 
         mAppBarLayout = (CollapsingToolbarLayout)getActivity().findViewById(R.id.toolbar_layout);
@@ -99,7 +100,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         mPosterView = (ImageView)rootView.findViewById(R.id.detail_poster_imageview);
 
         Log.v(LOG_TAG, "onCreateView(): mBackdropView = " + mBackdropView);
-
         return rootView;
     }
 
