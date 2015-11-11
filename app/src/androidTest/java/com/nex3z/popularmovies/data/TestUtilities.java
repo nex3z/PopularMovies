@@ -39,6 +39,21 @@ public class TestUtilities extends AndroidTestCase {
         return testValues;
     }
 
+    static ContentValues createVideoValues() {
+        ContentValues testValues = new ContentValues();
+        testValues.put(MovieContract.VideoEntry.COLUMN_MOVIE_KEY, 135397);
+        testValues.put(MovieContract.VideoEntry.COLUMN_VIDEO_ID, "54749bea9251414f41001b58");
+        testValues.put(MovieContract.VideoEntry.COLUMN_ISO_639_1, "en");
+        testValues.put(MovieContract.VideoEntry.COLUMN_KEY, "bvu-zlR5A8Q");
+        testValues.put(MovieContract.VideoEntry.COLUMN_NAME, "Teaser");
+        testValues.put(MovieContract.VideoEntry.COLUMN_SITE, "YouTube");
+        testValues.put(MovieContract.VideoEntry.COLUMN_SIZE, "1080");
+        testValues.put(MovieContract.VideoEntry.COLUMN_TYPE, "Teaser");
+
+        return testValues;
+    }
+
+
     static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
         for (Map.Entry<String, Object> entry : valueSet) {

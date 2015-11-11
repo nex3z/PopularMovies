@@ -106,4 +106,87 @@ public class TestDb extends AndroidTestCase {
         db.close();
     }
 
+    public void testCreateVideoDb() throws Throwable {
+        final HashSet<String> tableNameHashSet = new HashSet<String>();
+        tableNameHashSet.add(MovieContract.VideoEntry.TABLE_NAME);
+
+        mContext.deleteDatabase(MovieDbHelper.DATABASE_NAME);
+        SQLiteDatabase db = new MovieDbHelper(this.mContext).getWritableDatabase();
+        assertEquals(true, db.isOpen());
+
+        Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        assertTrue("Error: This means that the database has not been created correctly",
+                c.moveToFirst());
+
+        do {
+            Log.v(LOG_TAG, "testCreateVideoDb(): c.getString(0) = " + c.getString(0));
+            tableNameHashSet.remove(c.getString(0));
+        } while( c.moveToNext() );
+
+        assertTrue("Error: Your database was created without both the location entry and weather entry tables",
+                tableNameHashSet.isEmpty());
+
+        c = db.rawQuery("PRAGMA table_info(" + MovieContract.VideoEntry.TABLE_NAME + ")", null);
+        assertTrue("Error: This means that we were unable to query the database for table information.",
+                c.moveToFirst());
+
+        final HashSet<String> movieColumnHashSet = new HashSet<String>();
+        movieColumnHashSet.add(MovieContract.VideoEntry._ID);
+        movieColumnHashSet.add(MovieContract.VideoEntry.COLUMN_ISO_639_1);
+        movieColumnHashSet.add(MovieContract.VideoEntry.COLUMN_KEY);
+        movieColumnHashSet.add(MovieContract.VideoEntry.COLUMN_MOVIE_KEY);
+        movieColumnHashSet.add(MovieContract.VideoEntry.COLUMN_NAME);
+        movieColumnHashSet.add(MovieContract.VideoEntry.COLUMN_SITE);
+        movieColumnHashSet.add(MovieContract.VideoEntry.COLUMN_SIZE);
+        movieColumnHashSet.add(MovieContract.VideoEntry.COLUMN_TYPE);
+        movieColumnHashSet.add(MovieContract.VideoEntry.COLUMN_VIDEO_ID);
+
+        int columnNameIndex = c.getColumnIndex("name");
+        Log.v(LOG_TAG, "testCreateVideoDb(): columnNameIndex = " + columnNameIndex);
+
+        do {
+            String columnName = c.getString(columnNameIndex);
+            Log.v(LOG_TAG, "testCreateVideoDb(): columnName = " + columnName);
+            movieColumnHashSet.remove(columnName);
+        } while(c.moveToNext());
+
+        assertTrue("Error: The database doesn't contain all of the required location entry columns",
+                movieColumnHashSet.isEmpty());
+        db.close();
+    }
+
+    public void testVideoTable() throws Throwable {
+        MovieDbHelper dbHelper = new MovieDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = TestUtilities.createVideoValues();
+
+        long videoRowId;
+        videoRowId = db.insert(MovieContract.VideoEntry.TABLE_NAME, null, testValues);
+        Log.d(LOG_TAG, "testVideoTable(): videoRowId = " + videoRowId);
+        assertTrue(videoRowId != -1);
+
+        Cursor cursor = db.query(
+                MovieContract.VideoEntry.TABLE_NAME,  // Table to Query
+                null, // all columns
+                null, // Columns for the "where" clause
+                null, // Values for the "where" clause
+                null, // columns to group by
+                null, // columns to filter by row groups
+                null // sort order
+        );
+        Log.d(LOG_TAG, "testVideoTable(): cursor = " + cursor);
+
+        assertTrue("Error: No Records returned from location query", cursor.moveToFirst());
+
+        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
+                cursor, testValues);
+
+        assertFalse("Error: More than one record returned from location query",
+                cursor.moveToNext());
+
+        cursor.close();
+        db.close();
+    }
+
 }

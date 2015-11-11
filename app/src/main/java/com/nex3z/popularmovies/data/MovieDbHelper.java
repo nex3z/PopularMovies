@@ -5,11 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.nex3z.popularmovies.data.MovieContract.MovieEntry;
+import com.nex3z.popularmovies.data.MovieContract.VideoEntry;
 
 
 public class MovieDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     static final String DATABASE_NAME = "movie.db";
 
@@ -19,6 +20,19 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        final String SQL_CREATE_VIDEO_TABLE = "CREATE TABLE " + VideoEntry.TABLE_NAME + " (" +
+                VideoEntry._ID + " INTEGER PRIMARY KEY," +
+                VideoEntry.COLUMN_MOVIE_KEY + " INTEGER NOT NULL, " +
+                VideoEntry.COLUMN_VIDEO_ID + " TEXT NOT NULL, " +
+                VideoEntry.COLUMN_ISO_639_1 + " TEXT NOT NULL, " +
+                VideoEntry.COLUMN_KEY + " TEXT NOT NULL, " +
+                VideoEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                VideoEntry.COLUMN_SITE + " TEXT NOT NULL, " +
+                VideoEntry.COLUMN_SIZE + " TEXT NOT NULL, " +
+                VideoEntry.COLUMN_TYPE + " TEXT NOT NULL " +
+                " );";
+
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MovieEntry.TABLE_NAME + " (" +
                 MovieEntry._ID + " INTEGER PRIMARY KEY," +
                 MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
@@ -37,11 +51,13 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieEntry.COLUMN_ID + " INTEGER UNIQUE NOT NULL " +
                 " );";
 
+        db.execSQL(SQL_CREATE_VIDEO_TABLE);
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + VideoEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + MovieEntry.TABLE_NAME);
         onCreate(db);
     }

@@ -9,7 +9,9 @@ public class MovieContract {
 
     public static final String CONTENT_AUTHORITY = "com.nex3z.popularmovies";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
     public static final String PATH_MOVIE = "movie";
+    public static final String PATH_VIDEO = "video";
 
     public static final class MovieEntry implements BaseColumns {
 
@@ -46,6 +48,37 @@ public class MovieContract {
         }
 
         public static int getMovieIdFromUri(Uri uri) {
+            return Integer.parseInt(uri.getPathSegments().get(1));
+        }
+    }
+
+    public static final class VideoEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_VIDEO).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VIDEO;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VIDEO;
+
+        public static final String TABLE_NAME = "video";
+
+        public static final String COLUMN_MOVIE_KEY = "movie_id";
+        public static final String COLUMN_VIDEO_ID = "id";
+        public static final String COLUMN_ISO_639_1 = "iso_639_1";
+        public static final String COLUMN_KEY = "key";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_SITE = "site";
+        public static final String COLUMN_SIZE = "size";
+        public static final String COLUMN_TYPE = "type";
+
+
+        public static Uri buildVideoUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static int getVideoIdFromUri(Uri uri) {
             return Integer.parseInt(uri.getPathSegments().get(1));
         }
     }
