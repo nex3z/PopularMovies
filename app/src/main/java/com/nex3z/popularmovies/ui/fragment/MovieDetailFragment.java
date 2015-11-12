@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies;
+package com.nex3z.popularmovies.ui.fragment;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,7 +21,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nex3z.popularmovies.data.MovieContract;
+import com.nex3z.popularmovies.R;
+import com.nex3z.popularmovies.data.provider.MovieContract;
 import com.nex3z.popularmovies.service.MovieService;
 import com.nex3z.popularmovies.util.Utility;
 import com.squareup.picasso.Picasso;
@@ -30,7 +31,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
-    static final String DETAIL_URI = "URI";
+    public static  String DETAIL_URI = "URI";
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMoviesApp";
     private static final int DETAIL_LOADER = 0;
     private Uri mUri;

@@ -11,7 +11,7 @@
     
     -->
 
-    <fragment android:id="@+id/movie_list" android:name="com.nex3z.popularmovies.MovieListFragment"
+    <fragment android:id="@+id/movie_list" android:name="com.nex3z.popularmovies.ui.fragment.MovieListFragment"
         android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
         tools:layout="@android:layout/list_content" />
 

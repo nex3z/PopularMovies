@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.data;
+package com.nex3z.popularmovies.data.provider;
 
 import android.content.ComponentName;
 import android.content.ContentUris;
@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.nex3z.popularmovies.data.MovieContract.MovieEntry;
+import com.nex3z.popularmovies.data.provider.MovieContract.MovieEntry;
 
 
 public class TestProvider extends AndroidTestCase {

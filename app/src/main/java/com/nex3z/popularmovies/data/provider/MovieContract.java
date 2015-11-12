@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.data;
+package com.nex3z.popularmovies.data.provider;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;

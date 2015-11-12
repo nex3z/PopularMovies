@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies;
+package com.nex3z.popularmovies.ui.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.nex3z.popularmovies.ui.fragment.MovieDetailFragment;
+import com.nex3z.popularmovies.ui.fragment.MovieListFragment;
+import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.util.Utility;
 
 

@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies;
+package com.nex3z.popularmovies.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.nex3z.popularmovies.ui.fragment.MovieDetailFragment;
+import com.nex3z.popularmovies.R;
 
 
 public class MovieDetailActivity extends AppCompatActivity {

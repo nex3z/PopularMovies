@@ -8,7 +8,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.nex3z.popularmovies.R;
-import com.nex3z.popularmovies.data.MovieContract;
+import com.nex3z.popularmovies.data.provider.MovieContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;

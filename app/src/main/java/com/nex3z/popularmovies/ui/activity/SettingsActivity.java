@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies;
+package com.nex3z.popularmovies.ui.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -9,6 +9,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.nex3z.popularmovies.R;
 
 
 public class SettingsActivity extends PreferenceActivity

@@ -1,11 +1,11 @@
-package com.nex3z.popularmovies.data;
+package com.nex3z.popularmovies.data.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.nex3z.popularmovies.data.MovieContract.MovieEntry;
-import com.nex3z.popularmovies.data.MovieContract.VideoEntry;
+import com.nex3z.popularmovies.data.provider.MovieContract.MovieEntry;
+import com.nex3z.popularmovies.data.provider.MovieContract.VideoEntry;
 
 
 public class MovieDbHelper extends SQLiteOpenHelper {

@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.data;
+package com.nex3z.popularmovies.data.provider;
 
 import android.annotation.TargetApi;
 import android.content.ContentProvider;

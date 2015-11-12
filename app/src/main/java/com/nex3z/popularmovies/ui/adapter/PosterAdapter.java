@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies;
+package com.nex3z.popularmovies.ui.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 
-import com.nex3z.popularmovies.data.MovieContract;
+import com.nex3z.popularmovies.R;
+import com.nex3z.popularmovies.data.provider.MovieContract;
 import com.nex3z.popularmovies.util.Utility;
 import com.squareup.picasso.Picasso;
 

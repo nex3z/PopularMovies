@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies;
+package com.nex3z.popularmovies.ui.fragment;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -20,7 +20,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 
-import com.nex3z.popularmovies.data.MovieContract;
+import com.nex3z.popularmovies.ui.adapter.PosterAdapter;
+import com.nex3z.popularmovies.R;
+import com.nex3z.popularmovies.data.provider.MovieContract;
 import com.nex3z.popularmovies.service.MovieService;
 
 
@@ -176,7 +178,7 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
         mPosterAdapter.swapCursor(null);
     }
 
-    void onSortPrefChanged(String sortBy) {
+    public void onSortPrefChanged(String sortBy) {
         updateMovies();
         Bundle bundle = new Bundle();
         bundle.putString("sort_by", sortBy);
