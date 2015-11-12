@@ -36,6 +36,7 @@ public class PosterAdapter extends CursorAdapter {
         Log.v(LOG_TAG, "bindView(): imageUrl = " + imageUrl);
 
         ImageView iconView = (ImageView) view.findViewById(R.id.poster_image);
+        // Picasso.with(context).setIndicatorsEnabled(true);
         Picasso.with(context).load(imageUrl).into(iconView);
     }
 }
