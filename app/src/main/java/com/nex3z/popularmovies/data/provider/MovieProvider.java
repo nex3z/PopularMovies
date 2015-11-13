@@ -35,7 +35,7 @@ public class MovieProvider extends ContentProvider {
             MovieContract.MovieEntry.COLUMN_ID + " = ?";
 
     private static final String sVideoMovieSelection = MovieContract.VideoEntry.TABLE_NAME + "." +
-            MovieContract.VideoEntry.MOVIE_ID + " = ?";
+            MovieContract.VideoEntry.COLUMN_MOVIE_ID + " = ?";
 
     @Override
     public boolean onCreate() {

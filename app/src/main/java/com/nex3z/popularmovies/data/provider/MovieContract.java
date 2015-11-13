@@ -64,7 +64,7 @@ public class MovieContract {
 
         public static final String TABLE_NAME = "video";
 
-        public static final String MOVIE_ID = "movie_id";
+        public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_VIDEO_ID = "id";
         public static final String COLUMN_ISO_639_1 = "iso_639_1";
         public static final String COLUMN_KEY = "key";

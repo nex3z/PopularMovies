@@ -23,7 +23,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_VIDEO_TABLE = "CREATE TABLE " + VideoEntry.TABLE_NAME + " (" +
                 VideoEntry._ID + " INTEGER PRIMARY KEY," +
-                VideoEntry.MOVIE_ID + " INTEGER NOT NULL, " +
+                VideoEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
                 VideoEntry.COLUMN_VIDEO_ID + " TEXT NOT NULL, " +
                 VideoEntry.COLUMN_ISO_639_1 + " TEXT NOT NULL, " +
                 VideoEntry.COLUMN_KEY + " TEXT NOT NULL, " +

@@ -254,7 +254,7 @@ public class MovieService extends IntentService {
             Log.v(LOG_TAG, "fetchVideo(): current video = " + video);
 
             ContentValues videoValue = new ContentValues();
-            videoValue.put(MovieContract.VideoEntry.MOVIE_ID, movieId);
+            videoValue.put(MovieContract.VideoEntry.COLUMN_MOVIE_ID, movieId);
             videoValue.put(MovieContract.VideoEntry.COLUMN_VIDEO_ID, id);
             videoValue.put(MovieContract.VideoEntry.COLUMN_ISO_639_1, iso);
             videoValue.put(MovieContract.VideoEntry.COLUMN_KEY, key);
