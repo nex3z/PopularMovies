@@ -64,7 +64,7 @@ public class MovieContract {
 
         public static final String TABLE_NAME = "video";
 
-        public static final String COLUMN_MOVIE_KEY = "movie_id";
+        public static final String MOVIE_ID = "movie_id";
         public static final String COLUMN_VIDEO_ID = "id";
         public static final String COLUMN_ISO_639_1 = "iso_639_1";
         public static final String COLUMN_KEY = "key";
@@ -78,7 +78,11 @@ public class MovieContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static int getVideoIdFromUri(Uri uri) {
+        public static String getVideoIdFromUri(Uri uri) {
+            return uri.getPathSegments().get(2);
+        }
+
+        public static int getMovieIdFromUri(Uri uri) {
             return Integer.parseInt(uri.getPathSegments().get(1));
         }
     }

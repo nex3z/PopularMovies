@@ -12,7 +12,7 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.nex3z.popularmovies.data.provider.MovieContract.MovieEntry;
-
+import com.nex3z.popularmovies.data.provider.MovieContract.VideoEntry;
 
 public class TestProvider extends AndroidTestCase {
 
@@ -54,12 +54,12 @@ public class TestProvider extends AndroidTestCase {
         try {
             ProviderInfo providerInfo = pm.getProviderInfo(componentName, 0);
 
-            assertEquals("Error: WeatherProvider registered with authority: " +
+            assertEquals("Error: MovieProvider registered with authority: " +
                             providerInfo.authority +
                             " instead of authority: " + MovieContract.CONTENT_AUTHORITY,
                     providerInfo.authority, MovieContract.CONTENT_AUTHORITY);
         } catch (PackageManager.NameNotFoundException e) {
-            assertTrue("Error: WeatherProvider not registered at " + mContext.getPackageName(),
+            assertTrue("Error: MovieProvider not registered at " + mContext.getPackageName(),
                     false);
         }
     }
@@ -69,7 +69,7 @@ public class TestProvider extends AndroidTestCase {
         String type = mContext.getContentResolver().getType(MovieEntry.CONTENT_URI);
         Log.v(LOG_TAG, "testGetType(): uri = " + MovieEntry.CONTENT_URI + ", type = " + type);
         // vnd.android.cursor.dir/com.nex3z.movie/movie
-        assertEquals("Error: the WeatherEntry CONTENT_URI should return WeatherEntry.CONTENT_TYPE",
+        assertEquals("Error: the MovieEntry CONTENT_URI should return MovieEntry.CONTENT_TYPE",
                 MovieEntry.CONTENT_TYPE, type);
 
         long testId = 9527L;
@@ -77,19 +77,19 @@ public class TestProvider extends AndroidTestCase {
         type = mContext.getContentResolver().getType(MovieEntry.buildMovieUri(testId));
         Log.v(LOG_TAG, "testGetType(): uri = " + MovieEntry.buildMovieUri(testId) + ", type = " + type);
         // vnd.android.cursor.item/com.nex3z.movie/movie
-        assertEquals("Error: the WeatherEntry CONTENT_URI with location should return WeatherEntry.CONTENT_TYPE",
+        assertEquals("Error: the MovieEntry CONTENT_URI with location should return MovieEntry.CONTENT_TYPE",
                 MovieEntry.CONTENT_ITEM_TYPE, type);
     }
 
-    public void testBasicWeatherQuery() {
+    public void testBasicMovieQuery() {
         MovieDbHelper dbHelper = new MovieDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues testValues = TestUtilities.createMovieValues();
 
         long movieRowId = db.insert(MovieEntry.TABLE_NAME, null, testValues);
-        Log.v(LOG_TAG, "testBasicWeatherQuery(): movieRowId = " + String.valueOf(movieRowId));
-        assertTrue("Unable to Insert WeatherEntry into the Database", movieRowId != -1);
+        Log.v(LOG_TAG, "testBasicMovieQuery(): movieRowId = " + String.valueOf(movieRowId));
+        assertTrue("Unable to Insert MovieEntry into the Database", movieRowId != -1);
 
         db.close();
 
@@ -101,7 +101,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
 
-        TestUtilities.validateCursor("testBasicWeatherQuery", movieCursor, testValues);
+        TestUtilities.validateCursor("testBasicMovieQuery", movieCursor, testValues);
     }
 
     public void testUpdateMovie() {
@@ -143,14 +143,59 @@ public class TestProvider extends AndroidTestCase {
                 null    // sort order
         );
 
-        TestUtilities.validateCursor("testUpdateLocation.  Error validating location entry update.",
+        TestUtilities.validateCursor("testUpdateLocation.  Error validating entry update.",
+                cursor, updatedValues);
+
+        cursor.close();
+    }
+
+    public void testUpdateVideo() {
+        ContentValues values = TestUtilities.createVideoValues();
+
+        Uri videoUri = mContext.getContentResolver().
+                insert(VideoEntry.CONTENT_URI, values);
+        long movieRowId = ContentUris.parseId(videoUri);
+        Log.v(LOG_TAG, "testUpdateVideo(): videoUri = " + videoUri
+                + ", movieRowId = " + String.valueOf(movieRowId));
+
+        assertTrue(movieRowId != -1);
+
+        ContentValues updatedValues = new ContentValues(values);
+        updatedValues.put(VideoEntry._ID, movieRowId);
+        updatedValues.put(VideoEntry.COLUMN_SITE, "404");
+
+        Cursor movieCursor = mContext.getContentResolver().query(VideoEntry.CONTENT_URI, null, null, null, null);
+        Log.v(LOG_TAG, "testUpdateVideo(): movieCursor =" + movieCursor);
+
+        TestUtilities.TestContentObserver tco = TestUtilities.getTestContentObserver();
+        movieCursor.registerContentObserver(tco);
+
+        int count = mContext.getContentResolver().update(
+                VideoEntry.CONTENT_URI, updatedValues, VideoEntry._ID + "= ?",
+                new String[] { Long.toString(movieRowId)});
+        assertEquals(count, 1);
+
+        tco.waitForNotificationOrFail();
+
+        movieCursor.unregisterContentObserver(tco);
+        movieCursor.close();
+
+        Cursor cursor = mContext.getContentResolver().query(
+                VideoEntry.CONTENT_URI,
+                null,
+                VideoEntry._ID + " = " + movieRowId,
+                null,
+                null
+        );
+
+        TestUtilities.validateCursor("testUpdateLocation.  Error validating entry update.",
                 cursor, updatedValues);
 
         cursor.close();
     }
 
     public void testDeleteRecords() {
-        testBasicWeatherQuery();
+        testBasicMovieQuery();
 
         TestUtilities.TestContentObserver movieObserver = TestUtilities.getTestContentObserver();
         mContext.getContentResolver().registerContentObserver(MovieEntry.CONTENT_URI, true, movieObserver);

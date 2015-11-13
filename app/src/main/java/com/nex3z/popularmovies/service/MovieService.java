@@ -8,7 +8,10 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.nex3z.popularmovies.R;
+import com.nex3z.popularmovies.app.App;
+import com.nex3z.popularmovies.data.model.Video;
 import com.nex3z.popularmovies.data.provider.MovieContract;
+import com.nex3z.popularmovies.data.rest.model.VideoResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -222,14 +225,57 @@ public class MovieService extends IntentService {
                 this.getContentResolver()
                         .bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
             }
-            Log.d(LOG_TAG, "Write database Complete. " + cVVector.size() + " Inserted");
+            Log.d(LOG_TAG, "getMovieFromJson(): Write database Complete. "
+                    + cVVector.size() + " Inserted");
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
     }
 
+
     private void fetchVideo(long movieId) {
+        VideoResponse videoResponse = App.getRestClient().getVideoService().getVideos(movieId);
+        Log.v(LOG_TAG, "fetchVideo(): videoResponse: movieId = " + videoResponse.movieId
+                + ", video num = " + videoResponse.videos.size());
+
+        Vector<ContentValues> cVVector = new Vector<ContentValues>(videoResponse.videos.size());
+
+        for (int i = 0; i < videoResponse.videos.size(); i++) {
+            Video video = videoResponse.videos.get(i);
+            String id = video.getId();
+            String iso = video.getIso();
+            String key = video.getKey();
+            String name = video.getName();
+            String site = video.getSite();
+            String size = video.getSize();
+            String type = video.getType();
+
+            Log.v(LOG_TAG, "fetchVideo(): current video = " + video);
+
+            ContentValues videoValue = new ContentValues();
+            videoValue.put(MovieContract.VideoEntry.MOVIE_ID, movieId);
+            videoValue.put(MovieContract.VideoEntry.COLUMN_VIDEO_ID, id);
+            videoValue.put(MovieContract.VideoEntry.COLUMN_ISO_639_1, iso);
+            videoValue.put(MovieContract.VideoEntry.COLUMN_KEY, key);
+            videoValue.put(MovieContract.VideoEntry.COLUMN_NAME, name);
+            videoValue.put(MovieContract.VideoEntry.COLUMN_SITE, site);
+            videoValue.put(MovieContract.VideoEntry.COLUMN_SIZE, size);
+            videoValue.put(MovieContract.VideoEntry.COLUMN_TYPE, type);
+
+            cVVector.add(videoValue);
+        }
+
+        if (cVVector.size() > 0) {
+            ContentValues[] cvArray = new ContentValues[cVVector.size()];
+            cVVector.toArray(cvArray);
+            this.getContentResolver()
+                    .bulkInsert(MovieContract.VideoEntry.CONTENT_URI, cvArray);
+        }
+        Log.d(LOG_TAG, "fetchVideo(): Write video database Complete. " + cVVector.size() + " Inserted");
+
+    }
+    private void fetchVideo2(long movieId) {
         Log.v(LOG_TAG, "fetchVideo()");
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;

@@ -10,7 +10,7 @@ import com.nex3z.popularmovies.data.provider.MovieContract.VideoEntry;
 
 public class MovieDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     static final String DATABASE_NAME = "movie.db";
 
@@ -23,14 +23,15 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_VIDEO_TABLE = "CREATE TABLE " + VideoEntry.TABLE_NAME + " (" +
                 VideoEntry._ID + " INTEGER PRIMARY KEY," +
-                VideoEntry.COLUMN_MOVIE_KEY + " INTEGER NOT NULL, " +
+                VideoEntry.MOVIE_ID + " INTEGER NOT NULL, " +
                 VideoEntry.COLUMN_VIDEO_ID + " TEXT NOT NULL, " +
                 VideoEntry.COLUMN_ISO_639_1 + " TEXT NOT NULL, " +
                 VideoEntry.COLUMN_KEY + " TEXT NOT NULL, " +
                 VideoEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 VideoEntry.COLUMN_SITE + " TEXT NOT NULL, " +
                 VideoEntry.COLUMN_SIZE + " TEXT NOT NULL, " +
-                VideoEntry.COLUMN_TYPE + " TEXT NOT NULL " +
+                VideoEntry.COLUMN_TYPE + " TEXT NOT NULL, " +
+                "UNIQUE (" + VideoEntry.COLUMN_VIDEO_ID + ") ON CONFLICT REPLACE " +
                 " );";
 
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MovieEntry.TABLE_NAME + " (" +
