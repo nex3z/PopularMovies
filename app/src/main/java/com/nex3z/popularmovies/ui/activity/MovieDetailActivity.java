@@ -16,6 +16,7 @@ import android.view.MenuItem;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.ui.fragment.MovieDetailFragment;
+import com.nex3z.popularmovies.ui.fragment.VideoListFragment;
 
 
 public class MovieDetailActivity extends AppCompatActivity {
@@ -92,7 +93,13 @@ public class MovieDetailActivity extends AppCompatActivity {
                     return fragment;
                 }
                 case 1: {
+                    Bundle arguments = new Bundle();
+                    arguments.putParcelable(VideoListFragment.DETAIL_URI, mDetailUri);
 
+                    VideoListFragment fragment = new VideoListFragment();
+                    fragment.setArguments(arguments);
+
+                    return fragment;
                 }
                 default:
                     return new MovieDetailFragment();

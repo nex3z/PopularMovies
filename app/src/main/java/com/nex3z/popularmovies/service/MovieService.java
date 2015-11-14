@@ -34,7 +34,7 @@ public class MovieService extends IntentService {
     private static final String ACTION_FETCH_VIDEO = "com.nex3z.movie.service.action.FETCH_VIDEO";
 
     private static final String EXTRA_SORT_ORDER = "com.nex3z.movie.service.extra.SORT_ORDER";
-    private static final String EXTRA_MOVIE_ID = "com.nex3z.movie.service.extra.MOVIE_ID";
+    private static final String EXTRA_MOVIE_ID = "com.nex3z.movie.service.extra.DETAIL_URI";
 
     public static void startActionFetchNewMovies(Context context, String param1) {
         Intent intent = new Intent(context, MovieService.class);
