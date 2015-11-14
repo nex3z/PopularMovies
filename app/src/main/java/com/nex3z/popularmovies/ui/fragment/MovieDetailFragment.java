@@ -150,6 +150,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             // mAppBarLayout might be null when in two pane mode.
             if (mAppBarLayout != null) {
                 mAppBarLayout.setTitle(title);
+                //mAppBarLayout.setCollapsedTitleGravity(Gravity.START);
+                //mAppBarLayout.setExpandedTitleGravity(Gravity.START);
             }
             mTitleView.setText(title);
 

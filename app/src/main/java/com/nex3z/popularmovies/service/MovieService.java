@@ -235,6 +235,7 @@ public class MovieService extends IntentService {
 
 
     private void fetchVideo(long movieId) {
+        // TODO: handle invalid API key.
         VideoResponse videoResponse = App.getRestClient().getVideoService().getVideos(movieId);
         Log.v(LOG_TAG, "fetchVideo(): videoResponse: movieId = " + videoResponse.movieId
                 + ", video num = " + videoResponse.videos.size());
