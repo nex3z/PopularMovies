@@ -132,6 +132,7 @@ public class VideoListFragment extends Fragment implements LoaderManager.LoaderC
         switch (site) {
             case Video.YOUTUBE: {
                 uri = Uri.parse(YOUTUBE_BASE_URL + key);
+                break;
             }
             default: {
                 uri = Uri.parse(YOUTUBE_BASE_URL + key);

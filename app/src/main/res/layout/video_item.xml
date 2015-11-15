@@ -8,21 +8,26 @@
     card_view:cardUseCompatPadding="true"
     android:elevation="2dp"
     card_view:cardCornerRadius="2dp">
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/listPreferredItemHeight">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:adjustViewBounds="true"
+            android:paddingLeft="16dp"
             android:src="@drawable/placeholdervideoicon"
             android:id="@+id/video_icon_image"/>
 
         <TextView
             android:fontFamily="sans-serif"
-            android:textSize="24sp"
+            android:textSize="16sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -5,15 +5,18 @@
     android:layout_height="match_parent"
     android:layout_gravity="fill_vertical"
     android:fillViewport="true">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/video_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null" />
-</LinearLayout>
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/video_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null" />
+
+    </LinearLayout>
+
 </android.support.v4.widget.NestedScrollView>
