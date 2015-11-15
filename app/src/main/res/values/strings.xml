@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
+    <string name="app_name">Popular Movies</string>
     <string name="title_movie_detail">Movie Detail</string>
     <string name="tab_movie_detail">Detail</string>
     <string name="tab_movie_video">Video</string>

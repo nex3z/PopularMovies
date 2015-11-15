@@ -11,6 +11,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,6 +21,8 @@ import com.nex3z.popularmovies.ui.fragment.VideoListFragment;
 
 
 public class MovieDetailActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = MovieDetailActivity.class.getSimpleName();
 
     Uri mDetailUri;
 
@@ -39,6 +42,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             mDetailUri = getIntent().getData();
+            Log.v(LOG_TAG, "onCreate(): mDetailUri = " + mDetailUri);
 //            Bundle arguments = new Bundle();
 //            arguments.putParcelable(MovieDetailFragment.DETAIL_URI, getIntent().getData());
 //
@@ -115,5 +119,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return tabTitles[position];
         }
+    }
+
+    void setToolbarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 }

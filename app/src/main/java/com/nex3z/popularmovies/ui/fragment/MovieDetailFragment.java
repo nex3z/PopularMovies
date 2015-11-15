@@ -154,6 +154,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                 //mAppBarLayout.setExpandedTitleGravity(Gravity.START);
             }
             mTitleView.setText(title);
+            getActivity().setTitle(title);
 
             String releaseDate = data.getString(COL_MOVIE_RELEASE_DATE);
             Log.v(LOG_TAG, "onLoadFinished(): releaseDate = " + releaseDate);
