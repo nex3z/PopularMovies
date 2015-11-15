@@ -78,6 +78,8 @@ public class Video {
         this.type = type;
     }
 
+    public static final String YOUTUBE = "YouTube";
+
     @Override
     public String toString() {
         return "Video: id = " + id + ", iso = " + iso + ", key = " + key + "name = " + name

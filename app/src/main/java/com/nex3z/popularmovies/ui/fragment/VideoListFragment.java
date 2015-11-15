@@ -1,5 +1,6 @@
 package com.nex3z.popularmovies.ui.fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,9 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.nex3z.popularmovies.R;
+import com.nex3z.popularmovies.data.model.Video;
 import com.nex3z.popularmovies.data.provider.MovieContract;
 import com.nex3z.popularmovies.service.MovieService;
 import com.nex3z.popularmovies.ui.adapter.VideoAdapter;
@@ -33,11 +36,13 @@ public class VideoListFragment extends Fragment implements LoaderManager.LoaderC
             MovieContract.VideoEntry._ID,
             MovieContract.VideoEntry.COLUMN_KEY,
             MovieContract.VideoEntry.COLUMN_NAME,
+            MovieContract.VideoEntry.COLUMN_SITE
     };
 
     static final int COL_VIDEO_ID = 0;
     static final int COL_VIDEO_KEY = 1;
     static final int COL_VIDEO_NAME = 2;
+    static final int COL_VIDEO_SITE = 3;
 
     private static final int VIDEO_LOADER = 0;
 
@@ -66,7 +71,16 @@ public class VideoListFragment extends Fragment implements LoaderManager.LoaderC
         mListView = (ListView) rootView.findViewById(R.id.video_list);
         mListView.setAdapter(mVideoAdapter);
 
-
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                Log.v(LOG_TAG, "onItemClick(): position = " + String.valueOf(position) + ", cursor = " + cursor);
+                if (cursor != null) {
+                    playVideo(cursor.getString(COL_VIDEO_SITE), cursor.getString(COL_VIDEO_KEY));
+                }
+            }
+        });
 
         return rootView;
     }
@@ -108,5 +122,23 @@ public class VideoListFragment extends Fragment implements LoaderManager.LoaderC
     public void onLoaderReset(Loader<Cursor> loader) {
         Log.v(LOG_TAG, "onLoaderReset()");
         mVideoAdapter.swapCursor(null);
+    }
+
+    private void playVideo(String site, String key) {
+        final String YOUTUBE_BASE_URL = "http://www.youtube.com/watch?v=";
+        Log.v(LOG_TAG, "playVideo(): site = " + site + ", key = " + key);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = null;
+        switch (site) {
+            case Video.YOUTUBE: {
+                uri = Uri.parse(YOUTUBE_BASE_URL + key);
+            }
+            default: {
+                uri = Uri.parse(YOUTUBE_BASE_URL + key);
+            }
+        }
+
+        intent.setData(uri);
+        startActivity(intent);
     }
 }
