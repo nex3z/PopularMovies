@@ -25,15 +25,32 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
 
-        Cursor cursor = mContext.getContentResolver().query(
+        mContext.getContentResolver().delete(
+                VideoEntry.CONTENT_URI,
+                null,
+                null
+        );
+
+        Cursor movieCursor = mContext.getContentResolver().query(
                 MovieEntry.CONTENT_URI,
                 null,
                 null,
                 null,
                 null
         );
-        assertEquals("Error: Records not deleted from Weather table during delete", 0, cursor.getCount());
-        cursor.close();
+        assertEquals("Error: Records not deleted from Weather table during delete", 0, movieCursor.getCount());
+
+        Cursor videoCursor = mContext.getContentResolver().query(
+                VideoEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        assertEquals("Error: Records not deleted from Weather table during delete", 0, videoCursor.getCount());
+
+        movieCursor.close();
+        videoCursor.close();
     }
 
     public void deleteAllRecords() {
@@ -263,5 +280,38 @@ public class TestProvider extends AndroidTestCase {
                     cursor, bulkInsertContentValues[i]);
         }
         cursor.close();
+    }
+
+    public void testBasicVideoQuery() {
+        MovieDbHelper dbHelper = new MovieDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = TestUtilities.createVideoValues(1234, "abcd");
+        ContentValues testValues2 = TestUtilities.createVideoValues(5678, "efgh");
+
+
+        long movieRowId = db.insert(VideoEntry.TABLE_NAME, null, testValues);
+        Log.v(LOG_TAG, "testBasicVideoQuery(): movieRowId = " + String.valueOf(movieRowId));
+        assertTrue("Unable to Insert MovieEntry into the Database", movieRowId != -1);
+
+        movieRowId = db.insert(VideoEntry.TABLE_NAME, null, testValues2);
+        Log.v(LOG_TAG, "testBasicVideoQuery(): movieRowId = " + String.valueOf(movieRowId));
+        assertTrue("Unable to Insert MovieEntry into the Database", movieRowId != -1);
+
+        db.close();
+
+        Uri uri = MovieContract.VideoEntry.CONTENT_URI.buildUpon().appendPath("5678").build();
+        Log.v(LOG_TAG, "testBasicVideoQuery(): uri = " + uri);
+        Cursor videoCursor = mContext.getContentResolver().query(
+                uri,
+                null,
+                null,
+                null,
+                null
+        );
+
+        Log.v(LOG_TAG, "testBasicVideoQuery(): videoCursor.getCount() = " + videoCursor.getCount());
+
+        TestUtilities.validateCursor("testBasicMovieQuery", videoCursor, testValues2);
     }
 }

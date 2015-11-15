@@ -25,10 +25,16 @@ public class MovieProvider extends ContentProvider {
     //static final int VIDEO_WITH_MOVIE_AND_ID = 202;
 
     private static final SQLiteQueryBuilder sMovieQueryBuilder;
+    private static final SQLiteQueryBuilder sVideoQueryBuilder;
 
     static{
         sMovieQueryBuilder = new SQLiteQueryBuilder();
         sMovieQueryBuilder.setTables(MovieContract.MovieEntry.TABLE_NAME);
+    }
+
+    static{
+        sVideoQueryBuilder = new SQLiteQueryBuilder();
+        sVideoQueryBuilder.setTables(MovieContract.VideoEntry.TABLE_NAME);
     }
 
     private static final String sMovieIdSelection = MovieContract.MovieEntry.TABLE_NAME + "." +
@@ -125,15 +131,15 @@ public class MovieProvider extends ContentProvider {
         Log.v(LOG_TAG, "getVideoByMovieId(): uri = " + uri + ", projection = " + projection
                 + ", sortOrder = " + sortOrder);
 
-        int movieId = MovieContract.VideoEntry.getMovieIdFromUri(uri);
+        long movieId = MovieContract.VideoEntry.getMovieIdFromUri(uri);
         Log.v(LOG_TAG, "getVideoByMovieId(): movieId = " + movieId);
 
-        String[] selectionArgs = new String[]{Integer.toString(movieId)};
+        String[] selectionArgs = new String[]{Long.toString(movieId)};
         String selection = sVideoMovieSelection;
-        Log.v(LOG_TAG, "getVideoByMovieId(): selectionArgs = " + selectionArgs
+        Log.v(LOG_TAG, "getVideoByMovieId(): selectionArgs = " + selectionArgs[0]
                 + ", selection = " + selection);
 
-        return sMovieQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sVideoQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,

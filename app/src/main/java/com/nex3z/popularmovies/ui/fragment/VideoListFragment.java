@@ -86,13 +86,14 @@ public class VideoListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = MovieContract.VideoEntry.CONTENT_URI;
+        Uri uri = MovieContract.VideoEntry.CONTENT_URI.buildUpon()
+                .appendPath(String.valueOf(mMovieId)).build();
         Log.v(LOG_TAG, "onCreateLoader(): uri = " + uri);
 
         return new CursorLoader(getActivity(),
                 uri,
                 VIDEO_COLUMNS,
-                MovieContract.VideoEntry.COLUMN_MOVIE_ID + " = " + mMovieId,
+                null,
                 null,
                 null);
     }
