@@ -3,23 +3,30 @@ package com.nex3z.popularmovies.data.model;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.Transient;
 
 @Parcel
 public class Video {
 
+    @Transient
     private String id;
 
-    @SerializedName("iso_639_1")
+    @SerializedName("iso_639_1") @Transient
     private String iso;
 
+    @Transient
     private String key;
 
+    @Transient
     private String name;
 
+    @Transient
     private String site;
 
+    @Transient
     private String size;
 
+    @Transient
     private String type;
 
     public String getId() {
