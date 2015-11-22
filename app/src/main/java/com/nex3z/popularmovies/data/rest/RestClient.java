@@ -3,6 +3,7 @@ package com.nex3z.popularmovies.data.rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nex3z.popularmovies.BuildConfig;
+import com.nex3z.popularmovies.data.rest.service.MovieService;
 import com.nex3z.popularmovies.data.rest.service.VideoService;
 
 import retrofit.RequestInterceptor;
@@ -10,10 +11,10 @@ import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
 public class RestClient {
-
     private static final String BASE_URL = "http://api.themoviedb.org";
 
     private VideoService videoService;
+    private MovieService movieService;
 
     public RestClient() {
         Gson gson = new GsonBuilder().create();
@@ -30,10 +31,14 @@ public class RestClient {
                 .build();
 
         videoService = restAdapter.create(VideoService.class);
+        movieService = restAdapter.create(MovieService.class);
     }
 
     public VideoService getVideoService() {
         return videoService;
     }
 
+    public MovieService getMovieService() {
+        return movieService;
+    }
 }

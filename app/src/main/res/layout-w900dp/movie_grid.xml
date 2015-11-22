@@ -1,28 +1,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="0dp"
-    android:layout_marginRight="0dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".MovieListActivity">
-
-    <!--
-    This layout is a two-pane layout for the Movies
-    master/detail flow.
-    
-    -->
+    tools:context=".ui.activity.MovieGridActivity">
 
     <fragment
         android:id="@+id/movie_list"
-        android:name="com.nex3z.popularmovies.ui.fragment.MovieListFragment"
+        android:name="com.nex3z.popularmovies.ui.fragment.MovieGridFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"
-        tools:layout="@android:layout/list_content" />
+        tools:layout="@layout/fragment_movie_grid" />
 
     <FrameLayout
         android:id="@+id/movie_detail_container"

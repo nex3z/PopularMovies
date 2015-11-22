@@ -6,7 +6,6 @@ import android.util.Log;
 import com.nex3z.popularmovies.data.rest.RestClient;
 
 public class App extends Application{
-
     private static final String LOG_TAG = App.class.getSimpleName();
 
     private static RestClient restClient;
