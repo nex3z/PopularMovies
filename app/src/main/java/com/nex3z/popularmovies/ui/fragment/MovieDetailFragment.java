@@ -15,6 +15,7 @@ import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.app.App;
 import com.nex3z.popularmovies.data.model.Movie;
 import com.nex3z.popularmovies.data.rest.model.VideoResponse;
+import com.nex3z.popularmovies.data.rest.service.VideoService;
 import com.nex3z.popularmovies.util.ImageUtility;
 import com.squareup.picasso.Picasso;
 
@@ -22,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -88,7 +88,7 @@ public class MovieDetailFragment extends Fragment {
 
     private void updateDetail() {
         mTitleView.setText(mMovie.getTitle());
-        mRateView.setText(mMovie.getReleaseDate());
+        mReleaseDateView.setText(mMovie.getReleaseDate());
         mRateView.setText(mMovie.getVoteAverage() + "/10");
         mOverviewView.setText(mMovie.getOverview());
 
@@ -100,18 +100,17 @@ public class MovieDetailFragment extends Fragment {
 
     public void fetchVideos(long movieId) {
         Log.v(LOG_TAG, "fetchVideos(): movieId = " + movieId);
-        Observable<VideoResponse> videoResponse = App.getRestClient()
-                .getVideoService()
-                .getVideos(movieId)
+        VideoService service = App.getRestClient().getVideoService();
+        service.getVideos(movieId)
                 .timeout(5, TimeUnit.SECONDS)
-                .retry(2);
-        videoResponse.subscribeOn(Schedulers.io())
+                .retry(2)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> processResponse(response));
+                .subscribe(response -> processVideoResponse(response));
     }
 
-    private void processResponse(VideoResponse response) {
-        Log.v(LOG_TAG, "processResponse(): size = " + response.getVideos().size());
+    private void processVideoResponse(VideoResponse response) {
+        Log.v(LOG_TAG, "processVideoResponse(): size = " + response.getVideos().size());
 
     }
 }

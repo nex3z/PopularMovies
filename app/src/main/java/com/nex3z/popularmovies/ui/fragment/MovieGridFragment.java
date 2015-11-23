@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -46,14 +45,10 @@ public class MovieGridFragment extends Fragment {
     @Bind(R.id.movie_grid) RecyclerView mMovieRecyclerView;
 
     public interface Callbacks {
-        public void onItemSelected(Movie movie);
+        void onItemSelected(Movie movie);
     }
 
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(Movie movie) {
-        }
-    };
+    private static Callbacks sDummyCallbacks = (movie) -> {};
 
     public MovieGridFragment() { }
 
@@ -77,14 +72,11 @@ public class MovieGridFragment extends Fragment {
         setupRecyclerView(mMovieRecyclerView);
 
         mPosterAdapter = new PosterAdapter(getContext(), mMovies);
-        mPosterAdapter.setOnItemClickListener(new PosterAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Log.v(LOG_TAG, "onItemClick(): position = " + position);
-                Movie movie = mMovies.get(position);
-                if (movie != null) {
-                    mCallbacks.onItemSelected(movie);
-                }
+        mPosterAdapter.setOnItemClickListener((view, position) -> {
+            Log.v(LOG_TAG, "onItemClick(): position = " + position);
+            Movie movie = mMovies.get(position);
+            if (movie != null) {
+                mCallbacks.onItemSelected(movie);
             }
         });
         mMovieRecyclerView.setAdapter(mPosterAdapter);
@@ -93,6 +85,7 @@ public class MovieGridFragment extends Fragment {
 
         return rootView;
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -114,23 +107,22 @@ public class MovieGridFragment extends Fragment {
 
     public void fetchMovies(String sortBy, int page) {
         Log.v(LOG_TAG, "fetchMovies(): sortBy = " + sortBy + ", page = " + page);
-        Observable<MovieResponse> movieResponse = App.getRestClient()
-                .getMovieService()
-                .getMovies(sortBy, page)
+        MovieService service = App.getRestClient().getMovieService();
+        service.getMovies(sortBy, page)
                 .timeout(5, TimeUnit.SECONDS)
-                .retry(2);
-        movieResponse.subscribeOn(Schedulers.io())
+                .retry(2)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> processResponse(response));
+                .subscribe(response -> processMovieResponse(response));
     }
 
-    private void processResponse(MovieResponse response) {
+    private void processMovieResponse(MovieResponse response) {
         List<Movie> movies = response.getMovies();
-        Log.v(LOG_TAG, "processResponse(): movies size = " + movies.size());
+        Log.v(LOG_TAG, "processMovieResponse(): movies size = " + movies.size());
         mMovies.addAll(movies);
-        Log.v(LOG_TAG, "processResponse(): mMovies size = " + mMovies.size());
+        Log.v(LOG_TAG, "processMovieResponse(): mMovies size = " + mMovies.size());
         for(Movie movie : movies) {
-            Log.v(LOG_TAG, "processResponse(): movies id = " + movie.getId() + ", title = " + movie.getTitle());
+            Log.v(LOG_TAG, "processMovieResponse(): movies id = " + movie.getId() + ", title = " + movie.getTitle());
         }
         mPosterAdapter.notifyDataSetChanged();
     }
