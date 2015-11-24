@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.app.App;
 import com.nex3z.popularmovies.data.model.Movie;
+import com.nex3z.popularmovies.data.rest.model.ReviewResponse;
 import com.nex3z.popularmovies.data.rest.model.VideoResponse;
+import com.nex3z.popularmovies.data.rest.service.ReviewService;
 import com.nex3z.popularmovies.data.rest.service.VideoService;
 import com.nex3z.popularmovies.util.ImageUtility;
 import com.squareup.picasso.Picasso;
@@ -62,6 +64,7 @@ public class MovieDetailFragment extends Fragment {
             }
             updateBackdropImage();
             fetchVideos(mMovie.getId());
+            fetchReviews(mMovie.getId());
         }
     }
 
@@ -109,8 +112,24 @@ public class MovieDetailFragment extends Fragment {
                 .subscribe(response -> processVideoResponse(response));
     }
 
+    public void fetchReviews(long movieId) {
+        Log.v(LOG_TAG, "fetchVideos(): movieId = " + movieId);
+        ReviewService service = App.getRestClient().getReviewService();
+        service.getReviews(movieId)
+                .timeout(5, TimeUnit.SECONDS)
+                .retry(2)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> processReviewResponse(response));
+    }
+
     private void processVideoResponse(VideoResponse response) {
         Log.v(LOG_TAG, "processVideoResponse(): size = " + response.getVideos().size());
+
+    }
+
+    private void processReviewResponse(ReviewResponse response) {
+        Log.v(LOG_TAG, "processReviewResponse(): size = " + response.getReviews().size());
 
     }
 }

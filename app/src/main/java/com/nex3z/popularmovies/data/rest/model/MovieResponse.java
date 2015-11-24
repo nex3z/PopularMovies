@@ -7,6 +7,7 @@ import java.util.List;
 
 @Parcel
 public class MovieResponse {
+
     long page;
 
     @SerializedName("results")

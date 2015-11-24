@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nex3z.popularmovies.BuildConfig;
 import com.nex3z.popularmovies.data.rest.service.MovieService;
+import com.nex3z.popularmovies.data.rest.service.ReviewService;
 import com.nex3z.popularmovies.data.rest.service.VideoService;
 
 import retrofit.RequestInterceptor;
@@ -15,6 +16,7 @@ public class RestClient {
 
     private VideoService videoService;
     private MovieService movieService;
+    private ReviewService reviewService;
 
     public RestClient() {
         Gson gson = new GsonBuilder().create();
@@ -32,13 +34,12 @@ public class RestClient {
 
         videoService = restAdapter.create(VideoService.class);
         movieService = restAdapter.create(MovieService.class);
+        reviewService = restAdapter.create(ReviewService.class);
     }
 
-    public VideoService getVideoService() {
-        return videoService;
-    }
+    public VideoService getVideoService() { return videoService; }
 
-    public MovieService getMovieService() {
-        return movieService;
-    }
+    public MovieService getMovieService() { return movieService; }
+
+    public ReviewService getReviewService() { return reviewService; }
 }
