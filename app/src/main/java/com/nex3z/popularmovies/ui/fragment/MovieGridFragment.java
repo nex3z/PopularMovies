@@ -17,6 +17,7 @@ import com.nex3z.popularmovies.data.model.Movie;
 import com.nex3z.popularmovies.data.rest.model.MovieResponse;
 import com.nex3z.popularmovies.data.rest.service.MovieService;
 import com.nex3z.popularmovies.ui.adapter.PosterAdapter;
+import com.nex3z.popularmovies.ui.listener.EndlessRecyclerOnScrollListener;
 import com.nex3z.popularmovies.ui.widget.SpacesItemDecoration;
 
 import java.util.ArrayList;
@@ -86,7 +87,6 @@ public class MovieGridFragment extends Fragment {
         return rootView;
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -132,37 +132,12 @@ public class MovieGridFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new SpacesItemDecoration(4, 4, 4, 4));
         recyclerView.setHasFixedSize(true);
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                int visibleItemCount = recyclerView.getChildCount();
-                int totalItemCount = mLayoutManager.getItemCount();
-                int firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-                Log.v(LOG_TAG, "onScrolled(): visibleItemCount = " + visibleItemCount
-                        + ", totalItemCount = " + totalItemCount
-                        + ", firstVisibleItem = " + firstVisibleItem
-                        + ", mPreviousTotal = " + mPreviousTotal
-                        + ", mLoading = " + mLoading);
-                if (mLoading) {
-                    if (totalItemCount > mPreviousTotal) {
-                        mLoading = false;
-                        mPreviousTotal = totalItemCount;
-                        Log.v(LOG_TAG, "onScrolled(): mLoading is true, mLoading = " + mLoading
-                                + ", mPreviousTotal = " + mPreviousTotal);
-                    }
-                }
-                if (!mLoading && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem + VISIBLE_THRESHOLD)) {
-                    fetchMovies(mSortBy, ++mPage);
-                    Log.v(LOG_TAG, "onScrolled(): mMovies updated, size = " + mMovies.size());
-                    mLoading = true;
-                }
+            public void onLoadMore(int current_page) {
+                fetchMovies(mSortBy, ++mPage);
+                Log.v(LOG_TAG, "onScrolled(): mMovies updated, size = " + mMovies.size());
             }
         });
     }
-
 }
