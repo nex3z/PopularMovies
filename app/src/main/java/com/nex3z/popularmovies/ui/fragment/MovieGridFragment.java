@@ -71,7 +71,7 @@ public class MovieGridFragment extends Fragment {
 
         setupRecyclerView(mMovieRecyclerView);
 
-        mPosterAdapter = new PosterAdapter(getContext(), mMovies);
+        mPosterAdapter = new PosterAdapter(mMovies);
         mPosterAdapter.setOnItemClickListener((view, position) -> {
             Log.v(LOG_TAG, "onItemClick(): position = " + position);
             Movie movie = mMovies.get(position);

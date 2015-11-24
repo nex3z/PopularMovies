@@ -23,18 +23,14 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
 
     private static final String LOG_TAG = PosterAdapter.class.getSimpleName();
 
-    private Context mContext;
     private List<Movie> mMovies;
-    private LayoutInflater mLayoutInflater = null;
-
     private static OnItemClickListener mListener;
 
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
 
-    public PosterAdapter(Context context, List<Movie> movies) {
-        mContext = context;
+    public PosterAdapter(List<Movie> movies) {
         mMovies = movies;
     }
 
@@ -64,7 +60,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
         String url = ImageUtility.getImageUrl(movie.getPosterPath());
         Log.v(LOG_TAG, "getView(): title = " + title + ", url = " + url);
         // Picasso.with(mContext).setIndicatorsEnabled(true);
-        Picasso.with(mContext)
+        Picasso.with(holder.itemView.getContext())
                 .load(url)
                 .error(R.drawable.placeholder_poster_white)
                 .placeholder(R.drawable.placeholder_poster_white)
