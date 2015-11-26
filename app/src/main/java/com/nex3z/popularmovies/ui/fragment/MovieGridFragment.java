@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -42,6 +43,7 @@ public class MovieGridFragment extends Fragment {
     private Callbacks mCallbacks = sDummyCallbacks;
 
     @Bind(R.id.movie_grid) RecyclerView mMovieRecyclerView;
+    @Bind(R.id.swipe_container) SwipeRefreshLayout mSwipeLayout;
 
     public interface Callbacks {
         void onItemSelected(Movie movie);
@@ -69,6 +71,8 @@ public class MovieGridFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         setupRecyclerView(mMovieRecyclerView);
+
+        mSwipeLayout.setOnRefreshListener(() -> fetchMovies(mSortBy, mPage));
 
         mPosterAdapter = new PosterAdapter(mMovies);
         mPosterAdapter.setOnItemClickListener((view, position) -> {
@@ -113,11 +117,7 @@ public class MovieGridFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         response -> processMovieResponse(response),
-                        throwable -> Snackbar.make(
-                                mMovieRecyclerView,
-                                throwable.getLocalizedMessage(),
-                                Snackbar.LENGTH_LONG
-                        ).show()
+                        throwable -> processThrowable(throwable)
                 );
     }
 
@@ -130,6 +130,16 @@ public class MovieGridFragment extends Fragment {
             Log.v(LOG_TAG, "processMovieResponse(): movies id = " + movie.getId() + ", title = " + movie.getTitle());
         }
         mPosterAdapter.notifyDataSetChanged();
+        mSwipeLayout.setRefreshing(false);
+    }
+
+    private void processThrowable(Throwable throwable) {
+        Snackbar.make(
+                mMovieRecyclerView,
+                throwable.getLocalizedMessage(),
+                Snackbar.LENGTH_LONG
+        ).show();
+        mSwipeLayout.setRefreshing(false);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
