@@ -3,12 +3,14 @@ package com.nex3z.popularmovies.ui.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nex3z.popularmovies.R;
@@ -44,6 +46,7 @@ public class MovieDetailFragment extends Fragment {
     @Bind(R.id.detail_rate_textview) TextView mRateView;
     @Bind(R.id.detail_overview_textview) TextView mOverviewView;
     @Bind(R.id.detail_poster_imageview) ImageView mPosterView;
+    @Bind(R.id.detail_layout) LinearLayout mDetailLayout;
 
     public MovieDetailFragment() {
     }
@@ -109,7 +112,13 @@ public class MovieDetailFragment extends Fragment {
                 .retry(2)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> processVideoResponse(response));
+                .subscribe(
+                        response -> processVideoResponse(response),
+                        throwable -> Snackbar.make(
+                                mDetailLayout,
+                                throwable.getLocalizedMessage(), Snackbar.LENGTH_LONG
+                        ).show()
+                );
     }
 
     public void fetchReviews(long movieId) {
@@ -120,7 +129,13 @@ public class MovieDetailFragment extends Fragment {
                 .retry(2)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> processReviewResponse(response));
+                .subscribe(
+                        response -> processReviewResponse(response),
+                        throwable -> Snackbar.make(
+                                mDetailLayout,
+                                throwable.getLocalizedMessage(), Snackbar.LENGTH_LONG
+                        ).show()
+                );
     }
 
     private void processVideoResponse(VideoResponse response) {

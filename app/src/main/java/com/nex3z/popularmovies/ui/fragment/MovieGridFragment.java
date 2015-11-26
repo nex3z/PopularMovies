@@ -3,6 +3,7 @@ package com.nex3z.popularmovies.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,9 +39,6 @@ public class MovieGridFragment extends Fragment {
     private List<Movie> mMovies = new ArrayList<Movie>();
     private int mPage = 1;
     private String mSortBy = MovieService.SORT_BY_POPULARITY_DESC;
-    private int mPreviousTotal = 0;
-    private boolean mLoading = true;
-    private final int VISIBLE_THRESHOLD = 8;
     private Callbacks mCallbacks = sDummyCallbacks;
 
     @Bind(R.id.movie_grid) RecyclerView mMovieRecyclerView;
@@ -113,7 +111,14 @@ public class MovieGridFragment extends Fragment {
                 .retry(2)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> processMovieResponse(response));
+                .subscribe(
+                        response -> processMovieResponse(response),
+                        throwable -> Snackbar.make(
+                                mMovieRecyclerView,
+                                throwable.getLocalizedMessage(),
+                                Snackbar.LENGTH_LONG
+                        ).show()
+                );
     }
 
     private void processMovieResponse(MovieResponse response) {
