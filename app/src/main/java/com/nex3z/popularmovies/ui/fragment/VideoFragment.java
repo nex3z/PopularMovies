@@ -17,6 +17,7 @@ import com.nex3z.popularmovies.data.model.Video;
 import com.nex3z.popularmovies.data.rest.model.VideoResponse;
 import com.nex3z.popularmovies.data.rest.service.VideoService;
 import com.nex3z.popularmovies.ui.adapter.VideoAdapter;
+import com.nex3z.popularmovies.ui.widget.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +113,9 @@ public class VideoFragment extends Fragment {
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
-        // recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST);
+        recyclerView.addItemDecoration(itemDecoration);
     }
 }
