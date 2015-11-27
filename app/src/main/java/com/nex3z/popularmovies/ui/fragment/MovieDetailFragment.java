@@ -66,7 +66,7 @@ public class MovieDetailFragment extends Fragment {
                 mAppBarLayout.setTitle(mMovie.getTitle());
             }
             updateBackdropImage();
-            fetchVideos(mMovie.getId());
+            // fetchVideos(mMovie.getId());
             fetchReviews(mMovie.getId());
         }
     }
