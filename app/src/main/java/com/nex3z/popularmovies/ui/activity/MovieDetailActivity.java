@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.data.model.Movie;
 import com.nex3z.popularmovies.ui.fragment.MovieDetailFragment;
+import com.nex3z.popularmovies.ui.fragment.ReviewFragment;
 import com.nex3z.popularmovies.ui.fragment.VideoFragment;
 
 
@@ -63,10 +64,11 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     public class SectionPagerAdapter extends FragmentPagerAdapter {
 
-        final int PAGE_COUNT = 2;
+        final int PAGE_COUNT = 3;
         private String tabTitles[] = new String[]{
                 getString(R.string.tab_movie_detail),
-                getString(R.string.tab_movie_video)};
+                getString(R.string.tab_movie_video),
+                getString(R.string.tab_movie_review)};
 
         public SectionPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -86,9 +88,10 @@ public class MovieDetailActivity extends AppCompatActivity {
                     return fragment;
                 }
                 case 1: {
-
-
                     return VideoFragment.newInstance(mMovie.getId());
+                }
+                case 2: {
+                    return ReviewFragment.newInstance(mMovie.getId());
                 }
                 default:
                     return new MovieDetailFragment();

@@ -67,7 +67,7 @@ public class MovieDetailFragment extends Fragment {
             }
             updateBackdropImage();
             // fetchVideos(mMovie.getId());
-            fetchReviews(mMovie.getId());
+            // fetchReviews(mMovie.getId());
         }
     }
 

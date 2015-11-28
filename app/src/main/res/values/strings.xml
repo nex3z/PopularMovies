@@ -6,5 +6,7 @@
 
     <string name="tab_movie_detail">Detail</string>
     <string name="tab_movie_video">Video</string>
+    <string name="tab_movie_review">Review</string>
+
 
 </resources>
