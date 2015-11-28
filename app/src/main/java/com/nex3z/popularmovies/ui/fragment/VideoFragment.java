@@ -18,6 +18,7 @@ import com.nex3z.popularmovies.data.rest.model.VideoResponse;
 import com.nex3z.popularmovies.data.rest.service.VideoService;
 import com.nex3z.popularmovies.ui.adapter.VideoAdapter;
 import com.nex3z.popularmovies.ui.widget.DividerItemDecoration;
+import com.nex3z.popularmovies.util.VideoUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,15 @@ public class VideoFragment extends Fragment {
 
         setupRecyclerView(mVideoList);
         mVideoAdapter = new VideoAdapter(mVideos);
+
+        mVideoAdapter.setOnItemClickListener((view, position) -> {
+            Log.v(LOG_TAG, "onItemClick(): position = " + position);
+            Video video = mVideos.get(position);
+            if (video != null) {
+                Log.v(LOG_TAG, "onItemClick(): video = " + video);
+                VideoUtility.playVideo(getContext(), video.getSite(), video.getKey());
+            }
+        });
         mVideoList.setAdapter(mVideoAdapter);
 
         return rootView;

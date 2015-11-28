@@ -24,6 +24,15 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
 
     private List<Video> mVideos;
 
+    private static OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener;
+    }
     public VideoAdapter(List<Video> videos) {
         Log.v(LOG_TAG, "VideoAdapter(): videos size = " + videos.size());
         mVideos = videos;
@@ -69,6 +78,15 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             super(itemView);
             ButterKnife.bind(this, itemView);
             Log.v(LOG_TAG, "ViewHolder(): Bind complete.");
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v(LOG_TAG, "onClick(): mListener = " + mListener);
+                    if (mListener != null)
+                        mListener.onItemClick(itemView, getLayoutPosition());
+                }
+            });
         }
     }
 }
