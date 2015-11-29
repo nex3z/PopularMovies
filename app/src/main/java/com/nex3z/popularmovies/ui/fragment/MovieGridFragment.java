@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -82,8 +83,7 @@ public class MovieGridFragment extends Fragment {
                 mCallbacks.onItemSelected(movie);
             }
         });
-        mMovieRecyclerView.setAdapter(mPosterAdapter);
-
+        mMovieRecyclerView.setAdapter(new ScaleInAnimationAdapter(mPosterAdapter));
         fetchMovies(mSortBy, mPage);
 
         return rootView;
