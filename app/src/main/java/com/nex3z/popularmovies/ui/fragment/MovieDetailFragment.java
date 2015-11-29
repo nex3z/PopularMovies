@@ -3,7 +3,6 @@ package com.nex3z.popularmovies.ui.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,21 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nex3z.popularmovies.R;
-import com.nex3z.popularmovies.app.App;
 import com.nex3z.popularmovies.data.model.Movie;
-import com.nex3z.popularmovies.data.rest.model.ReviewResponse;
-import com.nex3z.popularmovies.data.rest.model.VideoResponse;
-import com.nex3z.popularmovies.data.rest.service.ReviewService;
-import com.nex3z.popularmovies.data.rest.service.VideoService;
+import com.nex3z.popularmovies.util.GenreUtility;
 import com.nex3z.popularmovies.util.ImageUtility;
 import com.squareup.picasso.Picasso;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 
 public class MovieDetailFragment extends Fragment {
@@ -44,6 +35,7 @@ public class MovieDetailFragment extends Fragment {
     @Bind(R.id.detail_title_textview) TextView mTitleView;
     @Bind(R.id.detail_release_date_textview) TextView mReleaseDateView;
     @Bind(R.id.detail_rate_textview) TextView mRateView;
+    @Bind(R.id.detail_genre_textview) TextView mGenreView;
     @Bind(R.id.detail_overview_textview) TextView mOverviewView;
     @Bind(R.id.detail_poster_imageview) ImageView mPosterView;
     @Bind(R.id.detail_layout) LinearLayout mDetailLayout;
@@ -66,8 +58,6 @@ public class MovieDetailFragment extends Fragment {
                 mAppBarLayout.setTitle(mMovie.getTitle());
             }
             updateBackdropImage();
-            // fetchVideos(mMovie.getId());
-            // fetchReviews(mMovie.getId());
         }
     }
 
@@ -98,53 +88,22 @@ public class MovieDetailFragment extends Fragment {
         mRateView.setText(mMovie.getVoteAverage() + "/10");
         mOverviewView.setText(mMovie.getOverview());
 
+        StringBuilder builder = new StringBuilder();
+        for (Integer id : mMovie.getGenreIds()) {
+            Log.v(LOG_TAG, "updateDetail(): genre id = " + id);
+            String genre = GenreUtility.getGenreName(id);
+            if (genre != "") {
+                if (builder.length() != 0) {
+                    builder.append(", ");
+                }
+                builder.append(genre);
+            }
+        }
+        mGenreView.setText(builder);
+
         String url = ImageUtility.getImageUrl(mMovie.getPosterPath());
         Picasso.with(getActivity())
                 .load(url)
                 .into(mPosterView);
-    }
-
-    public void fetchVideos(long movieId) {
-        Log.v(LOG_TAG, "fetchVideos(): movieId = " + movieId);
-        VideoService service = App.getRestClient().getVideoService();
-        service.getVideos(movieId)
-                .timeout(5, TimeUnit.SECONDS)
-                .retry(2)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        response -> processVideoResponse(response),
-                        throwable -> Snackbar.make(
-                                mDetailLayout,
-                                throwable.getLocalizedMessage(), Snackbar.LENGTH_LONG
-                        ).show()
-                );
-    }
-
-    public void fetchReviews(long movieId) {
-        Log.v(LOG_TAG, "fetchVideos(): movieId = " + movieId);
-        ReviewService service = App.getRestClient().getReviewService();
-        service.getReviews(movieId)
-                .timeout(5, TimeUnit.SECONDS)
-                .retry(2)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        response -> processReviewResponse(response),
-                        throwable -> Snackbar.make(
-                                mDetailLayout,
-                                throwable.getLocalizedMessage(), Snackbar.LENGTH_LONG
-                        ).show()
-                );
-    }
-
-    private void processVideoResponse(VideoResponse response) {
-        Log.v(LOG_TAG, "processVideoResponse(): size = " + response.getVideos().size());
-
-    }
-
-    private void processReviewResponse(ReviewResponse response) {
-        Log.v(LOG_TAG, "processReviewResponse(): size = " + response.getReviews().size());
-
     }
 }

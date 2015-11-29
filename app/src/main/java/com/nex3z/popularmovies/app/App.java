@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.nex3z.popularmovies.data.rest.RestClient;
+import com.nex3z.popularmovies.util.GenreUtility;
 
 public class App extends Application{
     private static final String LOG_TAG = App.class.getSimpleName();
@@ -16,6 +17,8 @@ public class App extends Application{
 
         restClient = new RestClient();
         Log.v(LOG_TAG, "onCreate(): restClient = " + restClient);
+
+        GenreUtility.buildGenreMap(getApplicationContext());
     }
 
     public static RestClient getRestClient() {

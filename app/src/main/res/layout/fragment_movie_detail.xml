@@ -1,7 +1,6 @@
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/movie_detail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -69,8 +68,7 @@
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_event_black_18dp"
-                    />
+                    android:src="@drawable/ic_event_black_18dp" />
 
                 <TextView
                     android:fontFamily="sans-serif"
@@ -94,8 +92,7 @@
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_star_rate_black_18dp"
-                    />
+                    android:src="@drawable/ic_star_rate_black_18dp" />
 
                 <TextView
                     android:fontFamily="sans-serif"
@@ -105,8 +102,32 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:textSize="14sp"
-
                     android:text="6.9/10"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_label_black_18dp" />
+
+                <TextView
+                    android:fontFamily="sans-serif"
+                    android:id="@+id/detail_genre_textview"
+                    android:paddingLeft="4dp"
+                    android:layout_gravity="left"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="14sp"
+                    android:text="Action, Science Fiction, Thriller, Adventure" />
 
             </LinearLayout>
 
