@@ -39,6 +39,7 @@
                     android:layout_width="32dp"
                     android:layout_gravity="center_vertical"
                     android:background="@null"
+                    android:id="@+id/poster_favourite_button"
                     android:src="@drawable/ic_favorite_border_black_18dp"
                     style="@style/PosterFavouriteIcon" />
 

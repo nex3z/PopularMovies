@@ -6,12 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.data.model.Movie;
 import com.nex3z.popularmovies.util.ImageUtility;
+import com.nex3z.popularmovies.util.StorageUtility;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -65,6 +67,28 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
                 .error(R.drawable.placeholder_poster_white)
                 .placeholder(R.drawable.placeholder_poster_white)
                 .into(holder.posterImageView);
+
+        if (StorageUtility.isFavourite(holder.itemView.getContext(), movie)) {
+            holder.favouriteBtn.setImageResource(R.drawable.ic_favorite_black_18dp);
+        }
+
+        holder.favouriteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(LOG_TAG, "onClick(): position = " + position);
+
+                holder.isFavourite = !holder.isFavourite;
+                Log.v(LOG_TAG, "onClick(): before, holder.isFavourite  = " + holder.isFavourite );
+
+                if (holder.isFavourite) {
+                    StorageUtility.addToFavourite(holder.itemView.getContext(), movie);
+                    holder.favouriteBtn.setImageResource(R.drawable.ic_favorite_black_18dp);
+                } else {
+                    StorageUtility.deleteFromFavourite(holder.itemView.getContext(), movie);
+                    holder.favouriteBtn.setImageResource(R.drawable.ic_favorite_border_black_18dp);
+                }
+            }
+        });
     }
 
     @Override
@@ -78,6 +102,8 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
 
         @Bind(R.id.poster_image) ImageView posterImageView;
         @Bind(R.id.poster_title) TextView titleTextView;
+        @Bind(R.id.poster_favourite_button) ImageButton favouriteBtn;
+        boolean isFavourite = false;
 
         public ViewHolder(final View itemView) {
             super(itemView);

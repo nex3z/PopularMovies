@@ -36,19 +36,19 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MovieEntry.TABLE_NAME + " (" +
                 MovieEntry._ID + " INTEGER PRIMARY KEY," +
-                MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_RELEASE_DATE + " DATE NOT NULL, " +
-                MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_BACKDROP_PATH + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_POPULARITY + " REAL NOT NULL, " +
-                MovieEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL, " +
-                MovieEntry.COLUMN_VOTE_COUNT + " INTEGER NOT NULL, " +
-                MovieEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_ADULT + " BOOLEAN NOT NULL, " +
-                MovieEntry.COLUMN_VIDEO + " BOOLEAN NOT NULL, " +
-                MovieEntry.COLUMN_GENRE_IDS + " TEXT NOT NULL, " + // Should use multiple tables and JOIN them together
+                MovieEntry.COLUMN_TITLE + " TEXT, " +
+                MovieEntry.COLUMN_POSTER_PATH + " TEXT, " +
+                MovieEntry.COLUMN_RELEASE_DATE + " DATE, " +
+                MovieEntry.COLUMN_OVERVIEW + " TEXT, " +
+                MovieEntry.COLUMN_BACKDROP_PATH + " TEXT, " +
+                MovieEntry.COLUMN_POPULARITY + " REAL, " +
+                MovieEntry.COLUMN_VOTE_AVERAGE + " REAL, " +
+                MovieEntry.COLUMN_VOTE_COUNT + " INTEGER, " +
+                MovieEntry.COLUMN_ORIGINAL_TITLE + " TEXT, " +
+                MovieEntry.COLUMN_ORIGINAL_LANGUAGE + " TEXT, " +
+                MovieEntry.COLUMN_ADULT + " BOOLEAN, " +
+                MovieEntry.COLUMN_VIDEO + " BOOLEAN, " +
+                MovieEntry.COLUMN_GENRE_IDS + " TEXT, " + // Should use multiple tables and JOIN them together
                 MovieEntry.COLUMN_ID + " INTEGER UNIQUE NOT NULL " +
                 " );";
 
