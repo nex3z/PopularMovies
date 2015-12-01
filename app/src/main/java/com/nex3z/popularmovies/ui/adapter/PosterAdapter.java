@@ -68,7 +68,8 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
                 .placeholder(R.drawable.placeholder_poster_white)
                 .into(holder.posterImageView);
 
-        if (StorageUtility.isFavourite(holder.itemView.getContext(), movie)) {
+        holder.isFavourite = StorageUtility.isFavourite(holder.itemView.getContext(), movie);
+        if (holder.isFavourite) {
             holder.favouriteBtn.setImageResource(R.drawable.ic_favorite_black_18dp);
         }
 
@@ -78,7 +79,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
                 Log.v(LOG_TAG, "onClick(): position = " + position);
 
                 holder.isFavourite = !holder.isFavourite;
-                Log.v(LOG_TAG, "onClick(): before, holder.isFavourite  = " + holder.isFavourite );
+                Log.v(LOG_TAG, "onClick(): before, holder.isFavourite  = " + holder.isFavourite);
 
                 if (holder.isFavourite) {
                     StorageUtility.addToFavourite(holder.itemView.getContext(), movie);
