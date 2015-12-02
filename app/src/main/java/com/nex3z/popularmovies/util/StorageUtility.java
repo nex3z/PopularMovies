@@ -16,8 +16,7 @@ public class StorageUtility {
             MovieContract.MovieEntry.COLUMN_ID + " = ?";
 
     public static void addToFavourite(Context context, Movie movie) {
-        ContentValues movieValues = new ContentValues();
-        movieValues.put(MovieContract.MovieEntry.COLUMN_ID, movie.getId());
+        ContentValues movieValues = buildContentValues(movie);
         context.getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, movieValues);
     }
 
@@ -43,5 +42,26 @@ public class StorageUtility {
             return true;
         }
         return false;
+    }
+
+    public static ContentValues buildContentValues(Movie movie) {
+        ContentValues movieValues = new ContentValues();
+
+        movieValues.put(MovieContract.MovieEntry.COLUMN_ID, movie.getId());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getTitle());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_VOTE_COUNT, movie.getVoteCount());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_ADULT, movie.isAdult());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH, movie.getBackdropPath());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_GENRE_IDS, movie.getGenreIds().toString());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_ORIGINAL_LANGUAGE, movie.getOriginalLanguage());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE, movie.getOriginalTitle());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, movie.getPopularity());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+        movieValues.put(MovieContract.MovieEntry.COLUMN_VIDEO, movie.isVideo());
+
+        return movieValues;
     }
 }
