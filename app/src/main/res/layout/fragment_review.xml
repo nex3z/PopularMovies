@@ -1,8 +1,26 @@
-<android.support.v7.widget.RecyclerView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/review_list"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    />
+    android:layout_width="match_parent" >
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/review_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/empty_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+        <TextView
+            style="@style/EmptyViewText"
+            android:id="@+id/empty_view"
+            android:text="@string/no_review_available" />
+
+    </android.support.v4.widget.NestedScrollView>
+
+</FrameLayout>

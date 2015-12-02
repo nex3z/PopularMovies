@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.app.App;
@@ -35,6 +37,8 @@ public class ReviewFragment extends Fragment {
     private static final String LOG_TAG = ReviewFragment.class.getSimpleName();
 
     @Bind(R.id.review_list) RecyclerView mReviewList;
+    @Bind(R.id.empty_view) TextView mEmptyView;
+    @Bind(R.id.empty_view_container) NestedScrollView mEmptyViewContainer;
 
     public static final String ARG_MOVIE_ID = "MOVIE_ID";
     private long mMovieId = -1;
@@ -101,6 +105,16 @@ public class ReviewFragment extends Fragment {
     private void processReviewResponse(ReviewResponse response) {
         List<Review> reviews = response.getReviews();
         Log.v(LOG_TAG, "processReviewResponse(): reviews size = " + reviews.size());
+        if (reviews.size() == 0) {
+            mReviewList.setVisibility(View.GONE);
+            mEmptyViewContainer.setVisibility(View.VISIBLE);
+            //mEmptyView.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            mReviewList.setVisibility(View.VISIBLE);
+            mEmptyViewContainer.setVisibility(View.GONE);
+            //mEmptyView.setVisibility(View.GONE);
+        }
         mReviews.addAll(reviews);
         Log.v(LOG_TAG, "processReviewResponse(): mVideos size = " + mReviews.size());
         for(Review review : mReviews) {
@@ -109,7 +123,6 @@ public class ReviewFragment extends Fragment {
         }
         mReviewAdapter.notifyDataSetChanged();
         Log.v(LOG_TAG, "processReviewResponse(): size = " + response.getReviews().size());
-
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {

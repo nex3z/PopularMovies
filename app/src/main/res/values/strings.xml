@@ -8,5 +8,7 @@
     <string name="tab_movie_video">Video</string>
     <string name="tab_movie_review">Review</string>
 
+    <string name="no_review_available">Nobody has written any reviews for now.</string>
+
 
 </resources>
