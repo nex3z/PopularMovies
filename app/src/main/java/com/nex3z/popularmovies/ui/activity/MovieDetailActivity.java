@@ -2,12 +2,7 @@ package com.nex3z.popularmovies.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,8 +12,6 @@ import android.view.MenuItem;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.data.model.Movie;
 import com.nex3z.popularmovies.ui.fragment.MovieDetailFragment;
-import com.nex3z.popularmovies.ui.fragment.ReviewFragment;
-import com.nex3z.popularmovies.ui.fragment.VideoFragment;
 
 
 public class MovieDetailActivity extends AppCompatActivity {
@@ -41,14 +34,19 @@ public class MovieDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
-        tabLayout.setupWithViewPager(viewPager);
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+//        viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
+//        tabLayout.setupWithViewPager(viewPager);
 
         if (savedInstanceState == null) {
             mMovie = getIntent().getParcelableExtra(MOVIE_INFO);
             Log.v(LOG_TAG, "onCreate(): savedInstanceState == null, movie = " + mMovie);
+
+            MovieDetailFragment fragment = MovieDetailFragment.newInstance(mMovie);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.movie_detail_container, fragment)
+                    .commit();
         }
     }
 
@@ -62,50 +60,50 @@ public class MovieDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class SectionPagerAdapter extends FragmentPagerAdapter {
-
-        final int PAGE_COUNT = 3;
-        private String tabTitles[] = new String[]{
-                getString(R.string.tab_movie_detail),
-                getString(R.string.tab_movie_video),
-                getString(R.string.tab_movie_review)};
-
-        public SectionPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0: {
-                    Bundle arguments = new Bundle();
-                    arguments.putParcelable(MovieDetailFragment.ARG_MOVIE_INFO,
-                            getIntent().getParcelableExtra(MOVIE_INFO));
-
-                    MovieDetailFragment fragment = new MovieDetailFragment();
-                    fragment.setArguments(arguments);
-
-                    return fragment;
-                }
-                case 1: {
-                    return VideoFragment.newInstance(mMovie.getId());
-                }
-                case 2: {
-                    return ReviewFragment.newInstance(mMovie.getId());
-                }
-                default:
-                    return new MovieDetailFragment();
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return PAGE_COUNT;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return tabTitles[position];
-        }
-    }
+//    public class SectionPagerAdapter extends FragmentPagerAdapter {
+//
+//        final int PAGE_COUNT = 3;
+//        private String tabTitles[] = new String[]{
+//                getString(R.string.tab_movie_detail),
+//                getString(R.string.tab_movie_video),
+//                getString(R.string.tab_movie_review)};
+//
+//        public SectionPagerAdapter(FragmentManager fm) {
+//            super(fm);
+//        }
+//
+//        @Override
+//        public Fragment getItem(int position) {
+//            switch (position) {
+//                case 0: {
+//                    Bundle arguments = new Bundle();
+//                    arguments.putParcelable(MovieDetailFragment.ARG_MOVIE_INFO,
+//                            getIntent().getParcelableExtra(MOVIE_INFO));
+//
+//                    MovieDetailFragment fragment = new MovieDetailFragment();
+//                    fragment.setArguments(arguments);
+//
+//                    return fragment;
+//                }
+//                case 1: {
+//                    return VideoFragment.newInstance(mMovie.getId());
+//                }
+//                case 2: {
+//                    return ReviewFragment.newInstance(mMovie.getId());
+//                }
+//                default:
+//                    return new MovieDetailFragment();
+//            }
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return PAGE_COUNT;
+//        }
+//
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            return tabTitles[position];
+//        }
+//    }
 }

@@ -2,6 +2,7 @@ package com.nex3z.popularmovies.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -41,6 +42,14 @@ public class MovieDetailFragment extends Fragment {
     @Bind(R.id.detail_layout) LinearLayout mDetailLayout;
 
     public MovieDetailFragment() {
+    }
+
+    public static MovieDetailFragment newInstance(Parcelable parcelable) {
+        MovieDetailFragment fragment = new MovieDetailFragment();
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(MovieDetailFragment.ARG_MOVIE_INFO, parcelable);
+        fragment.setArguments(arguments);
+        return fragment;
     }
 
     @Override

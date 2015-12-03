@@ -1,166 +1,164 @@
-<android.support.v4.widget.NestedScrollView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/movie_detail_container"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior" >
-
-<LinearLayout
-
-    android:id="@+id/detail_layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_width="match_parent" >
 
     <LinearLayout
+        android:id="@+id/detail_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/detail_poster_imageview"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:scaleType="fitStart"
-                android:adjustViewBounds="true"
-                android:src="@drawable/placeholder_poster" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/detail_poster_imageview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitStart"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/placeholder_poster" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:fontFamily="sans-serif-medium"
+                    android:id="@+id/detail_title_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:paddingTop="24dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:maxLines="2"
+                    android:text="Jurassic World"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="8dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/DetailInfoIcon"
+                        android:src="@drawable/ic_event_black_18dp" />
+
+                    <TextView
+                        android:fontFamily="sans-serif"
+                        android:id="@+id/detail_release_date_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:textSize="14sp"
+                        android:text="2015-06-12" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="8dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/DetailInfoIcon"
+                        android:src="@drawable/ic_star_rate_black_18dp" />
+
+                    <TextView
+                        android:fontFamily="sans-serif"
+                        android:id="@+id/detail_rate_textview"
+                        android:paddingLeft="4dp"
+                        android:layout_gravity="left"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="14sp"
+                        android:text="6.9/10"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="8dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/DetailInfoIcon"
+                        android:src="@drawable/ic_label_black_18dp" />
+
+                    <TextView
+                        android:fontFamily="sans-serif"
+                        android:id="@+id/detail_genre_textview"
+                        android:paddingLeft="4dp"
+                        android:layout_gravity="left"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="14sp"
+                        android:text="Action, Science Fiction, Thriller, Adventure" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
             <TextView
                 android:fontFamily="sans-serif-medium"
-                android:id="@+id/detail_title_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:paddingTop="24dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:maxLines="2"
-                android:text="Jurassic World"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/overview"/>
+            <TextView
+                android:fontFamily="sans-serif"
                 android:paddingTop="8dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/DetailInfoIcon"
-                    android:src="@drawable/ic_event_black_18dp" />
-
-                <TextView
-                    android:fontFamily="sans-serif"
-                    android:id="@+id/detail_release_date_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
-                    android:textSize="14sp"
-                    android:text="2015-06-12" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="8dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/DetailInfoIcon"
-                    android:src="@drawable/ic_star_rate_black_18dp" />
-
-                <TextView
-                    android:fontFamily="sans-serif"
-                    android:id="@+id/detail_rate_textview"
-                    android:paddingLeft="4dp"
-                    android:layout_gravity="left"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:textSize="14sp"
-                    android:text="6.9/10"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="8dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/DetailInfoIcon"
-                    android:src="@drawable/ic_label_black_18dp" />
-
-                <TextView
-                    android:fontFamily="sans-serif"
-                    android:id="@+id/detail_genre_textview"
-                    android:paddingLeft="4dp"
-                    android:layout_gravity="left"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:textSize="14sp"
-                    android:text="Action, Science Fiction, Thriller, Adventure" />
-
-            </LinearLayout>
-
+                android:paddingBottom="24dp"
+                android:id="@+id/detail_overview_textview"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:text="Twenty-two years after the events of Jurassic Park, Isla Nublar now features a fully functioning dinosaur theme park, Jurassic World, as originally envisioned by John Hammond."/>
         </LinearLayout>
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
-
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:fontFamily="sans-serif-medium"
-            android:textSize="24sp"
-            android:paddingTop="24dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:layout_gravity="left"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="@string/overview"/>
-        <TextView
-            android:fontFamily="sans-serif"
-            android:paddingTop="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="24dp"
-            android:id="@+id/detail_overview_textview"
-            android:layout_gravity="center_horizontal"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="14sp"
-            android:text="Twenty-two years after the events of Jurassic Park, Isla Nublar now features a fully functioning dinosaur theme park, Jurassic World, as originally envisioned by John Hammond."/>
-    </LinearLayout>
-
-</LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</FrameLayout>
