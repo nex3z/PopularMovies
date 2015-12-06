@@ -1,9 +1,7 @@
 package com.nex3z.popularmovies.ui.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +29,8 @@ public class MovieDetailFragment extends Fragment {
 
     private Movie mMovie;
 
-    ImageView mBackdropImage;
-    CollapsingToolbarLayout mAppBarLayout;
+    //ImageView mBackdropImage;
+    //CollapsingToolbarLayout mAppBarLayout;
     @Bind(R.id.detail_title_textview) TextView mTitleView;
     @Bind(R.id.detail_release_date_textview) TextView mReleaseDateView;
     @Bind(R.id.detail_rate_textview) TextView mRateView;
@@ -60,13 +58,13 @@ public class MovieDetailFragment extends Fragment {
             mMovie = getArguments().getParcelable(ARG_MOVIE_INFO);
             Log.v(LOG_TAG, "onCreate(): mMovie = " + mMovie);
 
-            Activity activity = this.getActivity();
-            mAppBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            mBackdropImage = (ImageView) activity.findViewById(R.id.detail_backdrop_image);
-            if (mAppBarLayout != null) {
-                mAppBarLayout.setTitle(mMovie.getTitle());
-            }
-            updateBackdropImage();
+//            Activity activity = this.getActivity();
+//            mAppBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+//            mBackdropImage = (ImageView) activity.findViewById(R.id.detail_backdrop_image);
+//            if (mAppBarLayout != null) {
+//                mAppBarLayout.setTitle(mMovie.getTitle());
+//            }
+
         }
     }
 
@@ -77,18 +75,6 @@ public class MovieDetailFragment extends Fragment {
         ButterKnife.bind(this, rootView);
         updateDetail();
         return rootView;
-    }
-
-    private void updateBackdropImage() {
-        String url = ImageUtility.getImageUrl(mMovie.getBackdropPath());
-        Log.v(LOG_TAG, "updateBackdropImage(): backdrop url = " + url
-                + ", mBackdropImage = " + mBackdropImage);
-
-        if (mBackdropImage != null) {
-            Picasso.with(getActivity())
-                    .load(url)
-                    .into(mBackdropImage);
-        }
     }
 
     private void updateDetail() {

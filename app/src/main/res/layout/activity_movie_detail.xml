@@ -24,8 +24,6 @@
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp"
             app:expandedTitleTextAppearance="@style/TransparentText"
             app:toolbarId="@+id/toolbar"
             >
@@ -59,6 +57,5 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
-
 
 </android.support.design.widget.CoordinatorLayout>
