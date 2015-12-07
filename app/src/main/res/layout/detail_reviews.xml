@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
-    android:layout_width="match_parent" >
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/detail_reviews_list"
+    <TextView
+        style="@style/DetailTitleText"
+        android:paddingTop="16dp"
+        android:text="@string/reviews"
+        />
+
+    <LinearLayout
+        android:id="@+id/detail_review_layout"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:orientation="vertical"
         />
 
     <TextView
         style="@style/EmptyViewText"
         android:id="@+id/empty_textview"
-        android:text="@string/no_review_available"
-        />
+        android:text="@string/no_review_available" />
 
-</FrameLayout>
+
+</LinearLayout>

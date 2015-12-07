@@ -7,12 +7,10 @@
     <TextView
         android:fontFamily="sans-serif-medium"
         android:textStyle="bold"
-        android:textSize="18sp"
-        android:paddingTop="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:textSize="16sp"
+        android:paddingTop="8dp"
         android:layout_gravity="left"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Text"
         android:id="@+id/review_author_textview" />
@@ -20,13 +18,12 @@
     <TextView
         android:fontFamily="sans-serif"
         android:textSize="16sp"
-        android:paddingTop="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:paddingTop="8dp"
         android:layout_gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Text"
+        android:maxLines="5"
         android:id="@+id/review_content_textview" />
 
 </LinearLayout>

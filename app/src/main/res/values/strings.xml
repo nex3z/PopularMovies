@@ -3,6 +3,7 @@
     <string name="title_movie_detail">Movie Detail</string>
 
     <string name="overview">Overview</string>
+    <string name="reviews">Reviews</string>
 
     <string name="tab_movie_detail">Detail</string>
     <string name="tab_movie_video">Video</string>
