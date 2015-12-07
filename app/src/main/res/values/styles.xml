@@ -42,8 +42,8 @@
     </style>
 
     <style name="DetailInfoIcon">
-        <item name="android:layout_width">14dp</item>
-        <item name="android:layout_height">14dp</item>
+        <item name="android:layout_width">16dp</item>
+        <item name="android:layout_height">16dp</item>
         <item name="android:layout_gravity">top</item>
         <item name="android:layout_marginTop">3dp</item>
     </style>
