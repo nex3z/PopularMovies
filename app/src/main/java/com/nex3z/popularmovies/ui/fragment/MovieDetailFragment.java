@@ -152,11 +152,12 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private void updateReviews(List<Review> reviews) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+
         for (int i = 0;i < reviews.size() && i < REVIEW_NUM ; ++i) {
             Review review = reviews.get(i);
             Log.v(LOG_TAG, "updateReviews(): review = " + review);
 
-            LayoutInflater inflater = LayoutInflater.from(getContext());
             View detailItem = inflater.inflate(R.layout.review_item, null);
 
             TextView authorView = (TextView)detailItem.findViewById(R.id.review_author_textview);

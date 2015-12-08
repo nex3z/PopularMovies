@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">PopularMovies</string>
+
+    <string name="discover">Discover</string>
+    <string name="favourite">Favourite</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string name="title_movie_detail">Movie Detail</string>
 
     <string name="overview">Overview</string>
@@ -11,5 +17,7 @@
 
     <string name="no_review_available">Nobody has written any reviews for now.</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
