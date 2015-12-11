@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:clipChildren="false"
     >
 
     <LinearLayout
@@ -11,10 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:clipChildren="false"
+        android:layout_margin="16dp"
         >
 
-        <include layout="@layout/detail_info" />
+        <include layout="@layout/detail_info"/>
 
         <View
             android:layout_width="match_parent"
