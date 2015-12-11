@@ -5,11 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginTop="16dp"
+    >
 
     <TextView
         style="@style/DetailTitleText"
-        android:paddingTop="16dp"
         android:text="@string/reviews"
         />
 

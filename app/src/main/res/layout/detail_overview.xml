@@ -6,19 +6,17 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="16dp"
+    android:layout_marginTop="16dp"
     >
 
     <TextView
         style="@style/DetailTitleText"
-        android:paddingTop="16dp"
         android:text="@string/overview"
         />
 
     <TextView
         android:id="@+id/detail_overview_textview"
         style="@style/DetailContentText"
-        android:textSize="16sp"
         tools:text="Twenty-two years after the events of Jurassic Park, Isla Nublar now features a fully functioning dinosaur theme park, Jurassic World, as originally envisioned by John Hammond."
         />
 

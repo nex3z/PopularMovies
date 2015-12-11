@@ -19,7 +19,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorLighterGray"
+            android:layout_marginTop="16dp"
+            android:background="@color/color_gray_light"
             />
 
         <include layout="@layout/detail_overview" />
@@ -27,7 +28,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorLighterGray"
+            android:layout_marginTop="16dp"
+            android:background="@color/color_gray_light"
             />
 
         <include layout="@layout/detail_reviews" />
