@@ -138,7 +138,7 @@ public class MovieGridActivity extends AppCompatActivity implements MovieGridFra
                     ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                             vh.posterImageView, getString(R.string.detail_poster_transition_name));
 
-            ActivityCompat.startActivity(this, intent, activityOptions2.toBundle());
+            ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
 
             // startActivity(intent);
         }
