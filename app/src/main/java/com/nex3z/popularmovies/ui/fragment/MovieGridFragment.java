@@ -47,10 +47,10 @@ public class MovieGridFragment extends Fragment {
     @Bind(R.id.swipe_container) SwipeRefreshLayout mSwipeLayout;
 
     public interface Callbacks {
-        void onItemSelected(Movie movie);
+        void onItemSelected(Movie movie, PosterAdapter.ViewHolder vh);
     }
 
-    private static Callbacks sDummyCallbacks = (movie) -> {};
+    private static Callbacks sDummyCallbacks = (movie, vh) -> {};
 
     public MovieGridFragment() { }
 
@@ -76,11 +76,11 @@ public class MovieGridFragment extends Fragment {
         mSwipeLayout.setOnRefreshListener(() -> fetchMovies(mSortBy, mPage));
 
         mPosterAdapter = new PosterAdapter(mMovies);
-        mPosterAdapter.setOnItemClickListener((view, position) -> {
+        mPosterAdapter.setOnItemClickListener((position, viewHolder) -> {
             Log.v(LOG_TAG, "onItemClick(): position = " + position);
             Movie movie = mMovies.get(position);
             if (movie != null) {
-                mCallbacks.onItemSelected(movie);
+                mCallbacks.onItemSelected(movie, viewHolder);
             }
         });
         mMovieRecyclerView.setAdapter(new ScaleInAnimationAdapter(mPosterAdapter));
@@ -131,6 +131,7 @@ public class MovieGridFragment extends Fragment {
         }
         mPosterAdapter.notifyDataSetChanged();
         mSwipeLayout.setRefreshing(false);
+        getActivity().supportStartPostponedEnterTransition();
     }
 
     private void processThrowable(Throwable throwable) {

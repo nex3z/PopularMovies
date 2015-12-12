@@ -78,6 +78,9 @@ public class MovieDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         ButterKnife.bind(this, rootView);
+
+        getActivity().supportPostponeEnterTransition();
+
         return rootView;
     }
 
@@ -110,6 +113,8 @@ public class MovieDetailFragment extends Fragment {
         Picasso.with(getActivity())
                 .load(url)
                 .into(mPosterView);
+
+        getActivity().supportStartPostponedEnterTransition();
     }
 
     public void fetchReviews(long movieId) {
@@ -135,6 +140,7 @@ public class MovieDetailFragment extends Fragment {
         if (reviews.size() == 0) {
             mReviewLayout.setVisibility(View.GONE);
             mEmptyView.setVisibility(View.VISIBLE);
+            getActivity().supportStartPostponedEnterTransition();
             return;
         } else {
             mReviewLayout.setVisibility(View.VISIBLE);
@@ -167,5 +173,8 @@ public class MovieDetailFragment extends Fragment {
 
             mReviewLayout.addView(detailItem);
         }
+
+        getActivity().supportStartPostponedEnterTransition();
     }
+
 }

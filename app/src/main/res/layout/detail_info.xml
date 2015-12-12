@@ -25,6 +25,7 @@
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
             android:layout_marginTop="-40dp"
+            android:transitionName="@string/detail_poster_transition_name"
             tools:src="@drawable/placeholder_poster"
             />
 

@@ -3,7 +3,10 @@ package com.nex3z.popularmovies.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,9 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.data.model.Movie;
+import com.nex3z.popularmovies.ui.adapter.PosterAdapter;
 import com.nex3z.popularmovies.ui.fragment.FavouriteFragment;
 import com.nex3z.popularmovies.ui.fragment.MovieGridFragment;
 
@@ -108,7 +113,7 @@ public class MovieGridActivity extends AppCompatActivity implements MovieGridFra
     }
 
     @Override
-    public void onItemSelected(Movie movie) {
+    public void onItemSelected(Movie movie, PosterAdapter.ViewHolder vh) {
         if (mTwoPane) {
 //            Bundle args = new Bundle();
 //            args.putParcelable(MovieDetailFragment.DETAIL_URI, uri);
@@ -122,7 +127,20 @@ public class MovieGridActivity extends AppCompatActivity implements MovieGridFra
         } else {
             Intent intent = new Intent(this, MovieDetailActivity.class)
                     .putExtra(MovieDetailActivity.MOVIE_INFO, movie);
-            startActivity(intent);
+
+            ActivityOptionsCompat activityOptions =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                            new Pair<View, String>(vh.posterImageView, getString(R.string.detail_poster_transition_name)));
+            ActivityOptionsCompat activityOptions2 =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(this);
+
+            ActivityOptionsCompat activityOptions3 =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                            vh.posterImageView, getString(R.string.detail_poster_transition_name));
+
+            ActivityCompat.startActivity(this, intent, activityOptions2.toBundle());
+
+            // startActivity(intent);
         }
     }
 }

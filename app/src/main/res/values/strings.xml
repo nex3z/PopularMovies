@@ -17,6 +17,8 @@
 
     <string name="no_review_available">Nobody has written any reviews for now.</string>
 
+    <string name="detail_poster_transition_name" translatable="false">TN_DetailPoster</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

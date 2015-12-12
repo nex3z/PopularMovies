@@ -1,6 +1,7 @@
 package com.nex3z.popularmovies.ui.adapter;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
     private static OnItemClickListener mListener;
 
     public interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
+        void onItemClick(int position, PosterAdapter.ViewHolder vh);
     }
 
     public PosterAdapter(List<Movie> movies) {
@@ -68,6 +69,8 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
                 .placeholder(R.drawable.placeholder_poster_white)
                 .into(holder.posterImageView);
 
+        ViewCompat.setTransitionName(holder.posterImageView, "posterImageView" + position);
+
         holder.isFavourite = StorageUtility.isFavourite(holder.itemView.getContext(), movie);
         if (holder.isFavourite) {
             holder.favouriteBtn.setImageResource(R.drawable.ic_favorite_black_18dp);
@@ -97,13 +100,13 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
         return mMovies.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private static final String LOG_TAG = ViewHolder.class.getSimpleName();
+        private final String LOG_TAG = ViewHolder.class.getSimpleName();
 
-        @Bind(R.id.poster_image) ImageView posterImageView;
-        @Bind(R.id.poster_title) TextView titleTextView;
-        @Bind(R.id.poster_favourite_button) ImageButton favouriteBtn;
+        @Bind(R.id.poster_image) public ImageView posterImageView;
+        @Bind(R.id.poster_title) public TextView titleTextView;
+        @Bind(R.id.poster_favourite_button) public ImageButton favouriteBtn;
         boolean isFavourite = false;
 
         public ViewHolder(final View itemView) {
@@ -116,7 +119,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
                 public void onClick(View v) {
                     Log.v(LOG_TAG, "onClick(): mListener = " + mListener);
                     if (mListener != null)
-                        mListener.onItemClick(itemView, getLayoutPosition());
+                        mListener.onItemClick(getLayoutPosition(), ViewHolder.this);
                 }
             });
         }
