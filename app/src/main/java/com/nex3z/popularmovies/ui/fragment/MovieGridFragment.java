@@ -18,7 +18,8 @@ import com.nex3z.popularmovies.app.App;
 import com.nex3z.popularmovies.data.model.Movie;
 import com.nex3z.popularmovies.data.rest.model.MovieResponse;
 import com.nex3z.popularmovies.data.rest.service.MovieService;
-import com.nex3z.popularmovies.ui.adapter.PosterAdapter;
+import com.nex3z.popularmovies.ui.adapter.AbstractMovieAdapter;
+import com.nex3z.popularmovies.ui.adapter.MovieAdapter;
 import com.nex3z.popularmovies.ui.listener.EndlessRecyclerOnScrollListener;
 import com.nex3z.popularmovies.ui.widget.SpacesItemDecoration;
 
@@ -36,7 +37,7 @@ public class MovieGridFragment extends Fragment {
 
     private static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
 
-    private PosterAdapter mPosterAdapter;
+    private MovieAdapter mPosterAdapter;
     private GridLayoutManager mLayoutManager;
     private List<Movie> mMovies = new ArrayList<Movie>();
     private int mPage = 1;
@@ -47,7 +48,7 @@ public class MovieGridFragment extends Fragment {
     @Bind(R.id.swipe_container) SwipeRefreshLayout mSwipeLayout;
 
     public interface Callbacks {
-        void onItemSelected(Movie movie, PosterAdapter.ViewHolder vh);
+        void onItemSelected(Movie movie, AbstractMovieAdapter.ViewHolder vh);
     }
 
     private static Callbacks sDummyCallbacks = (movie, vh) -> {};
@@ -75,7 +76,7 @@ public class MovieGridFragment extends Fragment {
 
         mSwipeLayout.setOnRefreshListener(() -> fetchMovies(mSortBy, mPage));
 
-        mPosterAdapter = new PosterAdapter(mMovies);
+        mPosterAdapter = new MovieAdapter(mMovies);
         mPosterAdapter.setOnItemClickListener((position, viewHolder) -> {
             Log.v(LOG_TAG, "onItemClick(): position = " + position);
             Movie movie = mMovies.get(position);

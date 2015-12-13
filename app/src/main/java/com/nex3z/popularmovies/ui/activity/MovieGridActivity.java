@@ -18,7 +18,7 @@ import android.view.View;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.data.model.Movie;
-import com.nex3z.popularmovies.ui.adapter.PosterAdapter;
+import com.nex3z.popularmovies.ui.adapter.AbstractMovieAdapter;
 import com.nex3z.popularmovies.ui.fragment.FavouriteFragment;
 import com.nex3z.popularmovies.ui.fragment.MovieGridFragment;
 
@@ -55,8 +55,8 @@ public class MovieGridActivity extends AppCompatActivity implements MovieGridFra
         }
         Log.v(LOG_TAG, "onCreate(): mTwoPane = " + mTwoPane);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -113,7 +113,7 @@ public class MovieGridActivity extends AppCompatActivity implements MovieGridFra
     }
 
     @Override
-    public void onItemSelected(Movie movie, PosterAdapter.ViewHolder vh) {
+    public void onItemSelected(Movie movie, AbstractMovieAdapter.ViewHolder vh) {
         if (mTwoPane) {
 //            Bundle args = new Bundle();
 //            args.putParcelable(MovieDetailFragment.DETAIL_URI, uri);
@@ -131,12 +131,6 @@ public class MovieGridActivity extends AppCompatActivity implements MovieGridFra
             ActivityOptionsCompat activityOptions =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                             new Pair<View, String>(vh.posterImageView, getString(R.string.detail_poster_transition_name)));
-            ActivityOptionsCompat activityOptions2 =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(this);
-
-            ActivityOptionsCompat activityOptions3 =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                            vh.posterImageView, getString(R.string.detail_poster_transition_name));
 
             ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
 

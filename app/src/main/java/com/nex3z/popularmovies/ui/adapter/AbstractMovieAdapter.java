@@ -17,24 +17,18 @@ import com.nex3z.popularmovies.util.ImageUtility;
 import com.nex3z.popularmovies.util.StorageUtility;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder>{
 
-    private static final String LOG_TAG = PosterAdapter.class.getSimpleName();
+public abstract class AbstractMovieAdapter extends RecyclerView.Adapter<AbstractMovieAdapter.ViewHolder> {
 
-    private List<Movie> mMovies;
+    private static final String LOG_TAG = AbstractMovieAdapter.class.getSimpleName();
+
     private static OnItemClickListener mListener;
 
     public interface OnItemClickListener {
-        void onItemClick(int position, PosterAdapter.ViewHolder vh);
-    }
-
-    public PosterAdapter(List<Movie> movies) {
-        mMovies = movies;
+        void onItemClick(int position, AbstractMovieAdapter.ViewHolder vh);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -54,7 +48,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Movie movie = mMovies.get(position);
+        Movie movie = getMovie(position);
 
         TextView textView = holder.titleTextView;
         String title = movie.getTitle();
@@ -95,10 +89,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
         });
     }
 
-    @Override
-    public int getItemCount() {
-        return mMovies.size();
-    }
+    public abstract Movie getMovie(int position);
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -124,5 +115,4 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
             });
         }
     }
-
 }
