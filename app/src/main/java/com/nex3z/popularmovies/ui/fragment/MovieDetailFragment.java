@@ -8,18 +8,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.app.App;
 import com.nex3z.popularmovies.data.model.Movie;
 import com.nex3z.popularmovies.data.model.Review;
+import com.nex3z.popularmovies.data.model.Video;
 import com.nex3z.popularmovies.data.rest.model.ReviewResponse;
+import com.nex3z.popularmovies.data.rest.model.VideoResponse;
 import com.nex3z.popularmovies.data.rest.service.ReviewService;
+import com.nex3z.popularmovies.data.rest.service.VideoService;
 import com.nex3z.popularmovies.util.GenreUtility;
 import com.nex3z.popularmovies.util.ImageUtility;
+import com.nex3z.popularmovies.util.VideoUtility;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,6 +47,7 @@ public class MovieDetailFragment extends Fragment {
 
     private Movie mMovie;
     private List<Review> mReviews = new ArrayList<Review>();
+    private List<Video> mVideos = new ArrayList<Video>();
 
     @Bind(R.id.detail_title_textview) TextView mTitleView;
     @Bind(R.id.detail_release_date_textview) TextView mReleaseDateView;
@@ -51,6 +58,9 @@ public class MovieDetailFragment extends Fragment {
     @Bind(R.id.detail_layout) LinearLayout mDetailLayout;
     @Bind(R.id.detail_review_layout) LinearLayout mReviewLayout;
     @Bind(R.id.empty_textview) TextView mEmptyView;
+    @Bind(R.id.detail_backdrop_image) ImageView mBackdropImage;
+    @Bind(R.id.detail_play_btn) ImageButton mPlayBtn;
+    @Bind(R.id.movie_scroll_view) ObservableScrollView mObservableScrollView;
 
     public MovieDetailFragment() {
     }
@@ -79,6 +89,16 @@ public class MovieDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         ButterKnife.bind(this, rootView);
 
+        mPlayBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Video video = mVideos.get(0);
+                if (video.getKey() != null) {
+                    VideoUtility.playVideo(getActivity(), video.getSite(), video.getKey());
+                }
+            }
+        });
+
         getActivity().supportPostponeEnterTransition();
 
         return rootView;
@@ -86,6 +106,7 @@ public class MovieDetailFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        updateMovieInfo(mMovie);
         updateDetail();
         fetchReviews(mMovie.getId());
     }
@@ -175,6 +196,48 @@ public class MovieDetailFragment extends Fragment {
         }
 
         getActivity().supportStartPostponedEnterTransition();
+    }
+
+    private void updateMovieInfo(Movie movie) {
+//        mAppBarLayout.setTitle(mMovie.getTitle());
+
+        String url = ImageUtility.getImageUrl(movie.getBackdropPath());
+        Log.v(LOG_TAG, "updateBackdropImage(): backdrop url = " + url
+                + ", mBackdropImage = " + mBackdropImage);
+        Picasso.with(getActivity()).load(url).into(mBackdropImage);
+        fetchVideos(movie.getId());
+    }
+
+    public void fetchVideos(long movieId) {
+        Log.v(LOG_TAG, "fetchVideos(): movieId = " + movieId);
+        VideoService service = App.getRestClient().getVideoService();
+        service.getVideos(movieId)
+                .timeout(5, TimeUnit.SECONDS)
+                .retry(2)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> processVideoResponse(response),
+                        throwable -> Snackbar.make(
+                                mObservableScrollView,
+                                throwable.getLocalizedMessage(), Snackbar.LENGTH_LONG
+                        ).show()
+                );
+    }
+
+    private void processVideoResponse(VideoResponse response) {
+        List<Video> videos = response.getVideos();
+        if (videos.size() != 0) {
+            Log.v(LOG_TAG, "processVideoResponse(): videos size = " + videos.size());
+            mVideos.addAll(videos);
+            Log.v(LOG_TAG, "processVideoResponse(): mVideos size = " + mVideos.size());
+            for(Video video : mVideos) {
+                Log.v(LOG_TAG, "processVideoResponse(): video key = " + video.getKey()
+                        + ", name = " + video.getName());
+            }
+            Log.v(LOG_TAG, "processVideoResponse(): size = " + response.getVideos().size());
+            mPlayBtn.setVisibility(View.VISIBLE);
+        }
     }
 
 }

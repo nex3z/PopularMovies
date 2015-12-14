@@ -2,8 +2,6 @@ package com.nex3z.popularmovies.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -12,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -43,13 +42,14 @@ public class MovieDetailActivity extends AppCompatActivity {
     public static final String MOVIE_INFO = "MOVIE_INFO";
 
     private Movie mMovie;
-    private List<Video> mVideos = new ArrayList<Video>();
 
-    @Bind(R.id.detail_backdrop_image) ImageView mBackdropImage;
-    @Bind(R.id.toolbar_layout) CollapsingToolbarLayout mAppBarLayout;
+
+
+//    @Bind(R.id.toolbar_layout) CollapsingToolbarLayout mAppBarLayout;
     @Bind(R.id.detail_toolbar) Toolbar mToolbar;
-    @Bind(R.id.detail_play_btn) ImageButton mPlayBtn;
-    @Bind(R.id.detail_coordinator_layout) CoordinatorLayout mCoordinatorLayout;
+
+//    @Bind(R.id.detail_coordinator_layout) CoordinatorLayout mCoordinatorLayout;
+    @Bind(R.id.detail_activity_frame) FrameLayout mFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,19 +73,10 @@ public class MovieDetailActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.movie_detail_container, fragment)
                     .commit();
-            updateMovieInfo(mMovie);
+
         }
 
-        mPlayBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Video video = mVideos.get(0);
-                if (video.getKey() != null) {
-                    VideoUtility.playVideo(MovieDetailActivity.this,
-                            video.getSite(), video.getKey());
-                }
-            }
-        });
+
     }
 
     @Override
@@ -98,92 +89,5 @@ public class MovieDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public class SectionPagerAdapter extends FragmentPagerAdapter {
-//
-//        final int PAGE_COUNT = 3;
-//        private String tabTitles[] = new String[]{
-//                getString(R.string.tab_movie_detail),
-//                getString(R.string.tab_movie_video),
-//                getString(R.string.tab_movie_review)};
-//
-//        public SectionPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            switch (position) {
-//                case 0: {
-//                    Bundle arguments = new Bundle();
-//                    arguments.putParcelable(MovieDetailFragment.ARG_MOVIE_INFO,
-//                            getIntent().getParcelableExtra(MOVIE_INFO));
-//
-//                    MovieDetailFragment fragment = new MovieDetailFragment();
-//                    fragment.setArguments(arguments);
-//
-//                    return fragment;
-//                }
-//                case 1: {
-//                    return VideoFragment.newInstance(mMovie.getId());
-//                }
-//                case 2: {
-//                    return ReviewFragment.newInstance(mMovie.getId());
-//                }
-//                default:
-//                    return new MovieDetailFragment();
-//            }
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return PAGE_COUNT;
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            return tabTitles[position];
-//        }
-//    }
 
-    private void updateMovieInfo(Movie movie) {
-        mAppBarLayout.setTitle(mMovie.getTitle());
-
-        String url = ImageUtility.getImageUrl(movie.getBackdropPath());
-        Log.v(LOG_TAG, "updateBackdropImage(): backdrop url = " + url
-                + ", mBackdropImage = " + mBackdropImage);
-        Picasso.with(this).load(url).into(mBackdropImage);
-        fetchVideos(movie.getId());
-    }
-
-    public void fetchVideos(long movieId) {
-        Log.v(LOG_TAG, "fetchVideos(): movieId = " + movieId);
-        VideoService service = App.getRestClient().getVideoService();
-        service.getVideos(movieId)
-                .timeout(5, TimeUnit.SECONDS)
-                .retry(2)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        response -> processVideoResponse(response),
-                        throwable -> Snackbar.make(
-                                mCoordinatorLayout,
-                                throwable.getLocalizedMessage(), Snackbar.LENGTH_LONG
-                        ).show()
-                );
-    }
-
-    private void processVideoResponse(VideoResponse response) {
-        List<Video> videos = response.getVideos();
-        if (videos.size() != 0) {
-            Log.v(LOG_TAG, "processVideoResponse(): videos size = " + videos.size());
-            mVideos.addAll(videos);
-            Log.v(LOG_TAG, "processVideoResponse(): mVideos size = " + mVideos.size());
-            for(Video video : mVideos) {
-                Log.v(LOG_TAG, "processVideoResponse(): video key = " + video.getKey()
-                        + ", name = " + video.getName());
-            }
-            Log.v(LOG_TAG, "processVideoResponse(): size = " + response.getVideos().size());
-            mPlayBtn.setVisibility(View.VISIBLE);
-        }
-    }
 }
