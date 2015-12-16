@@ -125,8 +125,10 @@ public class MovieGridActivity extends AppCompatActivity implements MovieGridFra
 //                    .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
 //                    .commit();
         } else {
-            Intent intent = new Intent(this, MovieDetailActivity.class)
-                    .putExtra(MovieDetailActivity.MOVIE_INFO, movie);
+//            Intent intent = new Intent(this, MovieDetailActivity.class)
+//                    .putExtra(MovieDetailActivity.MOVIE_INFO, movie);
+            Intent intent = new Intent(this, DetailActivity.class)
+                    .putExtra(DetailActivity.MOVIE_INFO, movie);
 
             ActivityOptionsCompat activityOptions =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(this,
