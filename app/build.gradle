@@ -54,4 +54,5 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'io.reactivex:rxjava:1.0.16'
     compile 'jp.wasabeef:recyclerview-animators:2.1.0'
+    compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
 }

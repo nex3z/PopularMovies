@@ -16,6 +16,7 @@ import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.app.App;
 import com.nex3z.popularmovies.data.model.Movie;
 import com.nex3z.popularmovies.data.model.Review;
+import com.nex3z.popularmovies.data.model.Video;
 import com.nex3z.popularmovies.data.rest.model.ReviewResponse;
 import com.nex3z.popularmovies.data.rest.service.ReviewService;
 import com.nex3z.popularmovies.util.GenreUtility;
@@ -41,6 +42,7 @@ public class MovieDetailFragment extends Fragment {
 
     private Movie mMovie;
     private List<Review> mReviews = new ArrayList<Review>();
+    private List<Video> mVideos = new ArrayList<Video>();
 
     @Bind(R.id.detail_title_textview) TextView mTitleView;
     @Bind(R.id.detail_release_date_textview) TextView mReleaseDateView;
@@ -51,6 +53,7 @@ public class MovieDetailFragment extends Fragment {
     @Bind(R.id.detail_layout) LinearLayout mDetailLayout;
     @Bind(R.id.detail_review_layout) LinearLayout mReviewLayout;
     @Bind(R.id.empty_textview) TextView mEmptyView;
+
 
     public MovieDetailFragment() {
     }

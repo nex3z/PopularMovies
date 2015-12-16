@@ -1,4 +1,4 @@
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,35 +7,68 @@
     android:clipChildren="false"
     >
 
-    <LinearLayout
-        android:id="@+id/detail_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:clipChildren="false"
-        android:layout_margin="16dp"
-        >
+<!--<com.github.ksoichiro.android.observablescrollview.ObservableScrollView-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:id="@+id/movie_scroll_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:fillViewport="true"-->
+    <!--&gt;-->
 
-        <include layout="@layout/detail_info"/>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:clipChildren="false"-->
+        <!--&gt;-->
 
-        <View
+        <!--<FrameLayout-->
+            <!--android:id="@+id/movie_cover_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--&gt;-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/detail_backdrop_image"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="200dp"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:layout_gravity="center"-->
+                <!--tools:src="@drawable/placeholder_backdrop"-->
+                <!--/>-->
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/detail_play_btn"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:src="@drawable/ic_play_circle_fill_24dp"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:alpha=".60"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:background="@null"-->
+                <!--android:visibility="gone"-->
+                <!--/>-->
+
+        <!--</FrameLayout>-->
+
+        <!--<View-->
+            <!--android:id="@+id/anchor"-->
+            <!--android:layout_alignTop="@id/movie_cover_container"-->
+            <!--android:layout_alignBottom="@id/movie_cover_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--/>-->
+
+        <include
+            layout="@layout/movie_detail_content"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/color_gray_light"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+
             />
 
-        <include layout="@layout/detail_overview" />
+    <!--</RelativeLayout>-->
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/color_gray_light"
-            />
-
-        <include layout="@layout/detail_reviews" />
-
-    </LinearLayout>
-
-</FrameLayout>
+<!--</com.github.ksoichiro.android.observablescrollview.ObservableScrollView>-->
+</RelativeLayout>
