@@ -6,4 +6,5 @@
     <color name="color_accent">#546e7a</color>
     <color name="color_gray_light">#ddd</color>
     <color name="color_white">#FFFFFF</color>
+    <color name="color_transparent">#00000000</color>
 </resources>
