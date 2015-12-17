@@ -2,7 +2,9 @@ package com.nex3z.popularmovies.util;
 
 
 import android.app.Activity;
+import android.os.Build;
 import android.view.View;
+import android.view.Window;
 
 public class UiUtility {
 
@@ -17,4 +19,12 @@ public class UiUtility {
         int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
         decorView.setSystemUiVisibility(uiOptions);
     }
+
+    public static void setStatusBarColor(Activity activity, int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = activity.getWindow();
+            window.setStatusBarColor(color);
+        }
+    }
+
 }

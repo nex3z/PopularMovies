@@ -22,6 +22,11 @@
             android:clipChildren="false"
             >
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_activity_backdrop_container"
+                >
             <ImageView
                 android:id="@+id/detail_activity_backdrop_image"
                 android:layout_width="match_parent"
@@ -40,24 +45,13 @@
                 android:layout_gravity="center"
                 android:background="@null"
                 android:visibility="gone" />
+            </FrameLayout>
 
             <View
                 android:id="@+id/detail_activity_anchor"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/backdrop_image_height"
                 android:minHeight="@dimen/backdrop_image_height" />
-
-            <!--<TextView-->
-                <!--android:id="@+id/detail_activity_body"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@id/detail_activity_anchor"-->
-                <!--android:background="@android:color/white"-->
-                <!--android:paddingBottom="@dimen/activity_vertical_margin"-->
-                <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
-                <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
-                <!--android:paddingTop="@dimen/activity_vertical_margin"-->
-                <!--android:text="@string/lipsum" />-->
 
             <FrameLayout
                 android:id="@+id/detail_activity_fragment_container"
@@ -79,6 +73,7 @@
         android:background="?attr/colorPrimary"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:fitsSystemWindows="true"
+        android:visibility="visible"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
 </FrameLayout>
