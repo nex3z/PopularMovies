@@ -1,9 +1,7 @@
 package com.nex3z.popularmovies.ui.activity;
 
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -12,14 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.app.App;
 import com.nex3z.popularmovies.data.model.Movie;
@@ -28,6 +24,7 @@ import com.nex3z.popularmovies.data.rest.model.VideoResponse;
 import com.nex3z.popularmovies.data.rest.service.VideoService;
 import com.nex3z.popularmovies.ui.fragment.MovieDetailFragment;
 import com.nex3z.popularmovies.util.ImageUtility;
+import com.nex3z.popularmovies.util.UiUtility;
 import com.nex3z.popularmovies.util.VideoUtility;
 import com.squareup.picasso.Picasso;
 
@@ -52,8 +49,12 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
     private Movie mMovie;
     private List<Video> mVideos = new ArrayList<Video>();
     private boolean isStatusBarTransparent = true;
+    private boolean isToolbarTransparent = true;
+    private boolean isToolBarShown = true;
     private int mToolbarHeight;
     private int mShowStatusBarColorThreshold;
+    private int mLastUpScrollY = 0;
+    private int mLastScrollY = 0;
 
     @Bind(R.id.detail_activity_toolbar) Toolbar mToolbar;
     @Bind(R.id.detail_activity_container_frame) FrameLayout mActivityContainerFrame;
@@ -104,6 +105,7 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
         TypedValue tv = new TypedValue();
         if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
             mToolbarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+            Log.v(LOG_TAG, "onCreate(): mToolbarHeight = " + mToolbarHeight);
         }
         mShowStatusBarColorThreshold = mParallaxImageHeight + mPosterMargin - mToolbarHeight;
         Log.v(LOG_TAG, "onCreate(): mShowStatusBarColorThreshold = " + mShowStatusBarColorThreshold);
@@ -124,45 +126,121 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
         Log.v(LOG_TAG, "onScrollChanged(): scrollY = " + scrollY + ", firstScroll = " + firstScroll
                 + ", dragging = " + dragging);
 
+        // Parallax scrolling the backdrop image.
+        mBackdropContainerFrame.setTranslationY(scrollY / 2);
+
+        // Update alpha for status bar and toolbar.
         if(scrollY >= mShowStatusBarColorThreshold)  {
             if (isStatusBarTransparent) {
                 Log.v(LOG_TAG, "onScrollChanged(): show status bar color");
-                animateStatusBarAlpha(0, 1);
+                UiUtility.animateStatusBarSolid(this, mColorPrimaryDark);
+                //UiUtility.animateViewSolid(mToolbar, mColorPrimary);
                 isStatusBarTransparent = false;
             }
+        } else if (!isStatusBarTransparent) {
+            Log.v(LOG_TAG, "onScrollChanged(): hide status bar color");
+            UiUtility.animateStatusBarTransparent(this);
+            // UiUtility.animateViewTransparent(mToolbar, mColorPrimary);
+            isStatusBarTransparent = true;
+        }
 
-            int toolbarOffset = scrollY - mShowStatusBarColorThreshold;
-            toolbarOffset = toolbarOffset > mToolbarHeight ? mToolbarHeight : toolbarOffset;
-            Log.v(LOG_TAG, "onScrollChanged(): mToolbar.getTranslationY() = " + mToolbar.getTranslationY() + "mToolbar.setTranslationY = " + (-toolbarOffset));
-            mToolbar.setTranslationY(-toolbarOffset);
-
-        } else {
-            if (!isStatusBarTransparent) {
-                Log.v(LOG_TAG, "onScrollChanged(): hide status bar color");
-                animateStatusBarAlpha(1, 0);
-                isStatusBarTransparent = true;
+        if (scrollY >= mShowStatusBarColorThreshold + mToolbarHeight) {
+            if (isToolbarTransparent) {
+                Log.v(LOG_TAG, "onScrollChanged(): show tool bar color");
+                UiUtility.animateViewSolid(mToolbar, mColorPrimary);
+                isToolbarTransparent = false;
             }
+        }else if (!isToolbarTransparent) {
+                Log.v(LOG_TAG, "onScrollChanged(): hide tool bar color");
+                UiUtility.animateViewTransparent(mToolbar, mColorPrimary);
+                isToolbarTransparent = true;
+
+        }
+
+        // Update toolbar position.
+        if(scrollY >= mShowStatusBarColorThreshold)  {
+            int diff = scrollY - mLastScrollY;
+            Log.v(LOG_TAG, "onScrollChanged(): diff = " + diff);
+
+            if (diff >= 0) {
+                float curr = mToolbar.getTranslationY();
+                float next = curr - diff;
+                translateToolbar(next);
+                Log.v(LOG_TAG, "onScrollChanged(): Scrolling up, hide toolbar, curr = " + curr + ", next = " + next);
+                isToolBarShown = false;
+            } else {
+                float curr = mToolbar.getTranslationY();
+                float next = curr - diff;
+                translateToolbar(next);
+                Log.v(LOG_TAG, "onScrollChanged(): Scrolling down, show toolbar, curr = " + curr + ", next = " + next);
+                isToolBarShown = true;
+            }
+        } else {
             mToolbar.setTranslationY(0);
         }
 
-        mBackdropContainerFrame.setTranslationY(scrollY / 2);
+        mLastScrollY = scrollY;
+//        Log.v(LOG_TAG, "onScrollChanged(): scrollY = " + scrollY + ", firstScroll = " + firstScroll
+//                + ", dragging = " + dragging);
+//        boolean isScrollUp = true;
+//        if (scrollY > mLastScrollY) {
+//            Log.v(LOG_TAG, "onScrollChanged(): Scroll down");
+//            isScrollUp = false;
+//        } else {
+//            Log.v(LOG_TAG, "onScrollChanged(): Scroll up");
+//        }
+//
+//        if(scrollY >= mShowStatusBarColorThreshold)  {
+//            if (isStatusBarTransparent) {
+//                Log.v(LOG_TAG, "onScrollChanged(): show status bar color");
+//                animateStatusBarAlpha(0, 1);
+//                isStatusBarTransparent = false;
+//            }
+//
+//            int toolbarOffset = scrollY - mShowStatusBarColorThreshold;
+//            Log.v(LOG_TAG, "onScrollChanged(): mToolbar.getTranslationY() = "
+//                    + mToolbar.getTranslationY() + ", toolbarOffset = " + toolbarOffset);
+//            if (toolbarOffset > mToolbarHeight) {
+//                if (isScrollUp) {
+//                    int offset =  mToolbarHeight + scrollY - mLastScrollY;
+//                    Log.v(LOG_TAG, "onScrollChanged(): isScrollUp, offset = " + offset);
+//                    if (offset < mToolbarHeight) {
+//                        mToolbar.setTranslationY(-offset);
+//                    }
+//
+//                } else {
+//                    mToolbar.setTranslationY(mToolbarHeight);
+//                }
+//
+//            } else {
+//                mToolbar.setTranslationY(-toolbarOffset);
+//            }
+//
+//
+//        } else {
+//            if (!isStatusBarTransparent) {
+//                Log.v(LOG_TAG, "onScrollChanged(): hide status bar color");
+//                animateStatusBarAlpha(1, 0);
+//                isStatusBarTransparent = true;
+//            }
+//            mToolbar.setTranslationY(0);
+//        }
+//
+//        mBackdropContainerFrame.setTranslationY(scrollY / 2);
     }
 
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void animateStatusBarAlpha(float fromAlpha, float toAlpha) {
-        Window window = this.getWindow();
-
-        ValueAnimator animator = ValueAnimator.ofFloat(fromAlpha, toAlpha).setDuration(500);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float alpha = (float) animation.getAnimatedValue();
-                int color = ScrollUtils.getColorWithAlpha(alpha, mColorPrimaryDark);
-                window.setStatusBarColor(color);
-            }
-        });
-        animator.start();
+    private void translateToolbar(float translateY) {
+        Log.v(LOG_TAG, "translateToolbar(): translateY = " + translateY);
+        if (translateY > 0) {
+            mToolbar.setTranslationY(0);
+            Log.v(LOG_TAG, "translateToolbar(): translateY = " + translateY + ", ignore, set to 0");
+        } else if (translateY < -mToolbarHeight) {
+            mToolbar.setTranslationY(-mToolbarHeight);
+            Log.v(LOG_TAG, "translateToolbar(): translateY = " + translateY + ", ignore, set to " + (-mToolbarHeight));
+        } else {
+            mToolbar.setTranslationY(translateY);
+            Log.v(LOG_TAG, "translateToolbar(): translateY = " + translateY);
+        }
     }
 
     @Override
@@ -172,8 +250,18 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        int y = mScrollView.getCurrentScrollY();
-        Log.v(LOG_TAG, "onUpOrCancelMotionEvent(): mScrollView.getCurrentScrollY() = " + y);
+        mLastUpScrollY = mScrollView.getCurrentScrollY();
+        Log.v(LOG_TAG, "onUpOrCancelMotionEvent(): mLastScrollY = " + mLastUpScrollY);
+
+        if(isToolBarShown == true && mToolbar.getTranslationY() != 0) {
+            Log.v(LOG_TAG, "onUpOrCancelMotionEvent(): need show toolbar, mToolbar.getTranslationY() = " + mToolbar.getTranslationY());
+            animateToolbarMove(0);
+
+        } else if (isToolBarShown == false && mToolbar.getTranslationY() != -mToolbarHeight) {
+            Log.v(LOG_TAG, "onUpOrCancelMotionEvent(): need hide toolbar, mToolbar.getTranslationY() = " + mToolbar.getTranslationY());
+            animateToolbarMove(-mToolbarHeight);
+        }
+
 //        Log.v(LOG_TAG, "onUpOrCancelMotionEvent(): scrollState = " + scrollState);
 //        if (scrollState == ScrollState.UP) {
 //            if (toolbarIsShown()) {
@@ -196,16 +284,16 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
     }
 
     private void showToolbar() {
-        moveToolbar(0);
+        animateToolbarMove(0);
     }
 
     private void hideToolbar() {
         Log.v(LOG_TAG, "hideToolbar(): mToolbar.getHeight() = " + -mToolbar.getHeight());
-        moveToolbar(-mToolbar.getHeight());
+        animateToolbarMove(-mToolbar.getHeight());
     }
 
-    private void moveToolbar(float toTranslationY) {
-        Log.v(LOG_TAG, "moveToolbar(): toTranslationY = " + toTranslationY);
+    private void animateToolbarMove(float toTranslationY) {
+        Log.v(LOG_TAG, "animateToolbarMove(): toTranslationY = " + toTranslationY);
         if (mToolbar.getTranslationY() == toTranslationY) {
             return;
         }
