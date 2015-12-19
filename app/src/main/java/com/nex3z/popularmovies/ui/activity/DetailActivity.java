@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
@@ -47,10 +48,12 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
 
     public static final String MOVIE_INFO = "MOVIE_INFO";
 
-    private int mParallaxImageHeight;
+    //private int mParallaxImageHeight;
     private Movie mMovie;
     private List<Video> mVideos = new ArrayList<Video>();
     private boolean isStatusBarTransparent = true;
+    private int mToolbarHeight;
+    private int mShowStatusBarColorThreshold;
 
     @Bind(R.id.detail_activity_toolbar) Toolbar mToolbar;
     @Bind(R.id.detail_activity_container_frame) FrameLayout mActivityContainerFrame;
@@ -60,8 +63,10 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
     @Bind(R.id.detail_activity_scroll) ObservableScrollView mScrollView;
     @BindColor(R.color.color_primary) int mColorPrimary;
     @BindColor(R.color.color_primary_dark) int mColorPrimaryDark;
-    // @BindColor(R.color.color_transparent) int mColorTransparent;
+
     @BindDimen(R.dimen.detail_poster_margin) int mPosterMargin;
+    @BindDimen(R.dimen.backdrop_image_height) int mParallaxImageHeight;
+//    @BindDimen(R.attr.actionBarSize) int mToolbarHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +84,11 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
 
         mScrollView.setScrollViewCallbacks(this);
 
-        mParallaxImageHeight = getResources().getDimensionPixelSize(R.dimen.backdrop_image_height);
+        //mParallaxImageHeight = getResources().getDimensionPixelSize(R.dimen.backdrop_image_height);
         Log.v(LOG_TAG, "onCreate(): mParallaxImageHeight = " + mParallaxImageHeight + ", mPosterMargin = " + mPosterMargin);
 
         mToolbar.setBackgroundColor(Color.TRANSPARENT);
+//        mToolbarHeight = mToolbar.getMeasuredHeight();
 
         if (savedInstanceState == null) {
             mMovie = getIntent().getParcelableExtra(MOVIE_INFO);
@@ -94,6 +100,13 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
                     .commit();
             updateMovieInfo(mMovie);
         }
+
+        TypedValue tv = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            mToolbarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+        }
+        mShowStatusBarColorThreshold = mParallaxImageHeight + mPosterMargin - mToolbarHeight;
+        Log.v(LOG_TAG, "onCreate(): mShowStatusBarColorThreshold = " + mShowStatusBarColorThreshold);
 
         mPlayBtn.setOnClickListener(view -> {
                 Video video = mVideos.get(0);
@@ -111,17 +124,25 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
         Log.v(LOG_TAG, "onScrollChanged(): scrollY = " + scrollY + ", firstScroll = " + firstScroll
                 + ", dragging = " + dragging);
 
-        if(scrollY > mParallaxImageHeight + mPosterMargin)  {
+        if(scrollY >= mShowStatusBarColorThreshold)  {
             if (isStatusBarTransparent) {
                 Log.v(LOG_TAG, "onScrollChanged(): show status bar color");
                 animateStatusBarAlpha(0, 1);
                 isStatusBarTransparent = false;
             }
 
-        } else if (!isStatusBarTransparent) {
-            Log.v(LOG_TAG, "onScrollChanged(): hide status bar color");
-            animateStatusBarAlpha(1, 0);
-            isStatusBarTransparent = true;
+            int toolbarOffset = scrollY - mShowStatusBarColorThreshold;
+            toolbarOffset = toolbarOffset > mToolbarHeight ? mToolbarHeight : toolbarOffset;
+            Log.v(LOG_TAG, "onScrollChanged(): mToolbar.getTranslationY() = " + mToolbar.getTranslationY() + "mToolbar.setTranslationY = " + (-toolbarOffset));
+            mToolbar.setTranslationY(-toolbarOffset);
+
+        } else {
+            if (!isStatusBarTransparent) {
+                Log.v(LOG_TAG, "onScrollChanged(): hide status bar color");
+                animateStatusBarAlpha(1, 0);
+                isStatusBarTransparent = true;
+            }
+            mToolbar.setTranslationY(0);
         }
 
         mBackdropContainerFrame.setTranslationY(scrollY / 2);
@@ -151,17 +172,19 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        Log.v(LOG_TAG, "onUpOrCancelMotionEvent(): scrollState = " + scrollState);
-        if (scrollState == ScrollState.UP) {
-            if (toolbarIsShown()) {
-                hideToolbar();
-            }
-        } else if (scrollState == ScrollState.DOWN) {
-            if (toolbarIsHidden()) {
-                mToolbar.setBackgroundColor(mColorPrimary);
-                showToolbar();
-            }
-        }
+        int y = mScrollView.getCurrentScrollY();
+        Log.v(LOG_TAG, "onUpOrCancelMotionEvent(): mScrollView.getCurrentScrollY() = " + y);
+//        Log.v(LOG_TAG, "onUpOrCancelMotionEvent(): scrollState = " + scrollState);
+//        if (scrollState == ScrollState.UP) {
+//            if (toolbarIsShown()) {
+//                hideToolbar();
+//            }
+//        } else if (scrollState == ScrollState.DOWN) {
+//            if (toolbarIsHidden()) {
+//                mToolbar.setBackgroundColor(mColorPrimary);
+//                showToolbar();
+//            }
+//        }
     }
 
     private boolean toolbarIsShown() {

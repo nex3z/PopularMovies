@@ -69,11 +69,11 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/detail_activity_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:background="?attr/colorPrimary"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color_transparent"
         android:theme="@style/AppTheme.AppBarOverlay"
-        android:fitsSystemWindows="true"
         android:visibility="visible"
+        android:layout_marginTop="20dp"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
-
+    <!--android:fitsSystemWindows="true"-->
 </FrameLayout>
