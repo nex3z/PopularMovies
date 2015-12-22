@@ -55,6 +55,7 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
     private int mShowStatusBarColorThreshold;
     private int mLastUpScrollY = 0;
     private int mLastScrollY = 0;
+    private boolean isFirstScroll = true;
 
     @Bind(R.id.detail_activity_toolbar) Toolbar mToolbar;
     @Bind(R.id.detail_activity_container_frame) FrameLayout mActivityContainerFrame;
@@ -158,7 +159,7 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
             // Update toolbar position.
             if (scrollY >= mShowStatusBarColorThreshold) {
                 int diff = scrollY - mLastScrollY;
-//                Log.v(LOG_TAG, "onScrollChanged(): diff = " + diff);
+                Log.v(LOG_TAG, "onScrollChanged(): diff = " + diff);
 
                 if (diff >= 0) {
                     float curr = mToolbar.getTranslationY();
@@ -166,18 +167,23 @@ public class DetailActivity extends AppCompatActivity implements ObservableScrol
 //                    Log.v(LOG_TAG, "onScrollChanged(): Scrolling up, hide toolbar, curr = " + curr + ", next = " + next);
                     translateToolbar(next);
                     isToolBarShown = false;
+                    isFirstScroll = false;
                 } else {
                     float curr = mToolbar.getTranslationY();
                     float next = curr - diff;
 //                    Log.v(LOG_TAG, "onScrollChanged(): Scrolling down, show toolbar, curr = " + curr + ", next = " + next);
                     translateToolbar(next);
                     isToolBarShown = true;
+                    isFirstScroll = false;
                 }
             } else {
                 mToolbar.setTranslationY(0);
             }
 
             mLastScrollY = scrollY;
+        } else if (isFirstScroll && scrollY >= mShowStatusBarColorThreshold + mToolbarHeight) {
+            isToolBarShown = false;
+            mToolbar.setTranslationY(-mToolbarHeight);
         }
     }
 
