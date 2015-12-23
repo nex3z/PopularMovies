@@ -1,6 +1,7 @@
 package com.nex3z.popularmovies.ui.fragment;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.app.App;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.BindColor;
 import butterknife.ButterKnife;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import rx.android.schedulers.AndroidSchedulers;
@@ -46,6 +49,8 @@ public class MovieGridFragment extends Fragment {
 
     @Bind(R.id.movie_grid) RecyclerView mMovieRecyclerView;
     @Bind(R.id.swipe_container) SwipeRefreshLayout mSwipeLayout;
+    @Bind(R.id.grid_progressbar) ProgressBar mProgressBar;
+    @BindColor(R.color.color_primary) int mColorPrimary;
 
     public interface Callbacks {
         void onItemSelected(Movie movie, AbstractMovieAdapter.ViewHolder vh);
@@ -75,6 +80,9 @@ public class MovieGridFragment extends Fragment {
         setupRecyclerView(mMovieRecyclerView);
 
         mSwipeLayout.setOnRefreshListener(() -> fetchMovies(mSortBy, mPage));
+
+        Log.v(LOG_TAG, "mProgressBar = " + mProgressBar);
+        mProgressBar.getIndeterminateDrawable().setColorFilter(mColorPrimary, PorterDuff.Mode.MULTIPLY);
 
         mPosterAdapter = new MovieAdapter(mMovies);
         mPosterAdapter.setOnItemClickListener((position, viewHolder) -> {
@@ -132,6 +140,8 @@ public class MovieGridFragment extends Fragment {
         }
         mPosterAdapter.notifyDataSetChanged();
         mSwipeLayout.setRefreshing(false);
+        mProgressBar.setVisibility(View.GONE);
+
         getActivity().supportStartPostponedEnterTransition();
     }
 
@@ -142,6 +152,7 @@ public class MovieGridFragment extends Fragment {
                 Snackbar.LENGTH_LONG
         ).show();
         mSwipeLayout.setRefreshing(false);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
