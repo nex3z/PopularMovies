@@ -12,10 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activity.MovieGridActivity"
+            android:name=".presentation.ui.activity.MovieGridActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:theme="@style/AppTheme.Main">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,27 +22,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.MovieDetailActivity"
-            android:label="@string/title_movie_detail"
-            android:parentActivityName=".ui.activity.MovieGridActivity"
-            android:theme="@style/AppTheme.Details">
+            android:name=".presentation.ui.activity.MovieDetailActivity"
+            android:label="@string/title_activity_movie_detail"
+            android:parentActivityName=".presentation.ui.activity.MovieGridActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activity.MovieGridActivity" />
-        </activity>
-
-        <provider
-            android:name=".data.provider.MovieProvider"
-            android:authorities="com.nex3z.popularmovies" />
-
-        <activity
-            android:name=".ui.activity.DetailActivity"
-            android:label="@string/title_activity_detail"
-            android:theme="@style/AppTheme.Details"
-            android:parentActivityName=".ui.activity.MovieGridActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activity.MovieGridActivity" />
+                android:value="com.nex3z.popularmovies.presentation.ui.activity.MovieGridActivity" />
         </activity>
     </application>
 
