@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.data.repository.datasource;
+package com.nex3z.popularmovies.data.repository.datasource.video;
 
 import com.nex3z.popularmovies.app.App;
 

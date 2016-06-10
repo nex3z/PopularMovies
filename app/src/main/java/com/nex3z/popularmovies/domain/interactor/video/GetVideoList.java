@@ -1,7 +1,8 @@
-package com.nex3z.popularmovies.domain.interactor;
+package com.nex3z.popularmovies.domain.interactor.video;
 
 import com.nex3z.popularmovies.domain.executor.PostExecutionThread;
 import com.nex3z.popularmovies.domain.executor.ThreadExecutor;
+import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.repository.VideoRepository;
 
 import rx.Observable;

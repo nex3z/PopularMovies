@@ -17,8 +17,8 @@ import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.data.entity.mapper.VideoEntityDataMapper;
 import com.nex3z.popularmovies.data.executor.JobExecutor;
 import com.nex3z.popularmovies.data.repository.VideoDataRepository;
-import com.nex3z.popularmovies.data.repository.datasource.VideoDataStoreFactory;
-import com.nex3z.popularmovies.domain.interactor.GetVideoList;
+import com.nex3z.popularmovies.data.repository.datasource.video.VideoDataStoreFactory;
+import com.nex3z.popularmovies.domain.interactor.video.GetVideoList;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.repository.VideoRepository;
 import com.nex3z.popularmovies.presentation.UIThread;
@@ -147,7 +147,7 @@ public class MovieVideoFragment extends Fragment implements MovieVideoView {
     private void setupRecyclerView() {
         mAdapter = new VideoAdapter();
         mAdapter.setOnItemClickListener((position, viewHolder) -> {
-            Log.v(LOG_TAG, "onItemClick(): position = " + position);
+            Log.v(LOG_TAG, "onClick(): position = " + position);
             mPresenter.playVideo(position);
         });
         mVideoRecyclerView.setAdapter(mAdapter);

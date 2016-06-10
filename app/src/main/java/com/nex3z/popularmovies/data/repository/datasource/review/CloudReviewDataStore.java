@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.data.repository.datasource;
+package com.nex3z.popularmovies.data.repository.datasource.review;
 
 import com.nex3z.popularmovies.data.entity.ReviewEntity;
 import com.nex3z.popularmovies.data.net.RestClient;

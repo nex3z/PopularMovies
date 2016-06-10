@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.nex3z.popularmovies.domain.Video;
 import com.nex3z.popularmovies.domain.interactor.DefaultSubscriber;
-import com.nex3z.popularmovies.domain.interactor.GetVideoListArg;
+import com.nex3z.popularmovies.domain.interactor.video.GetVideoListArg;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.presentation.mapper.VideoModelDataMapper;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
@@ -54,7 +54,7 @@ public class MovieVideoPresenter implements Presenter {
     public void playVideo(int position) {
         VideoModel videoModel = mVideoModels.get(position);
         if (videoModel != null) {
-            Log.v(LOG_TAG, "onItemClick(): video = " + videoModel);
+            Log.v(LOG_TAG, "onClick(): video = " + videoModel);
             VideoUtility.playVideo(mView.getContext(), videoModel.getSite(), videoModel.getKey());
         }
     }

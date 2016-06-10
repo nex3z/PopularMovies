@@ -1,6 +1,5 @@
 package com.nex3z.popularmovies.presentation.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -76,11 +75,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public Context getContext() {
-        return this;
     }
 
     @Override

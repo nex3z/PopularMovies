@@ -1,8 +1,8 @@
 package com.nex3z.popularmovies.data.repository;
 
 import com.nex3z.popularmovies.data.entity.mapper.ReviewEntityDataMapper;
-import com.nex3z.popularmovies.data.repository.datasource.ReviewDataStore;
-import com.nex3z.popularmovies.data.repository.datasource.ReviewDataStoreFactory;
+import com.nex3z.popularmovies.data.repository.datasource.review.ReviewDataStore;
+import com.nex3z.popularmovies.data.repository.datasource.review.ReviewDataStoreFactory;
 import com.nex3z.popularmovies.domain.Review;
 import com.nex3z.popularmovies.domain.repository.ReviewRepository;
 

@@ -30,8 +30,6 @@ public class MovieModelDataMapper {
             movieModel.setVideo(movie.isVideo());
             movieModel.setVoteAverage(movie.getVoteAverage());
             movieModel.setVoteCount(movie.getVoteCount());
-            Log.v("mapper", "transform(): movie.getBackdropPath() = " + movie.getBackdropPath());
-            Log.v("mapper", "transform(): url  = " + ImageUtility.getImageUrl(movie.getBackdropPath()));
             movieModel.setBackdropImageUrl(ImageUtility.getImageUrl(movie.getBackdropPath()));
             movieModel.setPosterImageUrl(ImageUtility.getImageUrl(movie.getPosterPath()));
         }
@@ -50,5 +48,28 @@ public class MovieModelDataMapper {
         }
 
         return movieModelList;
+    }
+
+    public Movie toMovie(MovieModel movieModel) {
+        Movie movie = null;
+        if (movieModel != null) {
+            movie = new Movie();
+            movie.setAdult(movieModel.isAdult());
+            movie.setBackdropPath(movieModel.getBackdropPath());
+            movie.setGenreIds(movieModel.getGenreIds());
+            movie.setId(movieModel.getId());
+            movie.setOriginalLanguage(movieModel.getOriginalLanguage());
+            movie.setOriginalTitle(movieModel.getOriginalTitle());
+            movie.setOverview(movieModel.getOverview());
+            movie.setPopularity(movieModel.getPopularity());
+            movie.setPosterPath(movieModel.getPosterPath());
+            movie.setReleaseDate(movieModel.getReleaseDate());
+            movie.setTitle(movieModel.getTitle());
+            movie.setVideo(movieModel.isVideo());
+            movie.setVoteAverage(movieModel.getVoteAverage());
+            movie.setVoteCount(movieModel.getVoteCount());
+        }
+
+        return movie;
     }
 }

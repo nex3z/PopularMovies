@@ -1,8 +1,8 @@
 package com.nex3z.popularmovies.data.repository;
 
 import com.nex3z.popularmovies.data.entity.mapper.VideoEntityDataMapper;
-import com.nex3z.popularmovies.data.repository.datasource.VideoDataStore;
-import com.nex3z.popularmovies.data.repository.datasource.VideoDataStoreFactory;
+import com.nex3z.popularmovies.data.repository.datasource.video.VideoDataStore;
+import com.nex3z.popularmovies.data.repository.datasource.video.VideoDataStoreFactory;
 import com.nex3z.popularmovies.domain.Video;
 import com.nex3z.popularmovies.domain.repository.VideoRepository;
 

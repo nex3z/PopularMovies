@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.data.repository.datasource;
+package com.nex3z.popularmovies.data.repository.datasource.movie;
 
 import com.nex3z.popularmovies.data.entity.MovieEntity;
 import com.nex3z.popularmovies.data.net.RestClient;
@@ -17,15 +17,27 @@ public class CloudMovieDataStore implements MovieDataStore {
     }
 
     @Override
-    public Observable<List<MovieEntity>> movieEntityList(String sortBy) {
+    public Observable<List<MovieEntity>> getMovieEntityList(String sortBy) {
         MovieService movieService = mRestClient.getMovieService();
         return movieService.getMovies(sortBy).map(MovieResponse::getMovies);
     }
 
     @Override
-    public Observable<List<MovieEntity>> movieEntityList(String sortBy, int page) {
+    public Observable<List<MovieEntity>> getMovieEntityList(String sortBy, int page) {
         MovieService movieService = mRestClient.getMovieService();
         return movieService.getMovies(sortBy, page).map(MovieResponse::getMovies);
+    }
+
+    @Override
+    public Observable<Long> insertMovieEntity(MovieEntity movie) {
+        throw new UnsupportedOperationException(
+                "The insertMovieEntity method is not supported in cloud data store");
+    }
+
+    @Override
+    public Observable<Integer> deleteMovieEntity(long movieId) {
+        throw new UnsupportedOperationException(
+                "The deleteMovieEntity method is not supported in cloud data store");
     }
 
 }

@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.domain.interactor;
+package com.nex3z.popularmovies.domain.interactor.movie;
 
 
 public class GetMovieListArg {

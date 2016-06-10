@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.nex3z.popularmovies.domain.Review;
 import com.nex3z.popularmovies.domain.interactor.DefaultSubscriber;
-import com.nex3z.popularmovies.domain.interactor.GetReviewListArg;
+import com.nex3z.popularmovies.domain.interactor.review.GetReviewListArg;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.presentation.mapper.ReviewModelDataMapper;
 import com.nex3z.popularmovies.presentation.model.MovieModel;

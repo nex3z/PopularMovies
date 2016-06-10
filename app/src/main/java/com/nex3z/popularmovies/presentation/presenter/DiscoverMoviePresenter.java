@@ -1,11 +1,14 @@
 package com.nex3z.popularmovies.presentation.presenter;
 
+import android.support.annotation.InterpolatorRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.nex3z.popularmovies.domain.Movie;
 import com.nex3z.popularmovies.domain.interactor.DefaultSubscriber;
-import com.nex3z.popularmovies.domain.interactor.GetMovieListArg;
+import com.nex3z.popularmovies.domain.interactor.movie.DeleteMovieArg;
+import com.nex3z.popularmovies.domain.interactor.movie.GetMovieListArg;
+import com.nex3z.popularmovies.domain.interactor.movie.SaveMovieArg;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.presentation.mapper.MovieModelDataMapper;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
@@ -22,14 +25,20 @@ public class DiscoverMoviePresenter implements Presenter {
     private MovieGridView mMovieGridView;
 
     private final UseCase mGetMovieListUseCase;
+    private final UseCase mSaveMovieUseCase;
+    private final UseCase mDeleteMovieUseCase;
     private final MovieModelDataMapper mMovieModelDataMapper;
     private List<MovieModel> mMovies = new ArrayList<>();
     private int mPage = FIRST_PAGE;
     private String mSortBy = GetMovieListArg.SORT_BY_POPULARITY_DESC;
 
     public DiscoverMoviePresenter(UseCase getMovieListUseCase,
+                                  UseCase saveMovieUseCase,
+                                  UseCase deleteMovieUseCase,
                                   MovieModelDataMapper movieModelDataMapper) {
         mGetMovieListUseCase = getMovieListUseCase;
+        mSaveMovieUseCase = saveMovieUseCase;
+        mDeleteMovieUseCase = deleteMovieUseCase;
         mMovieModelDataMapper = movieModelDataMapper;
     }
 
@@ -83,6 +92,20 @@ public class DiscoverMoviePresenter implements Presenter {
 
     public MovieModel onMovieSelected(int position) {
         return mMovies.get(position);
+    }
+
+    public void addToFavourite(int position) {
+        MovieModel movieModel = mMovies.get(position);
+        if (movieModel != null) {
+            saveMovie(movieModel);
+        }
+    }
+
+    public void removeFromFavourite(int position) {
+        MovieModel movieModel = mMovies.get(position);
+        if (movieModel != null) {
+            deleteMovie(movieModel);
+        }
     }
 
     private void showViewLoading() {
@@ -143,4 +166,31 @@ public class DiscoverMoviePresenter implements Presenter {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    private void saveMovie(MovieModel movieModel) {
+        Log.v(LOG_TAG, "saveMovie(): movieModel = " + movieModel);
+        mSaveMovieUseCase.init(new SaveMovieArg(mMovieModelDataMapper.toMovie(movieModel)))
+                .execute(new SaveMovieSubscriber());
+    }
+
+    private final class SaveMovieSubscriber extends DefaultSubscriber<Long> {
+        @Override
+        public void onNext(Long aLong) {
+            Log.v(LOG_TAG, "onNext(): saved row id = " + aLong);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void deleteMovie(MovieModel movieModel) {
+        Log.v(LOG_TAG, "saveMovie(): movieModel = " + movieModel);
+        mDeleteMovieUseCase.init(new DeleteMovieArg(movieModel.getId()))
+                .execute(new DeleteMovieSubscriber());
+    }
+
+    private final class DeleteMovieSubscriber extends DefaultSubscriber<Integer> {
+        @Override
+        public void onNext(Integer integer) {
+            Log.v(LOG_TAG, "onNext(): delete row = " + integer);
+        }
+    }
 }

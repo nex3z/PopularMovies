@@ -18,9 +18,12 @@ import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.data.entity.mapper.MovieEntityDataMapper;
 import com.nex3z.popularmovies.data.executor.JobExecutor;
 import com.nex3z.popularmovies.data.repository.MovieDataRepository;
-import com.nex3z.popularmovies.data.repository.datasource.MovieDataStoreFactory;
-import com.nex3z.popularmovies.domain.interactor.GetMovieList;
+import com.nex3z.popularmovies.data.repository.datasource.movie.MovieDataStoreFactory;
+import com.nex3z.popularmovies.domain.interactor.movie.DeleteMovie;
+import com.nex3z.popularmovies.domain.interactor.movie.GetMovieList;
+import com.nex3z.popularmovies.domain.interactor.movie.SaveMovie;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
+import com.nex3z.popularmovies.domain.mapper.MovieDataMapper;
 import com.nex3z.popularmovies.domain.repository.MovieRepository;
 import com.nex3z.popularmovies.presentation.UIThread;
 import com.nex3z.popularmovies.presentation.mapper.MovieModelDataMapper;
@@ -156,13 +159,15 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
         mMovieAdapter.notifyItemRangeInserted(start, count);
     }
 
-
     private void initialize() {
         MovieRepository repository = new MovieDataRepository(
-                new MovieDataStoreFactory(), new MovieEntityDataMapper());
+                new MovieDataStoreFactory(), new MovieEntityDataMapper(), new MovieDataMapper());
         UseCase getMovieList = new GetMovieList(repository, new JobExecutor(), new UIThread());
+        UseCase saveMovie = new SaveMovie(repository, new JobExecutor(), new UIThread());
+        UseCase deleteMovie = new DeleteMovie(repository, new JobExecutor(), new UIThread());
 
-        mPresenter = new DiscoverMoviePresenter(getMovieList, new MovieModelDataMapper());
+        mPresenter = new DiscoverMoviePresenter(getMovieList, saveMovie, deleteMovie,
+                new MovieModelDataMapper());
         mPresenter.setView(this);
 
         setupRecyclerView();
@@ -179,13 +184,25 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
     private void setupRecyclerView() {
         Log.v(LOG_TAG, "setupRecyclerView()");
         mMovieAdapter = new MovieAdapter(mPresenter.getMovies());
-        mMovieAdapter.setOnItemClickListener((position, viewHolder) -> {
-            Log.v(LOG_TAG, "onItemClick(): position = " + position);
+        mMovieAdapter.setOnPosterClickListener((position, viewHolder) -> {
+            Log.v(LOG_TAG, "onClick(): position = " + position);
             MovieModel movie = mPresenter.onMovieSelected(position);
             if (movie != null) {
                 mCallbacks.onItemSelected(movie, viewHolder);
             }
         });
+        mMovieAdapter.setOnFavouriteClickListener(new MovieAdapter.OnFavouriteClickListener() {
+            @Override
+            public void onClick(int position, MovieAdapter.ViewHolder vh) {
+                Log.v(LOG_TAG, "onClick(): vh.isFavourite() = " + vh.isFavourite());
+                if (vh.isFavourite()) {
+                    mPresenter.addToFavourite(position);
+                } else {
+                    mPresenter.removeFromFavourite(position);
+                }
+            }
+        });
+
         mMovieRecyclerView.setAdapter(mMovieAdapter);
 
         GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);

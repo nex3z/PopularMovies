@@ -23,11 +23,16 @@ import butterknife.ButterKnife;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
     private static final String LOG_TAG = MovieAdapter.class.getSimpleName();
 
-    private static OnItemClickListener mListener;
+    private static OnPosterClickListener mPosterListener;
+    private static OnFavouriteClickListener mFavouriteListener;
     private List<MovieModel> mMovies;
 
-    public interface OnItemClickListener {
-        void onItemClick(int position, MovieAdapter.ViewHolder vh);
+    public interface OnPosterClickListener {
+        void onClick(int position, MovieAdapter.ViewHolder vh);
+    }
+
+    public interface OnFavouriteClickListener {
+        void onClick(int position, MovieAdapter.ViewHolder vh);
     }
 
     public MovieAdapter(List<MovieModel> movies) {
@@ -56,19 +61,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 .error(R.drawable.placeholder_poster_white)
                 .placeholder(R.drawable.placeholder_poster_white)
                 .into(holder.mIvPoster);
-
-        holder.mIBtnFavourite.setOnClickListener(v -> {
-            Log.v(LOG_TAG, "onClick(): position = " + position);
-
-            holder.isFavourite = !holder.isFavourite;
-            Log.v(LOG_TAG, "onClick(): before, holder.isFavourite  = " + holder.isFavourite);
-
-            if (holder.isFavourite) {
-                holder.mIBtnFavourite.setImageResource(R.drawable.ic_favorite_black_24dp);
-            } else {
-                holder.mIBtnFavourite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-            }
-        });
+        updateFavouriteButtonIcon(holder.mIBtnFavourite, holder.mIsFavourite);;
     }
 
     @Override
@@ -76,8 +69,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return mMovies.size();
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        mListener = listener;
+    public void setOnPosterClickListener(OnPosterClickListener listener) {
+        mPosterListener = listener;
+    }
+
+    public void setOnFavouriteClickListener(OnFavouriteClickListener listener) {
+        mFavouriteListener = listener;
     }
 
     public void setMovieCollection(Collection<MovieModel> movieCollection) {
@@ -91,20 +88,43 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         @BindView(R.id.iv_poster) public ImageView mIvPoster;
         @BindView(R.id.tv_title) public TextView mTvTitle;
         @BindView(R.id.ibtn_favourite) public ImageButton mIBtnFavourite;
-        boolean isFavourite = false;
+        boolean mIsFavourite = false;
 
         public ViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            mIvPoster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.v(LOG_TAG, "onClick(): mListener = " + mListener);
-                    if (mListener != null)
-                        mListener.onItemClick(getLayoutPosition(), ViewHolder.this);
+                    Log.v(LOG_TAG, "onClick(): mPosterListener = " + mPosterListener);
+                    if (mPosterListener != null)
+                        mPosterListener.onClick(getLayoutPosition(), ViewHolder.this);
                 }
             });
+
+            mIBtnFavourite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mIsFavourite = !mIsFavourite;
+                    Log.v(LOG_TAG, "onClick(): mIsFavourite = " + mIsFavourite);
+                    updateFavouriteButtonIcon(mIBtnFavourite, mIsFavourite);
+                    if (mFavouriteListener != null)
+                        mFavouriteListener.onClick(getLayoutPosition(), ViewHolder.this);
+                }
+            });
+        }
+
+        public boolean isFavourite() {
+            return mIsFavourite;
+        }
+    }
+
+    private void updateFavouriteButtonIcon(ImageButton favouriteButton, boolean isFavourite) {
+        if (isFavourite) {
+            favouriteButton.setImageResource(R.drawable.ic_favorite_black_24dp);
+        } else {
+            favouriteButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
     }
 

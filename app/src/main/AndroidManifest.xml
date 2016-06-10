@@ -30,6 +30,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nex3z.popularmovies.presentation.ui.activity.MovieGridActivity" />
         </activity>
+
+        <provider
+            android:name=".data.provider.MovieProvider"
+            android:authorities="com.nex3z.popularmovies" />
+
     </application>
 
 </manifest>
