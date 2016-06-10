@@ -95,17 +95,20 @@ public class MovieListPresenter implements Presenter {
         return mMovies.get(position);
     }
 
-    public void addToFavourite(int position) {
+    public void favouriteStatusChanged(int position) {
         MovieModel movieModel = mMovies.get(position);
         if (movieModel != null) {
-            saveMovie(movieModel);
-        }
-    }
-
-    public void removeFromFavourite(int position) {
-        MovieModel movieModel = mMovies.get(position);
-        if (movieModel != null) {
-            deleteMovie(movieModel);
+            boolean isFavourite = movieModel.isFavourite();
+            Log.v(LOG_TAG, "favouriteStatusChanged(): position =" + position
+                    + ", isFavourite = " + isFavourite);
+            if (isFavourite) {
+                // Not favourite anymore
+                movieModel.setFavourite(false);
+                deleteMovie(movieModel);
+            } else {
+                movieModel.setFavourite(true);
+                saveMovie(movieModel);
+            }
         }
     }
 
@@ -151,7 +154,7 @@ public class MovieListPresenter implements Presenter {
                     .execute(new MovieListSubscriber());
         } else if (mGetMovieListUseCase instanceof GetFavouriteMovieList) {
             Log.v(LOG_TAG, "fetchMovies(): mGetMovieListUseCase instanceof GetFavouriteMovieList");
-            mGetMovieListUseCase.execute(new MovieListSubscriber());
+            mGetMovieListUseCase.execute(new FavouriteMovieListSubscriber());
         }
 
     }
@@ -171,6 +174,26 @@ public class MovieListPresenter implements Presenter {
 
         @Override public void onNext(List<Movie> movies) {
             hideViewLoading();
+            showMovieCollectionInView(movies);
+        }
+    }
+
+    private final class FavouriteMovieListSubscriber extends DefaultSubscriber<List<Movie>> {
+
+        @Override public void onCompleted() {
+            hideViewLoading();
+        }
+
+        @Override public void onError(Throwable e) {
+            hideViewLoading();
+            showErrorMessage(e.getMessage());
+            Log.e(LOG_TAG, "onError(): e = " + e.getMessage());
+            showViewRetry();
+        }
+
+        @Override public void onNext(List<Movie> movies) {
+            hideViewLoading();
+            mMovies.clear();
             showMovieCollectionInView(movies);
         }
     }

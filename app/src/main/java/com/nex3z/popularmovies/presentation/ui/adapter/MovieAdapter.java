@@ -61,7 +61,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 .error(R.drawable.placeholder_poster_white)
                 .placeholder(R.drawable.placeholder_poster_white)
                 .into(holder.mIvPoster);
-        updateFavouriteButtonIcon(holder.mIBtnFavourite, holder.mIsFavourite);;
+        updateFavouriteButtonIcon(holder.mIBtnFavourite, movieModel.isFavourite());
     }
 
     @Override
@@ -88,7 +88,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         @BindView(R.id.iv_poster) public ImageView mIvPoster;
         @BindView(R.id.tv_title) public TextView mTvTitle;
         @BindView(R.id.ibtn_favourite) public ImageButton mIBtnFavourite;
-        boolean mIsFavourite = false;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -103,20 +102,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 }
             });
 
-            mIBtnFavourite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mIsFavourite = !mIsFavourite;
-                    Log.v(LOG_TAG, "onClick(): mIsFavourite = " + mIsFavourite);
-                    updateFavouriteButtonIcon(mIBtnFavourite, mIsFavourite);
-                    if (mFavouriteListener != null)
-                        mFavouriteListener.onClick(getLayoutPosition(), ViewHolder.this);
-                }
+            mIBtnFavourite.setOnClickListener(v -> {
+                if (mFavouriteListener != null)
+                    mFavouriteListener.onClick(getLayoutPosition(), ViewHolder.this);
             });
-        }
-
-        public boolean isFavourite() {
-            return mIsFavourite;
         }
     }
 

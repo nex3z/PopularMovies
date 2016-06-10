@@ -229,12 +229,14 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
         mMovieAdapter.setOnFavouriteClickListener(new MovieAdapter.OnFavouriteClickListener() {
             @Override
             public void onClick(int position, MovieAdapter.ViewHolder vh) {
-                Log.v(LOG_TAG, "onClick(): vh.isFavourite() = " + vh.isFavourite());
-                if (vh.isFavourite()) {
-                    mPresenter.addToFavourite(position);
-                } else {
-                    mPresenter.removeFromFavourite(position);
-                }
+//                Log.v(LOG_TAG, "onClick(): vh.isFavourite() = " + vh.isFavourite());
+                mPresenter.favouriteStatusChanged(position);
+                mMovieAdapter.notifyItemChanged(position);
+//                if (vh.isFavourite()) {
+//                    mPresenter.addToFavourite(position);
+//                } else {
+//                    mPresenter.removeFromFavourite(position);
+//                }
             }
         });
 

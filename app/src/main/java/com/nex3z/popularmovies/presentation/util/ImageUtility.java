@@ -1,7 +1,5 @@
 package com.nex3z.popularmovies.presentation.util;
 
-import android.util.Log;
-
 public class ImageUtility {
 
     public static final String LOG_TAG = ImageUtility.class.getSimpleName();
@@ -10,9 +8,6 @@ public class ImageUtility {
         final String BASE_URL = "http://image.tmdb.org/t/p/";
         final String SIZE = "w342";
 
-        String url = BASE_URL + SIZE + "/" + path;
-        Log.v(LOG_TAG, "getImageUrl(): " + url);
-
-        return url;
+        return BASE_URL + SIZE + "/" + path;
     }
 }

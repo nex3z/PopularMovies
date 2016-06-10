@@ -41,6 +41,8 @@ public class MovieModel implements Parcelable {
 
     private String mPosterImageUrl;
 
+    private boolean mIsFavourite;
+
     public MovieModel() {}
 
     @Override
@@ -174,6 +176,14 @@ public class MovieModel implements Parcelable {
 
     public void setBackdropImageUrl(String mBackdropImageUrl) {
         this.mBackdropImageUrl = mBackdropImageUrl;
+    }
+
+    public boolean isFavourite() {
+        return mIsFavourite;
+    }
+
+    public void setFavourite(boolean isFavoureite) {
+        mIsFavourite = isFavoureite;
     }
 
     @Override
