@@ -122,9 +122,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     private void updateFavouriteButtonIcon(ImageButton favouriteButton, boolean isFavourite) {
         if (isFavourite) {
-            favouriteButton.setImageResource(R.drawable.ic_favorite_black_24dp);
+            favouriteButton.setImageResource(R.drawable.ic_favorite_24dp);
         } else {
-            favouriteButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            favouriteButton.setImageResource(R.drawable.ic_favorite_border_24dp);
         }
     }
 

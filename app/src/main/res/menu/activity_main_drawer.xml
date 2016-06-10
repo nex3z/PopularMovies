@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_discover"
+            android:icon="@drawable/ic_explore_24dp"
+            android:title="@string/navigation_drawer_discover" />
+
+        <item
+            android:id="@+id/nav_favourite"
+            android:icon="@drawable/ic_favorite_24dp"
+            android:title="@string/navigation_drawer_favourite" />
+
+    </group>
+
+    <group
+        android:id="@+id/group_settings"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_24dp"
+            android:title="@string/navigation_drawer_settings" />
+
+    </group>
+
+</menu>

@@ -50,7 +50,7 @@
                     android:padding="8dp"
                     android:layout_gravity="center_vertical"
                     android:background="@null"
-                    android:src="@drawable/ic_favorite_border_black_24dp"
+                    android:src="@drawable/ic_favorite_border_24dp"
                     style="@style/MovieItemFavouriteIcon" />
 
             </LinearLayout>
