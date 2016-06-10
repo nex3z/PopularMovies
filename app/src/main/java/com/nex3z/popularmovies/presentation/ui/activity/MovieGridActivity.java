@@ -29,6 +29,9 @@ public class MovieGridActivity extends AppCompatActivity implements
     @BindView(R.id.drawer_layout) DrawerLayout mDrawer;
     @BindView(R.id.nav_view) NavigationView mNavigationView;
 
+    private MovieGridFragment mDiscoveryFragment;
+    private MovieGridFragment mFavouriteFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +44,7 @@ public class MovieGridActivity extends AppCompatActivity implements
         setupDrawer();
 
         if (savedInstanceState == null) {
-            MovieGridFragment fragment = MovieGridFragment.newInstance();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.movie_list_container, fragment)
-                    .commit();
+            navigateToDiscoveryList();
         }
     }
 
@@ -81,9 +81,9 @@ public class MovieGridActivity extends AppCompatActivity implements
         Log.v(LOG_TAG, "onNavigationItemSelected(): id = " + id);
 
         if (id == R.id.nav_discover) {
-
+            navigateToDiscoveryList();
         } else if (id == R.id.nav_favourite) {
-
+            navigateToFavouriteList();
         } else if (id == R.id.nav_settings) {
 
         }
@@ -108,6 +108,24 @@ public class MovieGridActivity extends AppCompatActivity implements
         toggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void navigateToDiscoveryList() {
+        if (mDiscoveryFragment == null) {
+            mDiscoveryFragment = MovieGridFragment.newDiscoveryInstance();
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.movie_list_container, mDiscoveryFragment)
+                .commit();
+    }
+
+    private void navigateToFavouriteList() {
+        if (mFavouriteFragment == null) {
+            mFavouriteFragment = MovieGridFragment.newFavouriteInstance();
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.movie_list_container, mFavouriteFragment)
+                .commit();
     }
 
 }

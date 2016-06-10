@@ -1,12 +1,13 @@
 package com.nex3z.popularmovies.presentation.presenter;
 
-import android.support.annotation.InterpolatorRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.nex3z.popularmovies.domain.Movie;
 import com.nex3z.popularmovies.domain.interactor.DefaultSubscriber;
 import com.nex3z.popularmovies.domain.interactor.movie.DeleteMovieArg;
+import com.nex3z.popularmovies.domain.interactor.movie.GetFavouriteMovieList;
+import com.nex3z.popularmovies.domain.interactor.movie.GetMovieList;
 import com.nex3z.popularmovies.domain.interactor.movie.GetMovieListArg;
 import com.nex3z.popularmovies.domain.interactor.movie.SaveMovieArg;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
@@ -18,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class DiscoverMoviePresenter implements Presenter {
-    private static final String LOG_TAG = DiscoverMoviePresenter.class.getSimpleName();
+public class MovieListPresenter implements Presenter {
+    private static final String LOG_TAG = MovieListPresenter.class.getSimpleName();
     private static final int FIRST_PAGE= 1;
 
     private MovieGridView mMovieGridView;
@@ -32,10 +33,10 @@ public class DiscoverMoviePresenter implements Presenter {
     private int mPage = FIRST_PAGE;
     private String mSortBy = GetMovieListArg.SORT_BY_POPULARITY_DESC;
 
-    public DiscoverMoviePresenter(UseCase getMovieListUseCase,
-                                  UseCase saveMovieUseCase,
-                                  UseCase deleteMovieUseCase,
-                                  MovieModelDataMapper movieModelDataMapper) {
+    public MovieListPresenter(UseCase getMovieListUseCase,
+                              UseCase saveMovieUseCase,
+                              UseCase deleteMovieUseCase,
+                              MovieModelDataMapper movieModelDataMapper) {
         mGetMovieListUseCase = getMovieListUseCase;
         mSaveMovieUseCase = saveMovieUseCase;
         mDeleteMovieUseCase = deleteMovieUseCase;
@@ -144,8 +145,15 @@ public class DiscoverMoviePresenter implements Presenter {
     @SuppressWarnings("unchecked")
     private void fetchMovies() {
         Log.v(LOG_TAG, "fetchMovies(): mPage = " + mPage + ", mSortBy = " + mSortBy);
-        mGetMovieListUseCase.init(new GetMovieListArg(mSortBy, mPage))
-                .execute(new MovieListSubscriber());
+        if (mGetMovieListUseCase instanceof GetMovieList) {
+            Log.v(LOG_TAG, "fetchMovies(): mGetMovieListUseCase instanceof GetMovieList");
+            mGetMovieListUseCase.init(new GetMovieListArg(mSortBy, mPage))
+                    .execute(new MovieListSubscriber());
+        } else if (mGetMovieListUseCase instanceof GetFavouriteMovieList) {
+            Log.v(LOG_TAG, "fetchMovies(): mGetMovieListUseCase instanceof GetFavouriteMovieList");
+            mGetMovieListUseCase.execute(new MovieListSubscriber());
+        }
+
     }
 
     private final class MovieListSubscriber extends DefaultSubscriber<List<Movie>> {
@@ -162,6 +170,7 @@ public class DiscoverMoviePresenter implements Presenter {
         }
 
         @Override public void onNext(List<Movie> movies) {
+            hideViewLoading();
             showMovieCollectionInView(movies);
         }
     }

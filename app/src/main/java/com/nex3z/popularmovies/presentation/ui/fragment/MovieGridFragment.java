@@ -20,6 +20,7 @@ import com.nex3z.popularmovies.data.executor.JobExecutor;
 import com.nex3z.popularmovies.data.repository.MovieDataRepository;
 import com.nex3z.popularmovies.data.repository.datasource.movie.MovieDataStoreFactory;
 import com.nex3z.popularmovies.domain.interactor.movie.DeleteMovie;
+import com.nex3z.popularmovies.domain.interactor.movie.GetFavouriteMovieList;
 import com.nex3z.popularmovies.domain.interactor.movie.GetMovieList;
 import com.nex3z.popularmovies.domain.interactor.movie.SaveMovie;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
@@ -28,7 +29,7 @@ import com.nex3z.popularmovies.domain.repository.MovieRepository;
 import com.nex3z.popularmovies.presentation.UIThread;
 import com.nex3z.popularmovies.presentation.mapper.MovieModelDataMapper;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
-import com.nex3z.popularmovies.presentation.presenter.DiscoverMoviePresenter;
+import com.nex3z.popularmovies.presentation.presenter.MovieListPresenter;
 import com.nex3z.popularmovies.presentation.ui.MovieGridView;
 import com.nex3z.popularmovies.presentation.ui.adapter.MovieAdapter;
 import com.nex3z.popularmovies.presentation.ui.misc.EndlessRecyclerOnScrollListener;
@@ -42,18 +43,23 @@ import butterknife.ButterKnife;
 public class MovieGridFragment extends Fragment implements MovieGridView {
     private static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
 
+    private static final String ARG_LIST_TYPE = "arg_list_type";
+    public static final String DISCOVERY = "discovery";
+    public static final String FAVOURITE = "favourite";
+
     private MovieAdapter mMovieAdapter;
 
     private static Callbacks sDummyCallbacks = (movie, vh) -> {};
     private Callbacks mCallbacks = sDummyCallbacks;
 
-    private DiscoverMoviePresenter mPresenter;
+    private MovieListPresenter mPresenter;
     private EndlessRecyclerOnScrollListener mEndlessScroller;
+
+    private String mType;
 
     @BindView(R.id.rv_movie_grid) RecyclerView mMovieRecyclerView;
     @BindView(R.id.swipe_container) SwipeRefreshLayout mSwipeLayout;
     @BindView(R.id.pb_load_movie) ProgressBar mProgressBar;
-    // @BindColor(R.color.colorPrimary) int mColorPrimary;
 
     public interface Callbacks {
         void onItemSelected(MovieModel movieModel, MovieAdapter.ViewHolder vh);
@@ -61,8 +67,31 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
 
     public MovieGridFragment() {}
 
-    public static MovieGridFragment newInstance() {
-        return new MovieGridFragment();
+    public static MovieGridFragment newInstance(String type) {
+        MovieGridFragment fragment = new MovieGridFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(MovieGridFragment.ARG_LIST_TYPE, type);
+        fragment.setArguments(arguments);
+        return fragment;
+    }
+
+    public static MovieGridFragment newDiscoveryInstance() {
+        return newInstance(DISCOVERY);
+    }
+
+    public static MovieGridFragment newFavouriteInstance() {
+        return newInstance(FAVOURITE);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            if (getArguments().containsKey(ARG_LIST_TYPE)) {
+                mType = getArguments().getString(ARG_LIST_TYPE);
+                Log.v(LOG_TAG, "onCreate(): mType = " + mType);
+            }
+        }
     }
 
     @Override
@@ -97,7 +126,6 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
         Log.v(LOG_TAG, "onDetach()");
         mCallbacks = sDummyCallbacks;
     }
-
 
     @Override
     public void onResume() {
@@ -162,11 +190,18 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
     private void initialize() {
         MovieRepository repository = new MovieDataRepository(
                 new MovieDataStoreFactory(), new MovieEntityDataMapper(), new MovieDataMapper());
-        UseCase getMovieList = new GetMovieList(repository, new JobExecutor(), new UIThread());
+
+        UseCase getMovieList;
+        if (mType.equals(DISCOVERY)) {
+            getMovieList = new GetMovieList(repository, new JobExecutor(), new UIThread());
+        } else {
+            getMovieList = new GetFavouriteMovieList(repository, new JobExecutor(), new UIThread());
+        }
+
         UseCase saveMovie = new SaveMovie(repository, new JobExecutor(), new UIThread());
         UseCase deleteMovie = new DeleteMovie(repository, new JobExecutor(), new UIThread());
 
-        mPresenter = new DiscoverMoviePresenter(getMovieList, saveMovie, deleteMovie,
+        mPresenter = new MovieListPresenter(getMovieList, saveMovie, deleteMovie,
                 new MovieModelDataMapper());
         mPresenter.setView(this);
 
@@ -214,7 +249,9 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
             @Override
             public void onLoadMore(int page) {
                 Log.v(LOG_TAG, "onLoadMore(): page = " + page);
-                mPresenter.loadMore(page);
+                if (mType.equals(DISCOVERY)) {
+                    mPresenter.loadMore(page);
+                }
             }
         };
 

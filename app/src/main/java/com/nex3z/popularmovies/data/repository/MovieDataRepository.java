@@ -53,4 +53,13 @@ public class MovieDataRepository implements MovieRepository {
                 mMovieDataStoreFactory.createContentProviderDataStore();
         return movieDataStore.deleteMovieEntity(movieId);
     }
+
+    @Override
+    public Observable<List<Movie>> getFavouriteMovies(String sortBy) {
+        final MovieDataStore movieDataStore =
+                mMovieDataStoreFactory.createContentProviderDataStore();
+        return movieDataStore
+                .getMovieEntityList(sortBy)
+                .map(mMovieEntityDataMapper::transform);
+    }
 }

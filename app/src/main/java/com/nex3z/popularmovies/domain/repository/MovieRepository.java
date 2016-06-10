@@ -9,6 +9,7 @@ import rx.Observable;
 public interface MovieRepository {
     Observable<List<Movie>> movies(String sortBy);
     Observable<List<Movie>> movies(String sortBy, int page);
+    Observable<List<Movie>> getFavouriteMovies(String sortBy);
     Observable<Long> insertMovie(Movie movie);
     Observable<Integer> deleteMovie(long movieId);
 }
