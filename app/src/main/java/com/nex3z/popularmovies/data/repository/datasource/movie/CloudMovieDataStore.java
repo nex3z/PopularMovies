@@ -40,4 +40,9 @@ public class CloudMovieDataStore implements MovieDataStore {
                 "The deleteMovieEntity method is not supported in cloud data store");
     }
 
+    @Override
+    public Observable<List<Boolean>> checkFavourite(List<Long> movieIds) {
+        throw new UnsupportedOperationException(
+                "The isFavouriteMovie method is not supported in cloud data store");
+    }
 }

@@ -1,5 +1,6 @@
 package com.nex3z.popularmovies.data.repository.datasource.movie;
 
+import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import com.nex3z.popularmovies.data.provider.MovieContract;
 import com.squareup.sqlbrite.BriteContentResolver;
 import com.squareup.sqlbrite.SqlBrite;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -86,6 +88,30 @@ public class ContentProviderDataStore implements MovieDataStore {
                     selectionArgs);
             Log.v(LOG_TAG, "buildUseCaseObservable(): deleted = " + deleted);
             subscriber.onNext(deleted);
+            subscriber.onCompleted();
+        });
+    }
+
+    @Override
+    public Observable<List<Boolean>> checkFavourite(List<Long> movieIds) {
+        return Observable.<List<Boolean>>create(subscriber -> {
+            List<Boolean> result = new ArrayList<Boolean>();
+            for (Long movieId : movieIds) {
+                String[] selectionArgs = new String[]{Long.toString(movieId)};
+                Cursor cursor = App.getAppContext()
+                        .getContentResolver()
+                        .query(MovieContract.MovieEntry.CONTENT_URI,
+                                null,
+                                sMovieIdSelection,
+                                selectionArgs,
+                                null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    result.add(true);
+                } else {
+                    result.add(false);
+                }
+            }
+            subscriber.onNext(result);
             subscriber.onCompleted();
         });
     }

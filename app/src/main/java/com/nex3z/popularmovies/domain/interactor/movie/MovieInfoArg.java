@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.domain.interactor;
+package com.nex3z.popularmovies.domain.interactor.movie;
 
 public class MovieInfoArg {
     public static final long MOVIE_ID_NOT_INITIALIZED = -1;

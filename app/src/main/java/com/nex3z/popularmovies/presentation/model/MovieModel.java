@@ -47,7 +47,8 @@ public class MovieModel implements Parcelable {
 
     @Override
     public String toString() {
-        return "MovieModel: mId = " + mId + ", mTitle = " + mTitle;
+        return "MovieModel: mId = " + mId + ", mTitle = " + mTitle
+                + ", mIsFavourite = " + mIsFavourite;
     }
 
     public boolean isAdult() {

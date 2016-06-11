@@ -22,6 +22,7 @@ import com.nex3z.popularmovies.data.repository.datasource.movie.MovieDataStoreFa
 import com.nex3z.popularmovies.domain.interactor.movie.DeleteMovie;
 import com.nex3z.popularmovies.domain.interactor.movie.GetFavouriteMovieList;
 import com.nex3z.popularmovies.domain.interactor.movie.GetMovieList;
+import com.nex3z.popularmovies.domain.interactor.movie.CheckFavourite;
 import com.nex3z.popularmovies.domain.interactor.movie.SaveMovie;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.mapper.MovieDataMapper;
@@ -200,8 +201,9 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
 
         UseCase saveMovie = new SaveMovie(repository, new JobExecutor(), new UIThread());
         UseCase deleteMovie = new DeleteMovie(repository, new JobExecutor(), new UIThread());
+        UseCase isFavourite = new CheckFavourite(repository, new JobExecutor(), new UIThread());
 
-        mPresenter = new MovieListPresenter(getMovieList, saveMovie, deleteMovie,
+        mPresenter = new MovieListPresenter(getMovieList, saveMovie, deleteMovie, isFavourite,
                 new MovieModelDataMapper());
         mPresenter.setView(this);
 
@@ -226,18 +228,9 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
                 mCallbacks.onItemSelected(movie, viewHolder);
             }
         });
-        mMovieAdapter.setOnFavouriteClickListener(new MovieAdapter.OnFavouriteClickListener() {
-            @Override
-            public void onClick(int position, MovieAdapter.ViewHolder vh) {
-//                Log.v(LOG_TAG, "onClick(): vh.isFavourite() = " + vh.isFavourite());
-                mPresenter.favouriteStatusChanged(position);
-                mMovieAdapter.notifyItemChanged(position);
-//                if (vh.isFavourite()) {
-//                    mPresenter.addToFavourite(position);
-//                } else {
-//                    mPresenter.removeFromFavourite(position);
-//                }
-            }
+        mMovieAdapter.setOnFavouriteClickListener((position, vh) -> {
+            mPresenter.favouriteStatusChanged(position);
+            mMovieAdapter.notifyItemChanged(position);
         });
 
         mMovieRecyclerView.setAdapter(mMovieAdapter);

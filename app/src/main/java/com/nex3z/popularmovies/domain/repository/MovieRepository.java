@@ -12,4 +12,5 @@ public interface MovieRepository {
     Observable<List<Movie>> getFavouriteMovies(String sortBy);
     Observable<Long> insertMovie(Movie movie);
     Observable<Integer> deleteMovie(long movieId);
+    Observable<List<Boolean>> checkFavourite(List<Long> movieIds);
 }

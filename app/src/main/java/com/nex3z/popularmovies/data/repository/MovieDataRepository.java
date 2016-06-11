@@ -62,4 +62,11 @@ public class MovieDataRepository implements MovieRepository {
                 .getMovieEntityList(sortBy)
                 .map(mMovieEntityDataMapper::transform);
     }
+
+    @Override
+    public Observable<List<Boolean>> checkFavourite(List<Long> movieIds) {
+        final MovieDataStore movieDataStore =
+                mMovieDataStoreFactory.createContentProviderDataStore();
+        return movieDataStore.checkFavourite(movieIds);
+    }
 }

@@ -1,5 +1,7 @@
 package com.nex3z.popularmovies.data.repository.datasource.movie;
 
+import android.support.annotation.InterpolatorRes;
+
 import com.nex3z.popularmovies.data.entity.MovieEntity;
 
 import java.util.List;
@@ -15,5 +17,7 @@ public interface MovieDataStore {
     Observable<Long> insertMovieEntity(MovieEntity movie);
 
     Observable<Integer> deleteMovieEntity(long movieId);
+
+    Observable<List<Boolean>> checkFavourite(List<Long> movieIds);
 
 }
