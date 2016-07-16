@@ -102,7 +102,17 @@ public class MovieInfoFragment extends Fragment implements MovieInfoView {
                 .load(movie.getPosterImageUrl())
                 .error(R.drawable.placeholder_poster_white)
                 .placeholder(R.drawable.placeholder_poster_white)
-                .into(mIvPoster);
+                .into(mIvPoster, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onError() {
+                        getActivity().supportStartPostponedEnterTransition();
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        getActivity().supportStartPostponedEnterTransition();
+                    }
+                });
     }
 
     private void initialize() {

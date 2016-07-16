@@ -3,6 +3,9 @@ package com.nex3z.popularmovies.presentation.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,7 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
+import android.view.View;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
@@ -95,9 +98,15 @@ public class MovieGridActivity extends AppCompatActivity implements
     @Override
     public void onItemSelected(MovieModel movieModel, MovieAdapter.ViewHolder vh) {
         Log.v(LOG_TAG, "onItemSelected(): movieModel = " + movieModel);
+
         Intent intent = new Intent(this, MovieDetailActivity.class)
                 .putExtra(MovieDetailActivity.MOVIE_INFO, movieModel);
-        startActivity(intent);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(this, new Pair<View, String>(
+                        vh.mIvPoster,
+                        getString(R.string.detail_poster_transition_name)));
+
+        ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
     }
 
     private void setupDrawer() {

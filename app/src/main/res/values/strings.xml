@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PopularMovies</string>
     <string name="action_settings">Settings</string>
-    <string name="detail_poster_transition_name" translatable="false">TN_DetailPoster</string>
+    <string name="detail_poster_transition_name" translatable="false">detail_poster_transition</string>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
     <string name="more">More</string>
 

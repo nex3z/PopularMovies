@@ -64,6 +64,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
             Log.v(LOG_TAG, "onCreate(): savedInstanceState == null, movie = " + mMovie);
         }
 
+        supportPostponeEnterTransition();
+
         initialize();
     }
 

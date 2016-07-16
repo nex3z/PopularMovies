@@ -18,9 +18,8 @@
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            android:src="@drawable/placeholder_poster"
-            tools:src="@drawable/placeholder_poster"
-            />
+            android:transitionName="@string/detail_poster_transition_name"
+            tools:src="@drawable/placeholder_poster"/>
 
         <LinearLayout
             android:layout_weight="2"
