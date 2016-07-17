@@ -54,7 +54,6 @@ public class MovieVideoPresenter implements Presenter {
     public void playVideo(int position) {
         VideoModel videoModel = mVideoModels.get(position);
         if (videoModel != null) {
-            Log.v(LOG_TAG, "onClick(): video = " + videoModel);
             VideoUtility.playVideo(mView.getContext(), videoModel.getSite(), videoModel.getKey());
         }
     }

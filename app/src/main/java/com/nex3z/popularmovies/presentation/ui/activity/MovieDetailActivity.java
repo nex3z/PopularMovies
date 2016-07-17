@@ -1,5 +1,6 @@
 package com.nex3z.popularmovies.presentation.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -17,8 +18,18 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.nex3z.popularmovies.R;
+import com.nex3z.popularmovies.data.entity.mapper.VideoEntityDataMapper;
+import com.nex3z.popularmovies.data.executor.JobExecutor;
+import com.nex3z.popularmovies.data.repository.VideoDataRepository;
+import com.nex3z.popularmovies.data.repository.datasource.video.VideoDataStoreFactory;
+import com.nex3z.popularmovies.domain.interactor.UseCase;
+import com.nex3z.popularmovies.domain.interactor.video.GetVideoList;
+import com.nex3z.popularmovies.domain.repository.VideoRepository;
+import com.nex3z.popularmovies.presentation.UIThread;
+import com.nex3z.popularmovies.presentation.mapper.VideoModelDataMapper;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
 import com.nex3z.popularmovies.presentation.presenter.MovieDetailPresenter;
 import com.nex3z.popularmovies.presentation.ui.MovieDetailView;
@@ -30,6 +41,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailView {
     private static final String LOG_TAG = MovieDetailActivity.class.getSimpleName();
@@ -89,11 +101,40 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 .into(mIvBackdropImage);
     }
 
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void showLoading() {}
+
+    @Override
+    public void hideLoading() {}
+
+    @Override
+    public void showRetry() {}
+
+    @Override
+    public void hideRetry() {}
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.ibtn_detail_play)
+    public void play() {
+        mPresenter.playInitialVideo();
+    }
+
     private void initialize() {
         initializeTabLayout();
 
-        mPresenter = new MovieDetailPresenter();
-        mPresenter.setMovie(mMovie);
+        VideoRepository videoRepo = new VideoDataRepository(
+                new VideoDataStoreFactory(), new VideoEntityDataMapper());
+        UseCase getVideoList = new GetVideoList(videoRepo, new JobExecutor(), new UIThread());
+        mPresenter = new MovieDetailPresenter(mMovie, getVideoList, new VideoModelDataMapper());
         mPresenter.setView(this);
 
         mPresenter.initialize();
