@@ -92,6 +92,24 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.pause();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPresenter.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.destroy();
+    }
+
+    @Override
     public void renderMovie(MovieModel movie) {
         mCollapsingToolBarLayout.setTitle(movie.getTitle());
         Picasso.with(this)

@@ -52,7 +52,9 @@ public class MovieDetailPresenter implements Presenter{
     public void pause() {}
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+        mGetVideoList.unsubscribe();
+    }
 
     public void playInitialVideo() {
         if (mVideoModels != null) {
