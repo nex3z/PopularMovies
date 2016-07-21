@@ -16,7 +16,7 @@ import com.nex3z.popularmovies.presentation.util.VideoUtility;
 
 import java.util.List;
 
-public class MovieDetailPresenter implements Presenter{
+public class MovieDetailPresenter implements Presenter {
     private static final String LOG_TAG = MovieDetailPresenter.class.getSimpleName();
 
     private MovieDetailView mView;

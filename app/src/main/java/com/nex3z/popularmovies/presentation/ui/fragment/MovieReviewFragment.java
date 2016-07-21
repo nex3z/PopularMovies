@@ -132,8 +132,8 @@ public class MovieReviewFragment extends Fragment implements MovieReviewView {
     private void initialize() {
         ReviewRepository reviewRepo = new ReviewDataRepository(
                 new ReviewDataStoreFactory(), new ReviewEntityDataMapper());
-        UseCase getVideoList = new GetReviewList(reviewRepo, new JobExecutor(), new UIThread());
-        mPresenter = new MovieReviewPresenter(mMovie, getVideoList, new ReviewModelDataMapper());
+        UseCase getReviewList = new GetReviewList(reviewRepo, new JobExecutor(), new UIThread());
+        mPresenter = new MovieReviewPresenter(mMovie, getReviewList, new ReviewModelDataMapper());
         mPresenter.setView(this);
 
         setupRecyclerView();

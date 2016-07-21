@@ -19,7 +19,9 @@ import android.view.View;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
+import com.nex3z.popularmovies.presentation.ui.IntegratedMovieInfoView;
 import com.nex3z.popularmovies.presentation.ui.adapter.MovieAdapter;
+import com.nex3z.popularmovies.presentation.ui.fragment.IntegratedMovieInfoFragment;
 import com.nex3z.popularmovies.presentation.ui.fragment.MovieGridFragment;
 import com.nex3z.popularmovies.presentation.ui.fragment.MovieInfoFragment;
 import com.nex3z.popularmovies.presentation.ui.fragment.MovieVideoFragment;
@@ -108,9 +110,10 @@ public class MovieGridActivity extends AppCompatActivity implements
         Log.v(LOG_TAG, "onItemSelected(): movieModel = " + movieModel);
 
         if (mTwoPane) {
-            MovieInfoFragment movieInfoFragment = MovieInfoFragment.newInstance(movieModel);
+            IntegratedMovieInfoFragment fragment =
+                    IntegratedMovieInfoFragment.newInstance(movieModel);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.movie_detail_container, movieInfoFragment)
+                    .replace(R.id.movie_detail_container, fragment)
                     .commit();
         } else {
             Intent intent = new Intent(this, MovieDetailActivity.class)

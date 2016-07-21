@@ -76,7 +76,7 @@ public class MovieReviewPresenter implements Presenter {
     private void showReviewCollectionInView() {
         Log.v(LOG_TAG, "showReviewCollectionInView(): mReviewModels.size() = "
                 + mReviewModels.size());
-        mView.hideLoading();
+        hideViewLoading();
         mView.renderReviews(mReviewModels);
     }
 
