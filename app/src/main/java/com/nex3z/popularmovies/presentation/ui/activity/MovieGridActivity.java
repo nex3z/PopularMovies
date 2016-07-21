@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.test.suitebuilder.annotation.Suppress;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,8 @@ import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
 import com.nex3z.popularmovies.presentation.ui.adapter.MovieAdapter;
 import com.nex3z.popularmovies.presentation.ui.fragment.MovieGridFragment;
+import com.nex3z.popularmovies.presentation.ui.fragment.MovieInfoFragment;
+import com.nex3z.popularmovies.presentation.ui.fragment.MovieVideoFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +35,7 @@ public class MovieGridActivity extends AppCompatActivity implements
     @BindView(R.id.drawer_layout) DrawerLayout mDrawer;
     @BindView(R.id.nav_view) NavigationView mNavigationView;
 
+    private boolean mTwoPane;
     private MovieGridFragment mDiscoveryFragment;
     private MovieGridFragment mFavouriteFragment;
 
@@ -45,6 +49,10 @@ public class MovieGridActivity extends AppCompatActivity implements
         setSupportActionBar(mToolbar);
 
         setupDrawer();
+
+        if (findViewById(R.id.movie_detail_container) != null) {
+            mTwoPane = true;
+        }
 
         if (savedInstanceState == null) {
             navigateToDiscoveryList();
@@ -95,18 +103,25 @@ public class MovieGridActivity extends AppCompatActivity implements
         return true;
     }
 
-    @Override
+    @Override @SuppressWarnings("unchecked")
     public void onItemSelected(MovieModel movieModel, MovieAdapter.ViewHolder vh) {
         Log.v(LOG_TAG, "onItemSelected(): movieModel = " + movieModel);
 
-        Intent intent = new Intent(this, MovieDetailActivity.class)
-                .putExtra(MovieDetailActivity.MOVIE_INFO, movieModel);
-        ActivityOptionsCompat activityOptions = ActivityOptionsCompat
-                .makeSceneTransitionAnimation(this, new Pair<View, String>(
-                        vh.mIvPoster,
-                        getString(R.string.detail_poster_transition_name)));
+        if (mTwoPane) {
+            MovieInfoFragment movieInfoFragment = MovieInfoFragment.newInstance(movieModel);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, movieInfoFragment)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, MovieDetailActivity.class)
+                    .putExtra(MovieDetailActivity.MOVIE_INFO, movieModel);
+            ActivityOptionsCompat activityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(this, new Pair<View, String>(
+                            vh.mIvPoster,
+                            getString(R.string.detail_poster_transition_name)));
 
-        ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
+            ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
+        }
     }
 
     private void setupDrawer() {

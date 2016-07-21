@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="layout" name="movie_list">@layout/movie_list_two_pane</item>
+</resources>
