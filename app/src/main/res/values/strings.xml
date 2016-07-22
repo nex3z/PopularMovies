@@ -4,6 +4,8 @@
     <string name="detail_poster_transition_name" translatable="false">detail_poster_transition</string>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
     <string name="more">More</string>
+    <string name="share">Share</string>
+    <string name="share_hash_tag">\u0020#PopularMovie</string>
 
     <string name="tab_movie_detail">Detail</string>
     <string name="tab_movie_video">Video</string>
