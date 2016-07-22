@@ -11,6 +11,7 @@
 
     <string name="downloading_video_list">Downloading video list, please try again later.</string>
     <string name="no_video_available">No video available for this movie.</string>
+    <string name="no_review_available">No review on this movie yet.</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

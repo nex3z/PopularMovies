@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nex3z.popularmovies.R;
@@ -43,6 +44,7 @@ public class MovieVideoFragment extends Fragment implements MovieVideoView {
 
     @BindView(R.id.rv_video_list) RecyclerView mVideoRecyclerView;
     @BindView(R.id.pb_load_video) ProgressBar mProgressBar;
+    @BindView(R.id.tv_no_video) TextView mTvNoVideo;
 
     private MovieModel mMovie;
     private VideoAdapter mAdapter;
@@ -104,8 +106,10 @@ public class MovieVideoFragment extends Fragment implements MovieVideoView {
 
     @Override
     public void renderVideos(Collection<VideoModel> videoModelCollection) {
-        if (videoModelCollection != null) {
+        if (videoModelCollection != null && videoModelCollection.size() != 0) {
             mAdapter.setVideoCollection(videoModelCollection);
+        } else {
+            mTvNoVideo.setVisibility(View.VISIBLE);
         }
     }
 

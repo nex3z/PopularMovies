@@ -11,6 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/tv_no_review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/detail_loading_icon_margin_top"
+        android:text="@string/no_review_available"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/pb_load_review"
         style="?android:attr/progressBarStyle"
@@ -18,6 +28,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/detail_loading_icon_margin_top"
         android:layout_gravity="center_horizontal"/>
-
 
 </FrameLayout>

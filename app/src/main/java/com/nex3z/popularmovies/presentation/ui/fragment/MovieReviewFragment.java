@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nex3z.popularmovies.R;
@@ -42,6 +43,7 @@ public class MovieReviewFragment extends Fragment implements MovieReviewView {
 
     @BindView(R.id.rv_review_list) RecyclerView mReviewRecyclerView;
     @BindView(R.id.pb_load_review) ProgressBar mProgressBar;
+    @BindView(R.id.tv_no_review) TextView mTvNoReview;
 
     private MovieModel mMovie;
     private ReviewAdapter mAdapter;
@@ -103,8 +105,10 @@ public class MovieReviewFragment extends Fragment implements MovieReviewView {
 
     @Override
     public void renderReviews(Collection<ReviewModel> reviewModelCollection) {
-        if (reviewModelCollection != null) {
+        if (reviewModelCollection != null && reviewModelCollection.size() != 0) {
             mAdapter.setReviewsCollection(reviewModelCollection);
+        } else {
+            mTvNoReview.setVisibility(View.VISIBLE);
         }
     }
 
