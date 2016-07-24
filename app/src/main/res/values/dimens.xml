@@ -6,4 +6,6 @@
     <dimen name="app_bar_height">200dp</dimen>
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="detail_loading_icon_margin_top">32dp</dimen>
+    <dimen name="video_item_height">56dp</dimen>
+    <dimen name="video_icon_size">48dp</dimen>
 </resources>

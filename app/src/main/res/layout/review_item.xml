@@ -7,8 +7,8 @@
 
     <TextView
         android:id="@+id/tv_review_author"
-        android:textStyle="bold"
-        android:textSize="18sp"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
         android:paddingTop="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -23,6 +23,7 @@
         android:paddingTop="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
+        android:paddingBottom="16dp"
         android:layout_gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

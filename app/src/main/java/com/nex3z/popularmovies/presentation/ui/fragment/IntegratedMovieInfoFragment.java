@@ -108,17 +108,7 @@ public class IntegratedMovieInfoFragment extends Fragment implements IntegratedM
                 .load(movie.getPosterImageUrl())
                 .error(R.drawable.placeholder_poster_white)
                 .placeholder(R.drawable.placeholder_poster_white)
-                .into(mIvPoster, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onError() {
-                        getActivity().supportStartPostponedEnterTransition();
-                    }
-
-                    @Override
-                    public void onSuccess() {
-                        getActivity().supportStartPostponedEnterTransition();
-                    }
-                });
+                .into(mIvPoster);
     }
 
     @Override
