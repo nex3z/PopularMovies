@@ -53,6 +53,7 @@ public class IntegratedMovieInfoPresenter implements Presenter {
     public void destroy() {
         mGetVideoList.unsubscribe();
         mGetReviewList.unsubscribe();
+        mView = null;
     }
 
     public void setView(IntegratedMovieInfoView view) {

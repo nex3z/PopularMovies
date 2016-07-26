@@ -39,6 +39,7 @@ public class MovieVideoPresenter implements Presenter {
     @Override
     public void destroy() {
         mGetVideoList.unsubscribe();
+        mView = null;
     }
 
     public void setView(MovieVideoView view) {

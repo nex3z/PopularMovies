@@ -57,6 +57,7 @@ public class MovieListPresenter implements Presenter {
     @Override
     public void destroy() {
         mGetMovieListUseCase.unsubscribe();
+        mMovieGridView = null;
     }
 
     public void setView(@NonNull MovieGridView view) {

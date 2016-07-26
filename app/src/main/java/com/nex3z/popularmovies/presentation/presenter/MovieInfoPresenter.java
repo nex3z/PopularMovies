@@ -21,7 +21,9 @@ public class MovieInfoPresenter implements Presenter {
     public void pause() {}
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+        mView = null;
+    }
 
     public void setView(MovieInfoView view) {
         mView = view;

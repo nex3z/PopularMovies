@@ -54,6 +54,7 @@ public class MovieDetailPresenter implements Presenter {
     @Override
     public void destroy() {
         mGetVideoList.unsubscribe();
+        mView = null;
     }
 
     public void playInitialVideo() {

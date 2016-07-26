@@ -44,6 +44,7 @@ public class MovieReviewPresenter implements Presenter {
     @Override
     public void destroy() {
         mGetReviewList.unsubscribe();
+        mView = null;
     }
 
     public void setView(MovieReviewView view) {
