@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.test.suitebuilder.annotation.Suppress;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,12 +18,9 @@ import android.view.View;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
-import com.nex3z.popularmovies.presentation.ui.IntegratedMovieInfoView;
 import com.nex3z.popularmovies.presentation.ui.adapter.MovieAdapter;
 import com.nex3z.popularmovies.presentation.ui.fragment.IntegratedMovieInfoFragment;
 import com.nex3z.popularmovies.presentation.ui.fragment.MovieGridFragment;
-import com.nex3z.popularmovies.presentation.ui.fragment.MovieInfoFragment;
-import com.nex3z.popularmovies.presentation.ui.fragment.MovieVideoFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -135,6 +131,7 @@ public class MovieGridActivity extends AppCompatActivity implements
         toggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.getMenu().getItem(0).setChecked(true);
     }
 
     private void navigateToDiscoveryList() {
