@@ -22,7 +22,6 @@ import com.nex3z.popularmovies.data.repository.ReviewDataRepository;
 import com.nex3z.popularmovies.data.repository.VideoDataRepository;
 import com.nex3z.popularmovies.data.repository.datasource.review.ReviewDataStoreFactory;
 import com.nex3z.popularmovies.data.repository.datasource.video.VideoDataStoreFactory;
-import com.nex3z.popularmovies.domain.Review;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.interactor.review.GetReviewList;
 import com.nex3z.popularmovies.domain.interactor.video.GetVideoList;
@@ -35,7 +34,6 @@ import com.nex3z.popularmovies.presentation.model.MovieModel;
 import com.nex3z.popularmovies.presentation.model.ReviewModel;
 import com.nex3z.popularmovies.presentation.model.VideoModel;
 import com.nex3z.popularmovies.presentation.presenter.IntegratedMovieInfoPresenter;
-import com.nex3z.popularmovies.presentation.presenter.MovieReviewPresenter;
 import com.nex3z.popularmovies.presentation.ui.IntegratedMovieInfoView;
 import com.squareup.picasso.Picasso;
 
@@ -44,6 +42,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class IntegratedMovieInfoFragment extends Fragment implements IntegratedMovieInfoView {
     private static final String LOG_TAG = IntegratedMovieInfoFragment.class.getSimpleName();
@@ -61,6 +60,7 @@ public class IntegratedMovieInfoFragment extends Fragment implements IntegratedM
 
     private MovieModel mMovie;
     private IntegratedMovieInfoPresenter mPresenter;
+    private Unbinder mUnbinder;
 
     public IntegratedMovieInfoFragment() {}
 
@@ -87,7 +87,7 @@ public class IntegratedMovieInfoFragment extends Fragment implements IntegratedM
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_integrated_movie_info, container, false);
-        ButterKnife.bind(this, rootView);
+        mUnbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -96,6 +96,12 @@ public class IntegratedMovieInfoFragment extends Fragment implements IntegratedM
         super.onActivityCreated(savedInstanceState);
         initialize();
         loadData();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
     @Override

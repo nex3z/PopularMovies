@@ -19,23 +19,21 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class MovieInfoFragment extends Fragment implements MovieInfoView {
     private static final String LOG_TAG = MovieInfoFragment.class.getSimpleName();
 
     private static final String ARG_MOVIE_INFO = "arg_movie_info";
 
-    @BindView(R.id.tv_movie_title)
-    TextView mTvMovieTitle;
-    @BindView(R.id.tv_release_date)
-    TextView mReleaseDate;
-    @BindView(R.id.iv_poster)
-    ImageView mIvPoster;
-    @BindView(R.id.tv_overview)
-    TextView mOverview;
+    @BindView(R.id.tv_movie_title) TextView mTvMovieTitle;
+    @BindView(R.id.tv_release_date) TextView mReleaseDate;
+    @BindView(R.id.iv_poster) ImageView mIvPoster;
+    @BindView(R.id.tv_overview) TextView mOverview;
 
     private MovieModel mMovie;
     private MovieInfoPresenter mPresenter;
+    private Unbinder mUnbinder;
 
     public MovieInfoFragment() {}
 
@@ -63,7 +61,7 @@ public class MovieInfoFragment extends Fragment implements MovieInfoView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_info, container, false);
-        ButterKnife.bind(this, rootView);
+        mUnbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -84,6 +82,12 @@ public class MovieInfoFragment extends Fragment implements MovieInfoView {
     public void onPause() {
         super.onPause();
         mPresenter.pause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
     @Override

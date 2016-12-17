@@ -19,12 +19,12 @@ import com.nex3z.popularmovies.data.entity.mapper.MovieEntityDataMapper;
 import com.nex3z.popularmovies.data.executor.JobExecutor;
 import com.nex3z.popularmovies.data.repository.MovieDataRepository;
 import com.nex3z.popularmovies.data.repository.datasource.movie.MovieDataStoreFactory;
+import com.nex3z.popularmovies.domain.interactor.UseCase;
+import com.nex3z.popularmovies.domain.interactor.movie.CheckFavourite;
 import com.nex3z.popularmovies.domain.interactor.movie.DeleteMovie;
 import com.nex3z.popularmovies.domain.interactor.movie.GetFavouriteMovieList;
 import com.nex3z.popularmovies.domain.interactor.movie.GetMovieList;
-import com.nex3z.popularmovies.domain.interactor.movie.CheckFavourite;
 import com.nex3z.popularmovies.domain.interactor.movie.SaveMovie;
-import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.mapper.MovieDataMapper;
 import com.nex3z.popularmovies.domain.repository.MovieRepository;
 import com.nex3z.popularmovies.presentation.UIThread;
@@ -40,6 +40,7 @@ import java.util.Collection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class MovieGridFragment extends Fragment implements MovieGridView {
     private static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
@@ -48,19 +49,18 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
     public static final String DISCOVERY = "discovery";
     public static final String FAVOURITE = "favourite";
 
-    private MovieAdapter mMovieAdapter;
-
-    private static Callbacks sDummyCallbacks = (movie, vh) -> {};
-    private Callbacks mCallbacks = sDummyCallbacks;
-
-    private MovieListPresenter mPresenter;
-    private EndlessRecyclerOnScrollListener mEndlessScroller;
-
-    private String mType;
-
     @BindView(R.id.rv_movie_grid) RecyclerView mMovieRecyclerView;
     @BindView(R.id.swipe_container) SwipeRefreshLayout mSwipeLayout;
     @BindView(R.id.pb_load_movie) ProgressBar mProgressBar;
+
+    private static Callbacks sDummyCallbacks = (movie, vh) -> {};
+    private Callbacks mCallbacks = sDummyCallbacks;
+    private MovieListPresenter mPresenter;
+    private MovieAdapter mMovieAdapter;
+    private EndlessRecyclerOnScrollListener mEndlessScroller;
+    private String mType;
+    private Unbinder mUnbinder;
+
 
     public interface Callbacks {
         void onItemSelected(MovieModel movieModel, MovieAdapter.ViewHolder vh);
@@ -85,6 +85,17 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        Log.v(LOG_TAG, "onAttach()");
+        if (!(context instanceof Callbacks)) {
+            throw new IllegalStateException("Activity must implement fragment's callbacks.");
+        }
+        mCallbacks = (Callbacks) context;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -99,7 +110,7 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_grid, container, false);
-        ButterKnife.bind(this, rootView);
+        mUnbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -108,24 +119,6 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
         super.onActivityCreated(savedInstanceState);
         initialize();
         loadMovies();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        Log.v(LOG_TAG, "onAttach()");
-        if (!(context instanceof Callbacks)) {
-            throw new IllegalStateException("Activity must implement fragment's callbacks.");
-        }
-        mCallbacks = (Callbacks) context;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.v(LOG_TAG, "onDetach()");
-        mCallbacks = sDummyCallbacks;
     }
 
     @Override
@@ -141,11 +134,23 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mPresenter.destroy();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.v(LOG_TAG, "onDetach()");
+        mCallbacks = sDummyCallbacks;
+    }
     @Override
     public void showLoading() {
         mProgressBar.setVisibility(View.VISIBLE);

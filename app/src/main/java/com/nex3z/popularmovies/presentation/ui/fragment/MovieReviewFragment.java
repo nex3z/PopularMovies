@@ -35,6 +35,7 @@ import java.util.Collection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class MovieReviewFragment extends Fragment implements MovieReviewView {
     private static final String LOG_TAG = MovieReviewFragment.class.getSimpleName();
@@ -48,6 +49,7 @@ public class MovieReviewFragment extends Fragment implements MovieReviewView {
     private MovieModel mMovie;
     private ReviewAdapter mAdapter;
     private MovieReviewPresenter mPresenter;
+    private Unbinder mUnbinder;
 
     public MovieReviewFragment() {}
 
@@ -74,7 +76,7 @@ public class MovieReviewFragment extends Fragment implements MovieReviewView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_review, container, false);
-        ButterKnife.bind(this, rootView);
+        mUnbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -95,6 +97,12 @@ public class MovieReviewFragment extends Fragment implements MovieReviewView {
     public void onPause() {
         super.onPause();
         mPresenter.pause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
     @Override

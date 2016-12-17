@@ -35,6 +35,7 @@ import java.util.Collection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class MovieVideoFragment extends Fragment implements MovieVideoView {
@@ -49,6 +50,7 @@ public class MovieVideoFragment extends Fragment implements MovieVideoView {
     private MovieModel mMovie;
     private VideoAdapter mAdapter;
     private MovieVideoPresenter mPresenter;
+    private Unbinder mUnbinder;
 
     public MovieVideoFragment() {}
 
@@ -75,7 +77,7 @@ public class MovieVideoFragment extends Fragment implements MovieVideoView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_video, container, false);
-        ButterKnife.bind(this, rootView);
+        mUnbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -96,6 +98,12 @@ public class MovieVideoFragment extends Fragment implements MovieVideoView {
     public void onPause() {
         super.onPause();
         mPresenter.pause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
     @Override
