@@ -18,8 +18,8 @@ import java.util.List;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
-public class ContentProviderDataStore implements MovieDataStore {
-    private static final String LOG_TAG = ContentProviderDataStore.class.getSimpleName();
+public class ContentProviderMovieDataStore implements MovieDataStore {
+    private static final String LOG_TAG = ContentProviderMovieDataStore.class.getSimpleName();
 
     private static final String sMovieIdSelection = MovieContract.MovieEntry.TABLE_NAME + "." +
             MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?";
@@ -29,7 +29,7 @@ public class ContentProviderDataStore implements MovieDataStore {
     private final MovieEntityDataMapper mMovieEntityDataMapper;
 
 
-    public ContentProviderDataStore() {
+    public ContentProviderMovieDataStore() {
         SqlBrite sqlBrite = SqlBrite.create();
         mBriteContentResolver = sqlBrite.wrapContentProvider(
                 App.getAppContext().getContentResolver(), Schedulers.io());

@@ -7,6 +7,9 @@ import com.nex3z.popularmovies.data.net.service.MovieService;
 import com.nex3z.popularmovies.data.net.service.ReviewService;
 import com.nex3z.popularmovies.data.net.service.VideoService;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -15,6 +18,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Singleton
 public class RestClient {
     private static final String BASE_URL = "http://api.themoviedb.org";
 
@@ -22,6 +26,7 @@ public class RestClient {
     private MovieService mMovieService;
     private ReviewService mReviewService;
 
+    @Inject
     public RestClient() {
         Gson gson = new GsonBuilder().create();
 

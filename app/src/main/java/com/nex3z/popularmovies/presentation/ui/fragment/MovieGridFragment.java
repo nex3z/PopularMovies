@@ -3,7 +3,6 @@ package com.nex3z.popularmovies.presentation.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,20 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nex3z.popularmovies.R;
-import com.nex3z.popularmovies.data.entity.mapper.MovieEntityDataMapper;
-import com.nex3z.popularmovies.data.executor.JobExecutor;
-import com.nex3z.popularmovies.data.repository.MovieDataRepository;
-import com.nex3z.popularmovies.data.repository.datasource.movie.MovieDataStoreFactory;
-import com.nex3z.popularmovies.domain.interactor.UseCase;
-import com.nex3z.popularmovies.domain.interactor.movie.CheckFavourite;
-import com.nex3z.popularmovies.domain.interactor.movie.DeleteMovie;
-import com.nex3z.popularmovies.domain.interactor.movie.GetFavouriteMovieList;
-import com.nex3z.popularmovies.domain.interactor.movie.GetMovieList;
-import com.nex3z.popularmovies.domain.interactor.movie.SaveMovie;
-import com.nex3z.popularmovies.domain.mapper.MovieDataMapper;
-import com.nex3z.popularmovies.domain.repository.MovieRepository;
-import com.nex3z.popularmovies.presentation.UIThread;
-import com.nex3z.popularmovies.presentation.mapper.MovieModelDataMapper;
+import com.nex3z.popularmovies.presentation.internal.di.component.MovieComponent;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
 import com.nex3z.popularmovies.presentation.presenter.MovieListPresenter;
 import com.nex3z.popularmovies.presentation.ui.MovieGridView;
@@ -38,11 +24,14 @@ import com.nex3z.popularmovies.presentation.ui.misc.SpacesItemDecoration;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MovieGridFragment extends Fragment implements MovieGridView {
+public class MovieGridFragment extends BaseFragment implements MovieGridView {
     private static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
 
     private static final String ARG_LIST_TYPE = "arg_list_type";
@@ -52,6 +41,9 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
     @BindView(R.id.rv_movie_grid) RecyclerView mMovieRecyclerView;
     @BindView(R.id.swipe_container) SwipeRefreshLayout mSwipeLayout;
     @BindView(R.id.pb_load_movie) ProgressBar mProgressBar;
+
+    @Inject @Named("discoverMoviePresenter") MovieListPresenter mDiscoveryMovieListPresenter;
+    @Inject @Named("favouriteMoviePresenter") MovieListPresenter mFavouriteMovieListPresenter;
 
     private static Callbacks sDummyCallbacks = (movie, vh) -> {};
     private Callbacks mCallbacks = sDummyCallbacks;
@@ -96,6 +88,12 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
     }
 
     @Override
+    protected boolean onInjectView() throws IllegalStateException {
+        getComponent(MovieComponent.class).inject(this);
+        return true;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -115,8 +113,8 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void onViewInjected(Bundle savedInstanceState) {
+        super.onViewInjected(savedInstanceState);
         initialize();
         loadMovies();
     }
@@ -194,22 +192,11 @@ public class MovieGridFragment extends Fragment implements MovieGridView {
     }
 
     private void initialize() {
-        MovieRepository repository = new MovieDataRepository(
-                new MovieDataStoreFactory(), new MovieEntityDataMapper(), new MovieDataMapper());
-
-        UseCase getMovieList;
         if (mType.equals(DISCOVERY)) {
-            getMovieList = new GetMovieList(repository, new JobExecutor(), new UIThread());
+            mPresenter = mDiscoveryMovieListPresenter;
         } else {
-            getMovieList = new GetFavouriteMovieList(repository, new JobExecutor(), new UIThread());
+            mPresenter = mFavouriteMovieListPresenter;
         }
-
-        UseCase saveMovie = new SaveMovie(repository, new JobExecutor(), new UIThread());
-        UseCase deleteMovie = new DeleteMovie(repository, new JobExecutor(), new UIThread());
-        UseCase isFavourite = new CheckFavourite(repository, new JobExecutor(), new UIThread());
-
-        mPresenter = new MovieListPresenter(getMovieList, saveMovie, deleteMovie, isFavourite,
-                new MovieModelDataMapper());
         mPresenter.setView(this);
 
         setupRecyclerView();

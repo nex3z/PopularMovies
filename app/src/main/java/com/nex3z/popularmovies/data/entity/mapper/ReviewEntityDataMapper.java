@@ -6,7 +6,14 @@ import com.nex3z.popularmovies.domain.Review;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class ReviewEntityDataMapper {
+
+    @Inject
+    public ReviewEntityDataMapper() {}
 
     public Review transform(ReviewEntity reviewEntity) {
         Review review = null;

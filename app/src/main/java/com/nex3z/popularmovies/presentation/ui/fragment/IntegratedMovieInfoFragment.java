@@ -3,8 +3,6 @@ package com.nex3z.popularmovies.presentation.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,21 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nex3z.popularmovies.R;
-import com.nex3z.popularmovies.data.entity.mapper.ReviewEntityDataMapper;
-import com.nex3z.popularmovies.data.entity.mapper.VideoEntityDataMapper;
-import com.nex3z.popularmovies.data.executor.JobExecutor;
-import com.nex3z.popularmovies.data.repository.ReviewDataRepository;
-import com.nex3z.popularmovies.data.repository.VideoDataRepository;
-import com.nex3z.popularmovies.data.repository.datasource.review.ReviewDataStoreFactory;
-import com.nex3z.popularmovies.data.repository.datasource.video.VideoDataStoreFactory;
-import com.nex3z.popularmovies.domain.interactor.UseCase;
-import com.nex3z.popularmovies.domain.interactor.review.GetReviewList;
-import com.nex3z.popularmovies.domain.interactor.video.GetVideoList;
-import com.nex3z.popularmovies.domain.repository.ReviewRepository;
-import com.nex3z.popularmovies.domain.repository.VideoRepository;
-import com.nex3z.popularmovies.presentation.UIThread;
-import com.nex3z.popularmovies.presentation.mapper.ReviewModelDataMapper;
-import com.nex3z.popularmovies.presentation.mapper.VideoModelDataMapper;
+import com.nex3z.popularmovies.app.App;
+import com.nex3z.popularmovies.presentation.internal.di.component.DaggerMovieDetailComponent;
+import com.nex3z.popularmovies.presentation.internal.di.component.MovieDetailComponent;
+import com.nex3z.popularmovies.presentation.internal.di.module.ActivityModule;
+import com.nex3z.popularmovies.presentation.internal.di.module.MovieDetailModule;
+import com.nex3z.popularmovies.presentation.internal.di.module.MovieModule;
+import com.nex3z.popularmovies.presentation.internal.di.module.ReviewModule;
+import com.nex3z.popularmovies.presentation.internal.di.module.VideoModule;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
 import com.nex3z.popularmovies.presentation.model.ReviewModel;
 import com.nex3z.popularmovies.presentation.model.VideoModel;
@@ -40,11 +31,13 @@ import com.squareup.picasso.Picasso;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class IntegratedMovieInfoFragment extends Fragment implements IntegratedMovieInfoView {
+public class IntegratedMovieInfoFragment extends BaseFragment implements IntegratedMovieInfoView {
     private static final String LOG_TAG = IntegratedMovieInfoFragment.class.getSimpleName();
 
     private static final String ARG_MOVIE_INFO = "arg_movie_info";
@@ -58,8 +51,9 @@ public class IntegratedMovieInfoFragment extends Fragment implements IntegratedM
     @BindView(R.id.video_list_container) LinearLayout mVideoList;
     @BindView(R.id.review_list_container) LinearLayout mReviewList;
 
+    @Inject IntegratedMovieInfoPresenter mPresenter;
+
     private MovieModel mMovie;
-    private IntegratedMovieInfoPresenter mPresenter;
     private Unbinder mUnbinder;
 
     public IntegratedMovieInfoFragment() {}
@@ -78,9 +72,9 @@ public class IntegratedMovieInfoFragment extends Fragment implements IntegratedM
         if (getArguments() != null) {
             if (getArguments().containsKey(ARG_MOVIE_INFO)) {
                 mMovie = getArguments().getParcelable(ARG_MOVIE_INFO);
-                Log.v(LOG_TAG, "onCreate(): mMovie = " + mMovie);
             }
         }
+        Log.v(LOG_TAG, "onCreate(): mMovie = " + mMovie);
     }
 
     @Override
@@ -92,8 +86,9 @@ public class IntegratedMovieInfoFragment extends Fragment implements IntegratedM
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initInjector();
         initialize();
         loadData();
     }
@@ -154,17 +149,19 @@ public class IntegratedMovieInfoFragment extends Fragment implements IntegratedM
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private void initialize() {
-        VideoRepository videoRepo = new VideoDataRepository(
-                new VideoDataStoreFactory(), new VideoEntityDataMapper());
-        UseCase getVideoList = new GetVideoList(videoRepo, new JobExecutor(), new UIThread());
-        ReviewRepository reviewRepo = new ReviewDataRepository(
-                new ReviewDataStoreFactory(), new ReviewEntityDataMapper());
-        UseCase getReviewList = new GetReviewList(reviewRepo, new JobExecutor(), new UIThread());
+    void initInjector() {
+        MovieDetailComponent component = DaggerMovieDetailComponent.builder()
+                .appComponent(((App) getActivity().getApplication()).getAppComponent())
+                .activityModule(new ActivityModule(getActivity()))
+                .movieModule(new MovieModule(mMovie))
+                .videoModule(new VideoModule(mMovie))
+                .reviewModule(new ReviewModule(mMovie))
+                .movieDetailModule(new MovieDetailModule(mMovie))
+                .build();
+        component.inject(this);
+    }
 
-        mPresenter = new IntegratedMovieInfoPresenter(mMovie,
-                getVideoList, new VideoModelDataMapper(),
-                getReviewList, new ReviewModelDataMapper());
+    private void initialize() {
         mPresenter.setView(this);
     }
 
@@ -178,12 +175,7 @@ public class IntegratedMovieInfoFragment extends Fragment implements IntegratedM
         View videoItem = inflater.inflate(R.layout.video_item, null);
         TextView title = (TextView) videoItem.findViewById(R.id.tv_video_title);
         title.setText(videoModel.getName());
-        videoItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.playVideo(videoModel);
-            }
-        });
+        videoItem.setOnClickListener(v -> mPresenter.playVideo(videoModel));
         mVideoList.addView(videoItem);
     }
 

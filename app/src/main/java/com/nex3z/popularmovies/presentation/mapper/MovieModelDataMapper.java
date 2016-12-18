@@ -1,8 +1,7 @@
 package com.nex3z.popularmovies.presentation.mapper;
 
-import android.util.Log;
-
 import com.nex3z.popularmovies.domain.Movie;
+import com.nex3z.popularmovies.presentation.internal.di.PerActivity;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
 import com.nex3z.popularmovies.presentation.util.ImageUtility;
 
@@ -10,7 +9,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
+
+@PerActivity
 public class MovieModelDataMapper {
+
+    @Inject
+    public MovieModelDataMapper() {}
 
     public MovieModel transform(Movie movie) {
         MovieModel movieModel = null;

@@ -8,12 +8,17 @@ import com.nex3z.popularmovies.domain.repository.VideoRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import rx.Observable;
 
+@Singleton
 public class VideoDataRepository implements VideoRepository {
     private final VideoDataStoreFactory mVideoDataStoreFactory;
     private final VideoEntityDataMapper mVideoEntityDataMapper;
 
+    @Inject
     public VideoDataRepository(VideoDataStoreFactory factory, VideoEntityDataMapper mapper) {
         mVideoDataStoreFactory = factory;
         mVideoEntityDataMapper = mapper;

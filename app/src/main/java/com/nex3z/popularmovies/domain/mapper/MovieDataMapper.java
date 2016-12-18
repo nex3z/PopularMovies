@@ -4,7 +4,14 @@ package com.nex3z.popularmovies.domain.mapper;
 import com.nex3z.popularmovies.data.entity.MovieEntity;
 import com.nex3z.popularmovies.domain.Movie;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class MovieDataMapper {
+
+    @Inject
+    public MovieDataMapper() {}
 
     public MovieEntity toMovieEntity(Movie movie) {
         MovieEntity movieEntity = null;

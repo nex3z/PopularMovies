@@ -8,12 +8,17 @@ import com.nex3z.popularmovies.domain.repository.ReviewRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import rx.Observable;
 
+@Singleton
 public class ReviewDataRepository implements ReviewRepository {
     private final ReviewDataStoreFactory mReviewDataStoreFactory;
     private final ReviewEntityDataMapper mReviewEntityDataMapper;
 
+    @Inject
     public ReviewDataRepository(ReviewDataStoreFactory factory, ReviewEntityDataMapper mapper) {
         mReviewDataStoreFactory = factory;
         mReviewEntityDataMapper = mapper;

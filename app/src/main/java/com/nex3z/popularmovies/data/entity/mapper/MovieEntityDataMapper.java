@@ -1,7 +1,6 @@
 package com.nex3z.popularmovies.data.entity.mapper;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 
 import com.nex3z.popularmovies.data.entity.MovieEntity;
 import com.nex3z.popularmovies.data.provider.MovieContract;
@@ -10,9 +9,15 @@ import com.nex3z.popularmovies.domain.Movie;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Scanner;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class MovieEntityDataMapper {
+
+    @Inject
+    public MovieEntityDataMapper() {}
 
     public Movie transform(MovieEntity movieEntity) {
         Movie movie = null;

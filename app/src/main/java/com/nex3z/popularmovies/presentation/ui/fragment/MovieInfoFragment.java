@@ -2,9 +2,6 @@ package com.nex3z.popularmovies.presentation.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +9,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nex3z.popularmovies.R;
+import com.nex3z.popularmovies.presentation.internal.di.component.MovieDetailComponent;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
 import com.nex3z.popularmovies.presentation.presenter.MovieInfoPresenter;
 import com.nex3z.popularmovies.presentation.ui.MovieInfoView;
 import com.squareup.picasso.Picasso;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MovieInfoFragment extends Fragment implements MovieInfoView {
+public class MovieInfoFragment extends BaseFragment implements MovieInfoView {
     private static final String LOG_TAG = MovieInfoFragment.class.getSimpleName();
 
     private static final String ARG_MOVIE_INFO = "arg_movie_info";
@@ -31,8 +31,8 @@ public class MovieInfoFragment extends Fragment implements MovieInfoView {
     @BindView(R.id.iv_poster) ImageView mIvPoster;
     @BindView(R.id.tv_overview) TextView mOverview;
 
-    private MovieModel mMovie;
-    private MovieInfoPresenter mPresenter;
+    @Inject MovieInfoPresenter mPresenter;
+
     private Unbinder mUnbinder;
 
     public MovieInfoFragment() {}
@@ -46,15 +46,9 @@ public class MovieInfoFragment extends Fragment implements MovieInfoView {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            if (getArguments().containsKey(ARG_MOVIE_INFO)) {
-                mMovie = getArguments().getParcelable(ARG_MOVIE_INFO);
-                Log.v(LOG_TAG, "onCreate(): mMovie = " + mMovie);
-            }
-        }
+    protected boolean onInjectView() throws IllegalStateException {
+        getComponent(MovieDetailComponent.class).inject(this);
+        return true;
     }
 
     @Override
@@ -66,8 +60,8 @@ public class MovieInfoFragment extends Fragment implements MovieInfoView {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void onViewInjected(Bundle savedInstanceState) {
+        super.onViewInjected(savedInstanceState);
         initialize();
         loadMovieInfo();
     }
@@ -120,7 +114,6 @@ public class MovieInfoFragment extends Fragment implements MovieInfoView {
     }
 
     private void initialize() {
-        mPresenter = new MovieInfoPresenter(mMovie);
         mPresenter.setView(this);
 
     }

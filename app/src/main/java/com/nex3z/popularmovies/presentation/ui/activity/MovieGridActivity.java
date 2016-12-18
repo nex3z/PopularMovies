@@ -9,7 +9,6 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nex3z.popularmovies.R;
+import com.nex3z.popularmovies.presentation.internal.di.HasComponent;
+import com.nex3z.popularmovies.presentation.internal.di.component.DaggerMovieComponent;
+import com.nex3z.popularmovies.presentation.internal.di.component.MovieComponent;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
 import com.nex3z.popularmovies.presentation.ui.adapter.MovieAdapter;
 import com.nex3z.popularmovies.presentation.ui.fragment.IntegratedMovieInfoFragment;
@@ -25,7 +27,7 @@ import com.nex3z.popularmovies.presentation.ui.fragment.MovieGridFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MovieGridActivity extends AppCompatActivity implements
+public class MovieGridActivity extends BaseActivity implements HasComponent<MovieComponent>,
         MovieGridFragment.Callbacks, NavigationView.OnNavigationItemSelectedListener {
     private static final String LOG_TAG = MovieGridActivity.class.getSimpleName();
 
@@ -33,6 +35,7 @@ public class MovieGridActivity extends AppCompatActivity implements
     @BindView(R.id.drawer_layout) DrawerLayout mDrawer;
     @BindView(R.id.nav_view) NavigationView mNavigationView;
 
+    private MovieComponent mMovieComponent;
     private boolean mTwoPane;
     private MovieGridFragment mDiscoveryFragment;
     private MovieGridFragment mFavouriteFragment;
@@ -44,6 +47,7 @@ public class MovieGridActivity extends AppCompatActivity implements
 
         ButterKnife.bind(this);
 
+        initInjector();
         setSupportActionBar(mToolbar);
 
         setupDrawer();
@@ -51,6 +55,7 @@ public class MovieGridActivity extends AppCompatActivity implements
         if (findViewById(R.id.movie_detail_container) != null) {
             mTwoPane = true;
         }
+        Log.v(LOG_TAG, "onCreate(): mTwoPane = " + mTwoPane);
 
         if (savedInstanceState == null) {
             navigateToDiscoveryList();
@@ -121,6 +126,18 @@ public class MovieGridActivity extends AppCompatActivity implements
 
             ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
         }
+    }
+
+    @Override
+    public MovieComponent getComponent() {
+        return mMovieComponent;
+    }
+
+    private void initInjector() {
+        mMovieComponent = DaggerMovieComponent.builder()
+                .appComponent(getAppComponent())
+                .activityModule(getActivityModule())
+                .build();
     }
 
     private void setupDrawer() {

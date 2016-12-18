@@ -1,12 +1,19 @@
 package com.nex3z.popularmovies.presentation.mapper;
 
 import com.nex3z.popularmovies.domain.Review;
+import com.nex3z.popularmovies.presentation.internal.di.PerActivity;
 import com.nex3z.popularmovies.presentation.model.ReviewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+@PerActivity
 public class ReviewModelDataMapper {
+
+    @Inject
+    public ReviewModelDataMapper() {}
 
     public ReviewModel transform(Review review) {
         ReviewModel reviewModel = null;

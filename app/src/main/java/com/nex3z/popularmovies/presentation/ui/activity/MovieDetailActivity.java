@@ -13,7 +13,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,15 +23,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.nex3z.popularmovies.R;
-import com.nex3z.popularmovies.data.entity.mapper.VideoEntityDataMapper;
-import com.nex3z.popularmovies.data.executor.JobExecutor;
-import com.nex3z.popularmovies.data.repository.VideoDataRepository;
-import com.nex3z.popularmovies.data.repository.datasource.video.VideoDataStoreFactory;
-import com.nex3z.popularmovies.domain.interactor.UseCase;
-import com.nex3z.popularmovies.domain.interactor.video.GetVideoList;
-import com.nex3z.popularmovies.domain.repository.VideoRepository;
-import com.nex3z.popularmovies.presentation.UIThread;
-import com.nex3z.popularmovies.presentation.mapper.VideoModelDataMapper;
+import com.nex3z.popularmovies.presentation.internal.di.HasComponent;
+import com.nex3z.popularmovies.presentation.internal.di.component.DaggerMovieDetailComponent;
+import com.nex3z.popularmovies.presentation.internal.di.component.MovieDetailComponent;
+import com.nex3z.popularmovies.presentation.internal.di.module.MovieDetailModule;
+import com.nex3z.popularmovies.presentation.internal.di.module.MovieModule;
+import com.nex3z.popularmovies.presentation.internal.di.module.ReviewModule;
+import com.nex3z.popularmovies.presentation.internal.di.module.VideoModule;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
 import com.nex3z.popularmovies.presentation.presenter.MovieDetailPresenter;
 import com.nex3z.popularmovies.presentation.ui.MovieDetailView;
@@ -42,12 +39,16 @@ import com.nex3z.popularmovies.presentation.ui.fragment.MovieReviewFragment;
 import com.nex3z.popularmovies.presentation.ui.fragment.MovieVideoFragment;
 import com.squareup.picasso.Picasso;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MovieDetailActivity extends AppCompatActivity implements MovieDetailView {
+public class MovieDetailActivity extends BaseActivity implements MovieDetailView,
+        HasComponent<MovieDetailComponent> {
     private static final String LOG_TAG = MovieDetailActivity.class.getSimpleName();
+    private static final String SAVE_TAG_MOVIE = "movie";
 
     public static final String MOVIE_INFO = "movie_info";
 
@@ -57,8 +58,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     @BindView(R.id.toolbar_layout) CollapsingToolbarLayout mCollapsingToolBarLayout;
     @BindView(R.id.app_bar) AppBarLayout mAppBarLayout;
 
+    @Inject MovieDetailPresenter mPresenter;
+
+    private MovieDetailComponent mMovieDetailComponent;
     private MovieModel mMovie;
-    private MovieDetailPresenter mPresenter;
     private ShareActionProvider mShareActionProvider;
 
     @Override
@@ -77,13 +80,17 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
         if (savedInstanceState == null) {
             mMovie = getIntent().getParcelableExtra(MOVIE_INFO);
-            Log.v(LOG_TAG, "onCreate(): savedInstanceState == null, movie = " + mMovie);
+        } else {
+            mMovie = savedInstanceState.getParcelable(SAVE_TAG_MOVIE);
         }
+
+        initInjector();
 
         supportPostponeEnterTransition();
 
         initialize();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -108,6 +115,13 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         }
         return true;
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SAVE_TAG_MOVIE, mMovie);
+        super.onSaveInstanceState(outState);
+    }
+
 
     private Intent createShareForecastIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -174,20 +188,31 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public MovieDetailComponent getComponent() {
+        return mMovieDetailComponent;
+    }
+
     @OnClick(R.id.ibtn_detail_play)
     public void play() {
         mPresenter.playInitialVideo();
     }
 
+    private void initInjector() {
+        mMovieDetailComponent = DaggerMovieDetailComponent.builder()
+                .appComponent(getAppComponent())
+                .activityModule(getActivityModule())
+                .movieModule(new MovieModule(mMovie))
+                .videoModule(new VideoModule(mMovie))
+                .reviewModule(new ReviewModule(mMovie))
+                .movieDetailModule(new MovieDetailModule(mMovie))
+                .build();
+        mMovieDetailComponent.inject(this);
+    }
+
     private void initialize() {
         initializeTabLayout();
-
-        VideoRepository videoRepo = new VideoDataRepository(
-                new VideoDataStoreFactory(), new VideoEntityDataMapper());
-        UseCase getVideoList = new GetVideoList(videoRepo, new JobExecutor(), new UIThread());
-        mPresenter = new MovieDetailPresenter(mMovie, getVideoList, new VideoModelDataMapper());
         mPresenter.setView(this);
-
         mPresenter.initialize();
     }
 

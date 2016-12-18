@@ -3,10 +3,8 @@ package com.nex3z.popularmovies.presentation.ui.fragment;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nex3z.popularmovies.R;
-import com.nex3z.popularmovies.data.entity.mapper.ReviewEntityDataMapper;
-import com.nex3z.popularmovies.data.executor.JobExecutor;
-import com.nex3z.popularmovies.data.repository.ReviewDataRepository;
-import com.nex3z.popularmovies.data.repository.datasource.review.ReviewDataStoreFactory;
-import com.nex3z.popularmovies.domain.interactor.review.GetReviewList;
-import com.nex3z.popularmovies.domain.interactor.UseCase;
-import com.nex3z.popularmovies.domain.repository.ReviewRepository;
-import com.nex3z.popularmovies.presentation.UIThread;
-import com.nex3z.popularmovies.presentation.mapper.ReviewModelDataMapper;
-import com.nex3z.popularmovies.presentation.model.MovieModel;
+import com.nex3z.popularmovies.presentation.internal.di.component.MovieDetailComponent;
 import com.nex3z.popularmovies.presentation.model.ReviewModel;
 import com.nex3z.popularmovies.presentation.presenter.MovieReviewPresenter;
 import com.nex3z.popularmovies.presentation.ui.MovieReviewView;
@@ -33,11 +22,13 @@ import com.nex3z.popularmovies.presentation.ui.misc.DividerItemDecoration;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MovieReviewFragment extends Fragment implements MovieReviewView {
+public class MovieReviewFragment extends BaseFragment implements MovieReviewView {
     private static final String LOG_TAG = MovieReviewFragment.class.getSimpleName();
 
     public static final String ARG_MOVIE_INFO = "arg_movie_info";
@@ -46,9 +37,9 @@ public class MovieReviewFragment extends Fragment implements MovieReviewView {
     @BindView(R.id.pb_load_review) ProgressBar mProgressBar;
     @BindView(R.id.tv_no_review) TextView mTvNoReview;
 
-    private MovieModel mMovie;
+    @Inject MovieReviewPresenter mPresenter;
+
     private ReviewAdapter mAdapter;
-    private MovieReviewPresenter mPresenter;
     private Unbinder mUnbinder;
 
     public MovieReviewFragment() {}
@@ -62,14 +53,9 @@ public class MovieReviewFragment extends Fragment implements MovieReviewView {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            if (getArguments().containsKey(ARG_MOVIE_INFO)) {
-                mMovie = getArguments().getParcelable(ARG_MOVIE_INFO);
-                Log.v(LOG_TAG, "onCreate(): mMovie = " + mMovie);
-            }
-        }
+    protected boolean onInjectView() throws IllegalStateException {
+        getComponent(MovieDetailComponent.class).inject(this);
+        return true;
     }
 
     @Override
@@ -142,12 +128,7 @@ public class MovieReviewFragment extends Fragment implements MovieReviewView {
     }
 
     private void initialize() {
-        ReviewRepository reviewRepo = new ReviewDataRepository(
-                new ReviewDataStoreFactory(), new ReviewEntityDataMapper());
-        UseCase getReviewList = new GetReviewList(reviewRepo, new JobExecutor(), new UIThread());
-        mPresenter = new MovieReviewPresenter(mMovie, getReviewList, new ReviewModelDataMapper());
         mPresenter.setView(this);
-
         setupRecyclerView();
     }
 

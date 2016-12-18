@@ -9,13 +9,18 @@ import com.nex3z.popularmovies.domain.repository.MovieRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import rx.Observable;
 
+@Singleton
 public class MovieDataRepository implements MovieRepository {
     private final MovieDataStoreFactory mMovieDataStoreFactory;
     private final MovieEntityDataMapper mMovieEntityDataMapper;
     private final MovieDataMapper mMovieDataMapper;
 
+    @Inject
     public MovieDataRepository(MovieDataStoreFactory factory,
                                MovieEntityDataMapper movieEntityDataMapper,
                                MovieDataMapper movieDataMapper) {

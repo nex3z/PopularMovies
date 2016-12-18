@@ -6,7 +6,14 @@ import com.nex3z.popularmovies.domain.Video;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class VideoEntityDataMapper {
+
+    @Inject
+    public VideoEntityDataMapper() {}
 
     public Video transform(VideoEntity videoEntity) {
         Video video = null;

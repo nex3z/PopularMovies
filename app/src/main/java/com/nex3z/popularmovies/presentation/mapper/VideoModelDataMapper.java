@@ -1,12 +1,19 @@
 package com.nex3z.popularmovies.presentation.mapper;
 
 import com.nex3z.popularmovies.domain.Video;
+import com.nex3z.popularmovies.presentation.internal.di.PerActivity;
 import com.nex3z.popularmovies.presentation.model.VideoModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+@PerActivity
 public class VideoModelDataMapper {
+
+    @Inject
+    public VideoModelDataMapper() {}
 
     public VideoModel transform(Video video) {
         VideoModel videoModel = null;
