@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nex3z.popularmovies.R;
@@ -41,6 +42,7 @@ public class MovieGridFragment extends BaseFragment implements MovieGridView {
     @BindView(R.id.rv_movie_grid) RecyclerView mMovieRecyclerView;
     @BindView(R.id.swipe_container) SwipeRefreshLayout mSwipeLayout;
     @BindView(R.id.pb_load_movie) ProgressBar mProgressBar;
+    @BindView(R.id.tv_empty_message) TextView mTvEmptyMessage;
 
     @Inject @Named("discoverMoviePresenter") MovieListPresenter mDiscoveryMovieListPresenter;
     @Inject @Named("favouriteMoviePresenter") MovieListPresenter mFavouriteMovieListPresenter;
@@ -179,6 +181,11 @@ public class MovieGridFragment extends BaseFragment implements MovieGridView {
     @Override
     public void renderMovieList(Collection<MovieModel> movieModelCollection) {
         Log.v(LOG_TAG, "renderMovieList(): movieModelCollection = " + movieModelCollection.size());
+        if (movieModelCollection.isEmpty()) {
+            mTvEmptyMessage.setVisibility(View.VISIBLE);
+        } else {
+            mTvEmptyMessage.setVisibility(View.GONE);
+        }
         mMovieAdapter.setMovieCollection(movieModelCollection);
         mMovieAdapter.notifyDataSetChanged();
     }
@@ -194,8 +201,14 @@ public class MovieGridFragment extends BaseFragment implements MovieGridView {
     private void initialize() {
         if (mType.equals(DISCOVERY)) {
             mPresenter = mDiscoveryMovieListPresenter;
+            mTvEmptyMessage.setText(R.string.msg_no_movie);
+            mTvEmptyMessage.setCompoundDrawablesWithIntrinsicBounds(
+                    0, R.drawable.ic_block_48dp, 0, 0);
         } else {
             mPresenter = mFavouriteMovieListPresenter;
+            mTvEmptyMessage.setText(R.string.msg_no_favourite_movie);
+            mTvEmptyMessage.setCompoundDrawablesWithIntrinsicBounds(
+                    0, R.drawable.ic_favourite_border_grey_48dp, 0, 0);
         }
         mPresenter.setView(this);
 
