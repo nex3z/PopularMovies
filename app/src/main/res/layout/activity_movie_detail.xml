@@ -24,7 +24,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
-            <ImageView
+            <com.flaviofaria.kenburnsview.KenBurnsView
                 android:id="@+id/iv_detail_backdrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

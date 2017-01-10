@@ -5,14 +5,13 @@ import android.util.Log;
 
 import com.nex3z.popularmovies.domain.Movie;
 import com.nex3z.popularmovies.domain.interactor.DefaultSubscriber;
-import com.nex3z.popularmovies.domain.interactor.movie.CheckFavourite;
+import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.CheckFavouriteArg;
 import com.nex3z.popularmovies.domain.interactor.movie.DeleteMovieArg;
 import com.nex3z.popularmovies.domain.interactor.movie.GetFavouriteMovieList;
 import com.nex3z.popularmovies.domain.interactor.movie.GetMovieList;
 import com.nex3z.popularmovies.domain.interactor.movie.GetMovieListArg;
 import com.nex3z.popularmovies.domain.interactor.movie.SaveMovieArg;
-import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.presentation.mapper.MovieModelDataMapper;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
 import com.nex3z.popularmovies.presentation.ui.MovieGridView;

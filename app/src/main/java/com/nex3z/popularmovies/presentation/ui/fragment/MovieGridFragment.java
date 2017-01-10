@@ -201,9 +201,6 @@ public class MovieGridFragment extends BaseFragment implements MovieGridView {
     private void initialize() {
         if (mType.equals(DISCOVERY)) {
             mPresenter = mDiscoveryMovieListPresenter;
-            mTvEmptyMessage.setText(R.string.msg_no_movie);
-            mTvEmptyMessage.setCompoundDrawablesWithIntrinsicBounds(
-                    0, R.drawable.ic_block_48dp, 0, 0);
         } else {
             mPresenter = mFavouriteMovieListPresenter;
             mTvEmptyMessage.setText(R.string.msg_no_favourite_movie);

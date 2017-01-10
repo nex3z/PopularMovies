@@ -55,4 +55,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.google.dagger:dagger:2.8'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
+    compile 'com.flaviofaria:kenburnsview:1.0.7'
 }

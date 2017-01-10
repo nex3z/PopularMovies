@@ -35,8 +35,8 @@ public class MovieModelDataMapper {
             movieModel.setVideo(movie.isVideo());
             movieModel.setVoteAverage(movie.getVoteAverage());
             movieModel.setVoteCount(movie.getVoteCount());
-            movieModel.setBackdropImageUrl(ImageUtility.getImageUrl(movie.getBackdropPath()));
-            movieModel.setPosterImageUrl(ImageUtility.getImageUrl(movie.getPosterPath()));
+            movieModel.setBackdropImageUrl(ImageUtility.getBackdropImageUrl(movie.getBackdropPath()));
+            movieModel.setPosterImageUrl(ImageUtility.getPosterImageUrl(movie.getPosterPath()));
         }
 
         return movieModel;
