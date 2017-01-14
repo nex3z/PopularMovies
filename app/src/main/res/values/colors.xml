@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#D32F2F</color>
     <color name="colorAccent">#448AFF</color>
     <color name="colorDetailBackdropPlayButton">#FF9E9E9E</color>
+    <color name="colorDetailTabBg">#40000000</color>
 </resources>
