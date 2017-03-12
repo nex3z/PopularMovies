@@ -3,7 +3,8 @@ package com.nex3z.popularmovies.presentation.presenter;
 import android.util.Log;
 
 import com.nex3z.popularmovies.domain.Video;
-import com.nex3z.popularmovies.domain.interactor.DefaultSubscriber;
+import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
+import com.nex3z.popularmovies.domain.interactor.video.GetVideoList;
 import com.nex3z.popularmovies.domain.interactor.video.GetVideoListArg;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.presentation.mapper.VideoModelDataMapper;
@@ -38,7 +39,7 @@ public class MovieVideoPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        mGetVideoList.unsubscribe();
+        mGetVideoList.dispose();
         mView = null;
     }
 
@@ -78,8 +79,8 @@ public class MovieVideoPresenter implements Presenter {
     @SuppressWarnings("unchecked")
     private void fetchVideos() {
         Log.v(LOG_TAG, "fetVideos(): movie id = " + mMovieModel.getId());
-        mGetVideoList.init(new GetVideoListArg(mMovieModel.getId()))
-                .execute(new VideoListSubscriber());
+        mGetVideoList.execute(new VideoListSubscriber(),
+                GetVideoList.Params.forMovie(mMovieModel.getId()));
     }
 
     private void showVideoCollectionInView() {
@@ -88,9 +89,9 @@ public class MovieVideoPresenter implements Presenter {
         mView.renderVideos(mVideoModels);
     }
 
-    private final class VideoListSubscriber extends DefaultSubscriber<List<Video>> {
+    private final class VideoListSubscriber extends DefaultObserver<List<Video>> {
 
-        @Override public void onCompleted() {}
+        @Override public void onComplete() {}
 
         @Override public void onError(Throwable e) {
             Log.e(LOG_TAG, "onError(): e = " + e.getMessage());

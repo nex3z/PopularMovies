@@ -1,13 +1,17 @@
 package com.nex3z.popularmovies.domain.interactor.video;
 
+import com.nex3z.popularmovies.domain.Video;
 import com.nex3z.popularmovies.domain.executor.PostExecutionThread;
 import com.nex3z.popularmovies.domain.executor.ThreadExecutor;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.repository.VideoRepository;
 
-import rx.Observable;
+import java.util.List;
 
-public class GetVideoList extends UseCase<GetVideoListArg> {
+import io.reactivex.Observable;
+
+
+public class GetVideoList extends UseCase<List<Video>, GetVideoList.Params> {
 
     private final VideoRepository mVideoRepository;
 
@@ -18,12 +22,20 @@ public class GetVideoList extends UseCase<GetVideoListArg> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
-        if (mArg == null) {
-            throw new IllegalArgumentException("mArg cannot be null.");
+    public Observable<List<Video>> buildUseCaseObservable(Params params) {
+        return mVideoRepository.videos(params.mMovieId);
+    }
+
+    public static class Params {
+        private final long mMovieId;
+
+        private Params(long movieId) {
+            mMovieId = movieId;
         }
 
-        return mVideoRepository.videos(mArg.getMovieId());
+        public static Params forMovie(long movieId) {
+            return new Params(movieId);
+        }
     }
 
 }

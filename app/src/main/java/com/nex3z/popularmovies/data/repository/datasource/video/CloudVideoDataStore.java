@@ -7,7 +7,7 @@ import com.nex3z.popularmovies.data.net.service.VideoService;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public class CloudVideoDataStore implements VideoDataStore {
     private RestClient mRestClient;

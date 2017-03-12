@@ -3,7 +3,8 @@ package com.nex3z.popularmovies.presentation.presenter;
 import android.util.Log;
 
 import com.nex3z.popularmovies.domain.Review;
-import com.nex3z.popularmovies.domain.interactor.DefaultSubscriber;
+import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
+import com.nex3z.popularmovies.domain.interactor.review.GetReviewList;
 import com.nex3z.popularmovies.domain.interactor.review.GetReviewListArg;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.presentation.mapper.ReviewModelDataMapper;
@@ -43,7 +44,7 @@ public class MovieReviewPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        mGetReviewList.unsubscribe();
+        mGetReviewList.dispose();
         mView = null;
     }
 
@@ -70,8 +71,8 @@ public class MovieReviewPresenter implements Presenter {
     @SuppressWarnings("unchecked")
     private void fetchReviews() {
         Log.v(LOG_TAG, "fetVideos(): movie id = " + mMovieModel.getId());
-        mGetReviewList.init(new GetReviewListArg(mMovieModel.getId()))
-                .execute(new ReviewListSubscriber());
+        mGetReviewList.execute(new ReviewListSubscriber(),
+                GetReviewList.Params.forMovie(mMovieModel.getId()));
     }
 
     private void showReviewCollectionInView() {
@@ -81,9 +82,9 @@ public class MovieReviewPresenter implements Presenter {
         mView.renderReviews(mReviewModels);
     }
 
-    private final class ReviewListSubscriber extends DefaultSubscriber<List<Review>> {
+    private final class ReviewListSubscriber extends DefaultObserver<List<Review>> {
 
-        @Override public void onCompleted() {}
+        @Override public void onComplete() {}
 
         @Override public void onError(Throwable e) {
             Log.e(LOG_TAG, "onError(): e = " + e.getMessage());

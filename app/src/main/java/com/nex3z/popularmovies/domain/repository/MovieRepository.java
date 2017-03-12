@@ -4,7 +4,8 @@ import com.nex3z.popularmovies.domain.Movie;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 public interface MovieRepository {
     Observable<List<Movie>> movies(String sortBy);

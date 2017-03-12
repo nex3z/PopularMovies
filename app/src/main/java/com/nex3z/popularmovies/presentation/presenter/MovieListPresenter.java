@@ -4,13 +4,16 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.nex3z.popularmovies.domain.Movie;
-import com.nex3z.popularmovies.domain.interactor.DefaultSubscriber;
+import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
+import com.nex3z.popularmovies.domain.interactor.movie.CheckFavourite;
 import com.nex3z.popularmovies.domain.interactor.movie.CheckFavouriteArg;
+import com.nex3z.popularmovies.domain.interactor.movie.DeleteMovie;
 import com.nex3z.popularmovies.domain.interactor.movie.DeleteMovieArg;
 import com.nex3z.popularmovies.domain.interactor.movie.GetFavouriteMovieList;
 import com.nex3z.popularmovies.domain.interactor.movie.GetMovieList;
 import com.nex3z.popularmovies.domain.interactor.movie.GetMovieListArg;
+import com.nex3z.popularmovies.domain.interactor.movie.SaveMovie;
 import com.nex3z.popularmovies.domain.interactor.movie.SaveMovieArg;
 import com.nex3z.popularmovies.presentation.mapper.MovieModelDataMapper;
 import com.nex3z.popularmovies.presentation.model.MovieModel;
@@ -55,7 +58,7 @@ public class MovieListPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        mGetMovieListUseCase.unsubscribe();
+        mGetMovieListUseCase.dispose();
         mMovieGridView = null;
     }
 
@@ -70,7 +73,7 @@ public class MovieListPresenter implements Presenter {
     }
 
     public void refresh() {
-        mGetMovieListUseCase.unsubscribe();
+        // mGetMovieListUseCase.dispose();
         mPage = FIRST_PAGE;
         mMovies.clear();
         mMovieGridView.renderMovieList(mMovies);
@@ -155,18 +158,20 @@ public class MovieListPresenter implements Presenter {
         Log.v(LOG_TAG, "fetchMovies(): mPage = " + mPage + ", mSortBy = " + mSortBy);
         if (mGetMovieListUseCase instanceof GetMovieList) {
             Log.v(LOG_TAG, "fetchMovies(): mGetMovieListUseCase instanceof GetMovieList");
-            mGetMovieListUseCase.init(new GetMovieListArg(mSortBy, mPage))
-                    .execute(new MovieListSubscriber());
+            mGetMovieListUseCase
+                    .execute(new MovieListSubscriber(), GetMovieList.Params.forPage(mSortBy, mPage));
         } else if (mGetMovieListUseCase instanceof GetFavouriteMovieList) {
             Log.v(LOG_TAG, "fetchMovies(): mGetMovieListUseCase instanceof GetFavouriteMovieList");
-            mGetMovieListUseCase.execute(new FavouriteMovieListSubscriber());
+            mGetMovieListUseCase.execute(new FavouriteMovieListSubscriber(),
+                            GetFavouriteMovieList.Params.sortBy(
+                                    GetFavouriteMovieList.Params.SORT_BY_ADD_DATE_DESC));
         }
 
     }
 
-    private final class MovieListSubscriber extends DefaultSubscriber<List<Movie>> {
+    private final class MovieListSubscriber extends DefaultObserver<List<Movie>> {
 
-        @Override public void onCompleted() {
+        @Override public void onComplete() {
             hideViewLoading();
         }
 
@@ -185,9 +190,9 @@ public class MovieListPresenter implements Presenter {
         }
     }
 
-    private final class FavouriteMovieListSubscriber extends DefaultSubscriber<List<Movie>> {
+    private final class FavouriteMovieListSubscriber extends DefaultObserver<List<Movie>> {
 
-        @Override public void onCompleted() {
+        @Override public void onComplete() {
             hideViewLoading();
         }
 
@@ -212,11 +217,11 @@ public class MovieListPresenter implements Presenter {
     @SuppressWarnings("unchecked")
     private void saveMovie(MovieModel movieModel) {
         Log.v(LOG_TAG, "saveMovie(): movieModel = " + movieModel);
-        mSaveMovieUseCase.init(new SaveMovieArg(mMovieModelDataMapper.toMovie(movieModel)))
-                .execute(new SaveMovieSubscriber());
+        mSaveMovieUseCase.execute(new SaveMovieSubscriber(),
+                SaveMovie.Params.forMovie(mMovieModelDataMapper.toMovie(movieModel)));
     }
 
-    private final class SaveMovieSubscriber extends DefaultSubscriber<Long> {
+    private final class SaveMovieSubscriber extends DefaultObserver<Long> {
         @Override
         public void onNext(Long aLong) {
             Log.v(LOG_TAG, "onNext(): saved row id = " + aLong);
@@ -226,11 +231,11 @@ public class MovieListPresenter implements Presenter {
     @SuppressWarnings("unchecked")
     private void deleteMovie(MovieModel movieModel) {
         Log.v(LOG_TAG, "deleteMovie(): movieModel = " + movieModel);
-        mDeleteMovieUseCase.init(new DeleteMovieArg(movieModel.getId()))
-                .execute(new DeleteMovieSubscriber());
+        mDeleteMovieUseCase.execute(new DeleteMovieSubscriber(),
+                DeleteMovie.Params.forMovie(movieModel.getId()));
     }
 
-    private final class DeleteMovieSubscriber extends DefaultSubscriber<Integer> {
+    private final class DeleteMovieSubscriber extends DefaultObserver<Integer> {
         @Override
         public void onNext(Integer integer) {
             Log.v(LOG_TAG, "onNext(): delete row = " + integer);
@@ -244,11 +249,11 @@ public class MovieListPresenter implements Presenter {
             movieIds.add(movieModel.getId());
         }
         Log.v(LOG_TAG, "checkFavourite(): movieIds = " + movieIds);
-        mCheckFavouriteUseCase.init(new CheckFavouriteArg(movieIds))
-                .execute(new CheckFavouriteSubscriber(movieModels));
+        mCheckFavouriteUseCase.execute(new CheckFavouriteSubscriber(movieModels),
+                CheckFavourite.Params.forMovies(movieIds));
     }
 
-    private final class CheckFavouriteSubscriber extends DefaultSubscriber<List<Boolean>> {
+    private final class CheckFavouriteSubscriber extends DefaultObserver<List<Boolean>> {
         private List<MovieModel> mMovieModels;
 
         public CheckFavouriteSubscriber(List<MovieModel> movieModels) {

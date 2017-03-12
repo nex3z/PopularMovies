@@ -1,14 +1,15 @@
 package com.nex3z.popularmovies.domain.interactor.movie;
 
 
+import com.nex3z.popularmovies.domain.Movie;
 import com.nex3z.popularmovies.domain.executor.PostExecutionThread;
 import com.nex3z.popularmovies.domain.executor.ThreadExecutor;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.repository.MovieRepository;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
-public class SaveMovie extends UseCase<SaveMovieArg> {
+public class SaveMovie extends UseCase<Long, SaveMovie.Params> {
 
     private final MovieRepository mMovieRepository;
 
@@ -19,12 +20,20 @@ public class SaveMovie extends UseCase<SaveMovieArg> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
-        if (mArg == null) {
-            throw new IllegalArgumentException("mArg cannot be null.");
+    public Observable<Long> buildUseCaseObservable(Params params) {
+        return mMovieRepository.insertMovie(params.mMovie);
+    }
+
+    public static class Params {
+        private final Movie mMovie;
+
+        private Params(Movie movie) {
+            mMovie = movie;
         }
 
-        return mMovieRepository.insertMovie(mArg.getMovie());
+        public static Params forMovie(Movie movie) {
+            return new Params(movie);
+        }
     }
 
 }

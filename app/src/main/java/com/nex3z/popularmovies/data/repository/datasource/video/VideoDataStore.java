@@ -4,7 +4,7 @@ import com.nex3z.popularmovies.data.entity.VideoEntity;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public interface VideoDataStore {
 

@@ -2,9 +2,10 @@ package com.nex3z.popularmovies.data.net.service;
 
 import com.nex3z.popularmovies.data.net.response.MovieResponse;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
+
 
 public interface MovieService {
     String SORT_BY_POPULARITY_DESC = "popularity.desc";

@@ -4,7 +4,7 @@ import com.nex3z.popularmovies.domain.Review;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public interface ReviewRepository {
     Observable<List<Review>> reviews(long movieId);

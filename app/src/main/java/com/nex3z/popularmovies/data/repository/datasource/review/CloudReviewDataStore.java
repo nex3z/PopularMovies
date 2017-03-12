@@ -7,7 +7,7 @@ import com.nex3z.popularmovies.data.net.service.ReviewService;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public class CloudReviewDataStore implements ReviewDataStore {
     private RestClient mRestClient;

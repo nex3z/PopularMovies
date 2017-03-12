@@ -9,14 +9,11 @@ import com.nex3z.popularmovies.data.entity.MovieEntity;
 import com.nex3z.popularmovies.data.entity.mapper.MovieCursorDataMapper;
 import com.nex3z.popularmovies.data.entity.mapper.MovieEntityDataMapper;
 import com.nex3z.popularmovies.data.provider.MovieContract;
-import com.squareup.sqlbrite.BriteContentResolver;
-import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
 
 public class ContentProviderMovieDataStore implements MovieDataStore {
     private static final String LOG_TAG = ContentProviderMovieDataStore.class.getSimpleName();
@@ -24,31 +21,34 @@ public class ContentProviderMovieDataStore implements MovieDataStore {
     private static final String sMovieIdSelection = MovieContract.MovieEntry.TABLE_NAME + "." +
             MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?";
 
-    private final BriteContentResolver mBriteContentResolver;
     private final MovieCursorDataMapper mMovieCursorDataMapper;
     private final MovieEntityDataMapper mMovieEntityDataMapper;
 
 
     public ContentProviderMovieDataStore() {
-        SqlBrite sqlBrite = SqlBrite.create();
-        mBriteContentResolver = sqlBrite.wrapContentProvider(
-                App.getAppContext().getContentResolver(), Schedulers.io());
         mMovieCursorDataMapper = new MovieCursorDataMapper();
         mMovieEntityDataMapper = new MovieEntityDataMapper();
     }
 
     @Override
     public Observable<List<MovieEntity>> getMovieEntityList(String sortBy) {
-        return mBriteContentResolver
-                .createQuery(
-                        MovieContract.MovieEntry.CONTENT_URI,
-                        null,
-                        null,
-                        null,
-                        null,
-                        true)
-                .map(SqlBrite.Query::run)
-                .map(mMovieCursorDataMapper::transformList);
+        return Observable.create(emitter -> {
+            Cursor cursor = App.getAppContext().getContentResolver()
+                    .query(MovieContract.MovieEntry.CONTENT_URI, null, null, null, null);
+            emitter.onNext(mMovieCursorDataMapper.transformList(cursor));
+            emitter.onComplete();
+        });
+
+//        return mBriteContentResolver
+//                .createQuery(
+//                        MovieContract.MovieEntry.CONTENT_URI,
+//                        null,
+//                        null,
+//                        null,
+//                        null,
+//                        true)
+//                .map(SqlBrite.Query::run)
+//                .map(mMovieCursorDataMapper::transformList);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ContentProviderMovieDataStore implements MovieDataStore {
                     Log.v(LOG_TAG, "buildUseCaseObservable(): uri = " + uri);
                     Long id = MovieContract.MovieEntry.getMovieIdFromUri(uri);
                     subscriber.onNext(id);
-                    subscriber.onCompleted();
+                    subscriber.onComplete();
                 }
         );
     }
@@ -88,7 +88,7 @@ public class ContentProviderMovieDataStore implements MovieDataStore {
                     selectionArgs);
             Log.v(LOG_TAG, "buildUseCaseObservable(): deleted = " + deleted);
             subscriber.onNext(deleted);
-            subscriber.onCompleted();
+            subscriber.onComplete();
         });
     }
 
@@ -112,7 +112,7 @@ public class ContentProviderMovieDataStore implements MovieDataStore {
                 }
             }
             subscriber.onNext(result);
-            subscriber.onCompleted();
+            subscriber.onComplete();
         });
     }
 }

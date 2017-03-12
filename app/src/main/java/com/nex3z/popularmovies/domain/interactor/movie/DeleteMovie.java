@@ -5,9 +5,10 @@ import com.nex3z.popularmovies.domain.executor.ThreadExecutor;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.repository.MovieRepository;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
-public class DeleteMovie extends UseCase<DeleteMovieArg> {
+
+public class DeleteMovie extends UseCase<Integer, DeleteMovie.Params> {
 
     private final MovieRepository mMovieRepository;
 
@@ -18,11 +19,19 @@ public class DeleteMovie extends UseCase<DeleteMovieArg> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
-        if (mArg == null) {
-            throw new IllegalArgumentException("mArg cannot be null.");
+    public Observable<Integer> buildUseCaseObservable(Params params) {
+        return mMovieRepository.deleteMovie(params.mMovieId);
+    }
+
+    public static class Params {
+        private final long mMovieId;
+
+        private Params(long movieId) {
+            mMovieId = movieId;
         }
 
-        return mMovieRepository.deleteMovie(mArg.getMovieId());
+        public static Params forMovie(long movieId) {
+            return new Params(movieId);
+        }
     }
 }

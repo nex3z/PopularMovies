@@ -15,7 +15,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Singleton
@@ -32,7 +32,7 @@ public class RestClient {
 
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(
-                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor(chain -> {
                     Request original = chain.request();
                     HttpUrl originalHttpUrl = original.url();
@@ -53,7 +53,7 @@ public class RestClient {
                 .baseUrl(BASE_URL)
                 .client(httpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
         mVideoService = retrofit.create(VideoService.class);

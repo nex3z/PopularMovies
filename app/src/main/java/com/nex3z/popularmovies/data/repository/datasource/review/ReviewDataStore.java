@@ -4,7 +4,7 @@ import com.nex3z.popularmovies.data.entity.ReviewEntity;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public interface ReviewDataStore {
     Observable<List<ReviewEntity>> reviewEntityList(long movieId);

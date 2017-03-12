@@ -1,12 +1,10 @@
 package com.nex3z.popularmovies.data.repository.datasource.movie;
 
-import android.support.annotation.InterpolatorRes;
-
 import com.nex3z.popularmovies.data.entity.MovieEntity;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public interface MovieDataStore {
 

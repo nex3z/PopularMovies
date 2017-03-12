@@ -6,9 +6,12 @@ import com.nex3z.popularmovies.domain.executor.ThreadExecutor;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.repository.MovieRepository;
 
-import rx.Observable;
+import java.util.List;
 
-public class CheckFavourite extends UseCase<CheckFavouriteArg> {
+import io.reactivex.Observable;
+
+
+public class CheckFavourite extends UseCase<List<Boolean>, CheckFavourite.Params> {
 
     private final MovieRepository mMovieRepository;
 
@@ -19,11 +22,20 @@ public class CheckFavourite extends UseCase<CheckFavouriteArg> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
-        if (mArg == null) {
-            throw new IllegalArgumentException("mArg cannot be null.");
+    public Observable<List<Boolean>> buildUseCaseObservable(Params params) {
+        return mMovieRepository.checkFavourite(params.mMovieIds);
+    }
+
+    public static class Params {
+        private final List<Long> mMovieIds;
+
+        private Params(List<Long> movieIds) {
+            mMovieIds = movieIds;
         }
 
-        return mMovieRepository.checkFavourite(mArg.getMovieIds());
+        public static Params forMovies(List<Long> movieIds) {
+            return new Params(movieIds);
+        }
+
     }
 }

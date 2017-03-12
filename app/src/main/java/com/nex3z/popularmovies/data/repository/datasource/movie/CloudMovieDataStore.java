@@ -7,7 +7,7 @@ import com.nex3z.popularmovies.data.net.service.MovieService;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public class CloudMovieDataStore implements MovieDataStore {
     private RestClient mRestClient;

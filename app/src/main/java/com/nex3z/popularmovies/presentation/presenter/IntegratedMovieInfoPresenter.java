@@ -4,9 +4,11 @@ import android.util.Log;
 
 import com.nex3z.popularmovies.domain.Review;
 import com.nex3z.popularmovies.domain.Video;
-import com.nex3z.popularmovies.domain.interactor.DefaultSubscriber;
+import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
+import com.nex3z.popularmovies.domain.interactor.review.GetReviewList;
 import com.nex3z.popularmovies.domain.interactor.review.GetReviewListArg;
+import com.nex3z.popularmovies.domain.interactor.video.GetVideoList;
 import com.nex3z.popularmovies.domain.interactor.video.GetVideoListArg;
 import com.nex3z.popularmovies.presentation.mapper.ReviewModelDataMapper;
 import com.nex3z.popularmovies.presentation.mapper.VideoModelDataMapper;
@@ -51,8 +53,8 @@ public class IntegratedMovieInfoPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        mGetVideoList.unsubscribe();
-        mGetReviewList.unsubscribe();
+        mGetVideoList.dispose();
+        mGetReviewList.dispose();
         mView = null;
     }
 
@@ -94,8 +96,8 @@ public class IntegratedMovieInfoPresenter implements Presenter {
     @SuppressWarnings("unchecked")
     private void fetchVideos() {
         Log.v(LOG_TAG, "fetVideos(): movie id = " + mMovieModel.getId());
-        mGetVideoList.init(new GetVideoListArg(mMovieModel.getId()))
-                .execute(new VideoListSubscriber());
+        mGetVideoList.execute(new VideoListSubscriber(),
+                GetVideoList.Params.forMovie(mMovieModel.getId()));
     }
 
     private void showVideoCollectionInView() {
@@ -104,7 +106,7 @@ public class IntegratedMovieInfoPresenter implements Presenter {
         mView.renderVideos(mVideoModels);
     }
 
-    private final class VideoListSubscriber extends DefaultSubscriber<List<Video>> {
+    private final class VideoListSubscriber extends DefaultObserver<List<Video>> {
 
         @Override public void onError(Throwable e) {
             Log.e(LOG_TAG, "onError(): e = " + e.getMessage());
@@ -119,8 +121,8 @@ public class IntegratedMovieInfoPresenter implements Presenter {
     @SuppressWarnings("unchecked")
     private void fetchReviews() {
         Log.v(LOG_TAG, "fetVideos(): movie id = " + mMovieModel.getId());
-        mGetReviewList.init(new GetReviewListArg(mMovieModel.getId()))
-                .execute(new ReviewListSubscriber());
+        mGetReviewList.execute(new ReviewListSubscriber(),
+                GetReviewList.Params.forMovie(mMovieModel.getId()));
     }
 
     private void showReviewCollectionInView() {
@@ -130,9 +132,9 @@ public class IntegratedMovieInfoPresenter implements Presenter {
         mView.renderReviews(mReviewModels);
     }
 
-    private final class ReviewListSubscriber extends DefaultSubscriber<List<Review>> {
+    private final class ReviewListSubscriber extends DefaultObserver<List<Review>> {
 
-        @Override public void onCompleted() {}
+        @Override public void onComplete() {}
 
         @Override public void onError(Throwable e) {
             Log.e(LOG_TAG, "onError(): e = " + e.getMessage());
