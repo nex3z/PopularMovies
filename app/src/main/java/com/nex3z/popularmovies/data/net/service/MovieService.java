@@ -1,10 +1,10 @@
 package com.nex3z.popularmovies.data.net.service;
 
-import com.nex3z.popularmovies.data.net.response.MovieResponse;
+import com.nex3z.popularmovies.data.entity.movie.DiscoveryMovieRespEntity;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 public interface MovieService {
     String SORT_BY_POPULARITY_DESC = "popularity.desc";
@@ -13,8 +13,10 @@ public interface MovieService {
     String SORT_BY_RELEASE_DATE_DESC = "release_date.desc";
 
     @GET("/3/discover/movie")
-    Observable<MovieResponse> getMovies(@Query("sort_by") String sortBy, @Query("page") int page);
+    Observable<DiscoveryMovieRespEntity> getMovies(@Query("sort_by") String sortBy,
+                                                   @Query("page") int page);
 
     @GET("/3/discover/movie")
-    Observable<MovieResponse> getMovies(@Query("sort_by") String sortBy);
+    Observable<DiscoveryMovieRespEntity> getMovies(@Query("sort_by") String sortBy);
+
 }

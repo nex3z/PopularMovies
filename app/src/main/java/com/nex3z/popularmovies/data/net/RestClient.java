@@ -7,18 +7,14 @@ import com.nex3z.popularmovies.data.net.service.MovieService;
 import com.nex3z.popularmovies.data.net.service.ReviewService;
 import com.nex3z.popularmovies.data.net.service.VideoService;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-@Singleton
 public class RestClient {
     private static final String BASE_URL = "http://api.themoviedb.org";
 
@@ -26,13 +22,12 @@ public class RestClient {
     private MovieService mMovieService;
     private ReviewService mReviewService;
 
-    @Inject
     public RestClient() {
         Gson gson = new GsonBuilder().create();
 
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(
-                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor(chain -> {
                     Request original = chain.request();
                     HttpUrl originalHttpUrl = original.url();
@@ -53,7 +48,7 @@ public class RestClient {
                 .baseUrl(BASE_URL)
                 .client(httpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
         mVideoService = retrofit.create(VideoService.class);
