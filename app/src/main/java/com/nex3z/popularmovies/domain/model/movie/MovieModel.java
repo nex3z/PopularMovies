@@ -9,7 +9,7 @@ public class MovieModel {
     private String mOverview;
     private String mReleaseDate;
     private List<Integer> mGenreIds = null;
-    private int mId;
+    private long mId;
     private String mOriginalTitle;
     private String mOriginalLanguage;
     private String mTitle;
@@ -79,11 +79,11 @@ public class MovieModel {
         mGenreIds = genreIds;
     }
 
-    public int getId() {
+    public long getId() {
         return mId;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         mId = id;
     }
 

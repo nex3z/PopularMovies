@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.data.repository;
+package com.nex3z.popularmovies.data.repository.review;
 
 import com.nex3z.popularmovies.data.entity.review.ReviewRespEntity;
 
