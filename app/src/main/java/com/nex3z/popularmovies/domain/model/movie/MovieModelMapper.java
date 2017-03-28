@@ -8,6 +8,8 @@ import java.util.List;
 
 public class MovieModelMapper {
 
+    private MovieModelMapper() {}
+
     public static List<MovieModel> transform(DiscoveryMovieRespEntity entity) {
         return entity != null ? transform(entity.getResults()) : null;
     }

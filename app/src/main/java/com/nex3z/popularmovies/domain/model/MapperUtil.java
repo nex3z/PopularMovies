@@ -2,20 +2,18 @@ package com.nex3z.popularmovies.domain.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class MapperUtil {
 
-    public interface Transformer<From, To> {
-        To transform(From from);
-    }
-
-    public static <From, To> List<To> transform(List<From> fromList, Transformer<From, To> transformer) {
+    public static <From, To> List<To> transform(List<From> fromList,
+                                                Function<From, To> transformer) {
         List<To> toList = null;
 
         if (fromList != null) {
             toList = new ArrayList<To>(fromList.size());
             for (From from : fromList) {
-                toList.add(transformer.transform(from));
+                toList.add(transformer.apply(from));
             }
         }
 
