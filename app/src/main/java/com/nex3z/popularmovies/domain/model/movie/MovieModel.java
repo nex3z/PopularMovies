@@ -18,6 +18,7 @@ public class MovieModel {
     private int mVoteCount;
     private boolean mVideo;
     private double mVoteAverage;
+    private boolean mIsFavourite;
 
     @Override
     public String toString() {
@@ -149,5 +150,13 @@ public class MovieModel {
 
     public void setVoteAverage(double voteAverage) {
         mVoteAverage = voteAverage;
+    }
+
+    public boolean isFavourite() {
+        return mIsFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        mIsFavourite = favourite;
     }
 }
