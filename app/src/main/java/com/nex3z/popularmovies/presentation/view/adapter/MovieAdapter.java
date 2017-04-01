@@ -2,7 +2,6 @@ package com.nex3z.popularmovies.presentation.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,13 +93,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            mIvPoster.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.v(LOG_TAG, "onClick(): mPosterListener = " + mPosterListener);
-                    if (mPosterListener != null)
-                        mPosterListener.onClick(getLayoutPosition(), ViewHolder.this);
-                }
+            mIvPoster.setOnClickListener(v -> {
+                if (mPosterListener != null)
+                    mPosterListener.onClick(getLayoutPosition(), ViewHolder.this);
             });
 
             mIBtnFavourite.setOnClickListener(v -> {

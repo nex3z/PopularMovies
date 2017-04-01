@@ -6,6 +6,6 @@ import io.reactivex.Observable;
 
 public interface MovieRepository {
 
-    Observable<DiscoveryMovieRespEntity> discoverMovies(String sortBy, int page);
+    Observable<DiscoveryMovieRespEntity> discoverMovies(int page, String sortBy);
 
 }

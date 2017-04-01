@@ -15,7 +15,7 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public Observable<DiscoveryMovieRespEntity> discoverMovies(String sortBy, int page) {
-        return mMovieService.discoverMovies(sortBy, page);
+    public Observable<DiscoveryMovieRespEntity> discoverMovies(int page, String sortBy) {
+        return mMovieService.discoverMovies(page, sortBy);
     }
 }

@@ -32,7 +32,7 @@ public class ImageUtility {
     public @interface PosterSize {}
 
     public static String getPosterImageUrl(String path) {
-        return getPosterImageUrl(path, POSTER_SIZE_W342);
+        return getPosterImageUrl(path, POSTER_SIZE_W185);
     }
 
     public static String getPosterImageUrl(String path, @PosterSize String size) {

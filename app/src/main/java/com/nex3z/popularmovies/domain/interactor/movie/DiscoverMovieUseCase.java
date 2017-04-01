@@ -25,7 +25,7 @@ public class DiscoverMovieUseCase extends UseCase<List<MovieModel>, DiscoverMovi
     @Override
     public Observable<List<MovieModel>> buildUseCaseObservable(Params params) {
         return mMovieRepository
-                .discoverMovies(params.mSortBy, params.mPage)
+                .discoverMovies(params.mPage, params.mSortBy)
                 .map(MovieModelMapper::transform);
     }
 
@@ -38,13 +38,13 @@ public class DiscoverMovieUseCase extends UseCase<List<MovieModel>, DiscoverMovi
         private String mSortBy;
         private int mPage;
 
-        private Params(String sortBy, int page) {
+        private Params(int page, String sortBy) {
             mSortBy = sortBy;
             mPage = page;
         }
 
-        public static Params forPage(String sortBy, int page) {
-            return new Params(sortBy, page);
+        public static Params forPage(int page, String sortBy) {
+            return new Params(page, sortBy);
         }
     }
 }

@@ -3,13 +3,18 @@ package com.nex3z.popularmovies.presentation.view.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.nex3z.popularmovies.R;
+import com.nex3z.popularmovies.domain.model.movie.MovieModel;
+import com.nex3z.popularmovies.presentation.view.adapter.MovieAdapter;
 import com.nex3z.popularmovies.presentation.view.fragment.MovieListFragment;
 
-public class MovieListActivity extends BaseActivity {
+public class MovieListActivity extends BaseActivity implements
+        MovieListFragment.OnItemSelectListener {
+    private static final String LOG_TAG = MovieListActivity.class.getSimpleName();
 
     private Fragment mDiscoveryFragment;
 
@@ -42,5 +47,8 @@ public class MovieListActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void OnItemSelect(MovieModel movieModel, MovieAdapter.ViewHolder vh) {
+        Log.v(LOG_TAG, "OnItemSelect(): movieModel = " + movieModel);
+    }
 }
