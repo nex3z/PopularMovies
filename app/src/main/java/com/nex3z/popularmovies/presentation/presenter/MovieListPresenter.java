@@ -9,7 +9,6 @@ import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.view.MovieListView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class MovieListPresenter implements Presenter {
@@ -43,7 +42,7 @@ public class MovieListPresenter implements Presenter {
         mView = view;
     }
 
-    public void initialize() {
+    public void init() {
         mView.showLoading();
         refresh();
     }
@@ -51,7 +50,7 @@ public class MovieListPresenter implements Presenter {
     public void refresh() {
         mPage = FIRST_PAGE;
         mMovies.clear();
-        mView.renderMovieList(mMovies);
+        mView.renderMovies(mMovies);
         fetchMovies();
     }
 
@@ -73,20 +72,21 @@ public class MovieListPresenter implements Presenter {
         fetchMovies();
     }
 
-    public MovieModel onMovieSelect(int position) {
-        return mMovies.get(position);
+    public void onMovieSelect(int position) {
+        MovieModel movie = mMovies.get(position);
+        mView.showDetail(movie);
     }
 
-    private void showMovieCollectionInView(Collection<MovieModel> movies) {
-        Log.v(LOG_TAG, "showMovieCollectionInView(): Showing " + movies.size()
+    private void renderMovies(List<MovieModel> movies) {
+        Log.v(LOG_TAG, "renderMovies(): Showing " + movies.size()
                 + " more movies, total = " + mMovies.size());
 
         int currentSize = mMovies.size();
         mMovies.addAll(movies);
         if (currentSize == 0) {
-            mView.renderMovieList(mMovies);
+            mView.renderMovies(mMovies);
         } else {
-            mView.renderMovieList(mMovies, currentSize, movies.size());
+            mView.renderMovies(mMovies, currentSize, movies.size());
         }
     }
 
@@ -100,7 +100,7 @@ public class MovieListPresenter implements Presenter {
         @Override
         public void onNext(List<MovieModel> movieModels) {
             mView.hideLoading();
-            showMovieCollectionInView(movieModels);
+            renderMovies(movieModels);
         }
 
         @Override

@@ -28,7 +28,6 @@ import com.nex3z.popularmovies.presentation.view.misc.EndlessRecyclerOnScrollLis
 import com.nex3z.popularmovies.presentation.view.misc.SpacesItemDecoration;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,6 +48,7 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
     private MovieListPresenter mPresenter;
     private MovieAdapter mMovieAdapter;
     private List<MovieModel> mMovies = new ArrayList<>();
+    private MovieAdapter.ViewHolder mViewHolder;
     private EndlessRecyclerOnScrollListener mEndlessScroller;
     private OnItemSelectListener mListener = sDummyListener;
 
@@ -101,28 +101,35 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
     }
 
     @Override
-    public void renderMovieList(Collection<MovieModel> movieModels) {
-        Log.v(LOG_TAG, "renderMovieList(): movieModelCollection = " + movieModels.size());
+    public void renderMovies(List<MovieModel> movieModels) {
+        Log.v(LOG_TAG, "renderMovies(): movieModelCollection = " + movieModels.size());
         if (movieModels.isEmpty()) {
             mTvEmptyMessage.setVisibility(View.VISIBLE);
         } else {
             mTvEmptyMessage.setVisibility(View.GONE);
         }
-        mMovieAdapter.setMovieCollection(movieModels);
+        mMovieAdapter.setMovies(movieModels);
         mMovieAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void renderMovieList(Collection<MovieModel> movieModels, int start, int count) {
-        Log.v(LOG_TAG, "renderMovieList(): movieModels = " + movieModels.size()
+    public void renderMovies(List<MovieModel> movieModels, int start, int count) {
+        Log.v(LOG_TAG, "renderMovies(): movieModels = " + movieModels.size()
                 + ", start = " + start + ", count = " + count);
         mMovieAdapter.notifyItemRangeInserted(start, count);
+    }
+
+    @Override
+    public void showDetail(MovieModel movie) {
+        mListener.OnItemSelect(movie, mViewHolder);
     }
 
     private void setupRecyclerView() {
         Log.v(LOG_TAG, "setupRecyclerView()");
         mMovieAdapter = new MovieAdapter(mMovies);
         mMovieAdapter.setOnPosterClickListener((position, viewHolder) -> {
+            mViewHolder = viewHolder;
+            mPresenter.onMovieSelect(position);
         });
         mMovieAdapter.setOnFavouriteClickListener((position, vh) -> {
         });
@@ -149,7 +156,7 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
         DiscoverMovieUseCase useCase = new DiscoverMovieUseCase(movieRepository, new JobExecutor(), new UIThread());
         mPresenter = new MovieListPresenter(useCase);
         mPresenter.setView(this);
-        mPresenter.initialize();
+        mPresenter.init();
     }
 
     public interface OnItemSelectListener {

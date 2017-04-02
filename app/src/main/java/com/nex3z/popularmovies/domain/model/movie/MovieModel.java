@@ -1,8 +1,12 @@
 package com.nex3z.popularmovies.domain.model.movie;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class MovieModel {
+public class MovieModel implements Parcelable {
 
     private String mPosterPath;
     private boolean mAdult;
@@ -159,4 +163,62 @@ public class MovieModel {
     public void setFavourite(boolean favourite) {
         mIsFavourite = favourite;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mPosterPath);
+        dest.writeByte(this.mAdult ? (byte) 1 : (byte) 0);
+        dest.writeString(this.mOverview);
+        dest.writeString(this.mReleaseDate);
+        dest.writeList(this.mGenreIds);
+        dest.writeLong(this.mId);
+        dest.writeString(this.mOriginalTitle);
+        dest.writeString(this.mOriginalLanguage);
+        dest.writeString(this.mTitle);
+        dest.writeString(this.mBackdropPath);
+        dest.writeDouble(this.mPopularity);
+        dest.writeInt(this.mVoteCount);
+        dest.writeByte(this.mVideo ? (byte) 1 : (byte) 0);
+        dest.writeDouble(this.mVoteAverage);
+        dest.writeByte(this.mIsFavourite ? (byte) 1 : (byte) 0);
+    }
+
+    public MovieModel() {
+    }
+
+    protected MovieModel(Parcel in) {
+        this.mPosterPath = in.readString();
+        this.mAdult = in.readByte() != 0;
+        this.mOverview = in.readString();
+        this.mReleaseDate = in.readString();
+        this.mGenreIds = new ArrayList<Integer>();
+        in.readList(this.mGenreIds, Integer.class.getClassLoader());
+        this.mId = in.readLong();
+        this.mOriginalTitle = in.readString();
+        this.mOriginalLanguage = in.readString();
+        this.mTitle = in.readString();
+        this.mBackdropPath = in.readString();
+        this.mPopularity = in.readDouble();
+        this.mVoteCount = in.readInt();
+        this.mVideo = in.readByte() != 0;
+        this.mVoteAverage = in.readDouble();
+        this.mIsFavourite = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<MovieModel> CREATOR = new Parcelable.Creator<MovieModel>() {
+        @Override
+        public MovieModel createFromParcel(Parcel source) {
+            return new MovieModel(source);
+        }
+
+        @Override
+        public MovieModel[] newArray(int size) {
+            return new MovieModel[size];
+        }
+    };
 }

@@ -1,11 +1,16 @@
 package com.nex3z.popularmovies.presentation.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
@@ -50,5 +55,13 @@ public class MovieListActivity extends BaseActivity implements
     @Override
     public void OnItemSelect(MovieModel movieModel, MovieAdapter.ViewHolder vh) {
         Log.v(LOG_TAG, "OnItemSelect(): movieModel = " + movieModel);
+        Intent intent = new Intent(this, MovieDetailActivity.class)
+                .putExtra(MovieDetailActivity.MOVIE_INFO, movieModel);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(this, new Pair<View, String>(
+                        vh.mIvPoster,
+                        getString(R.string.detail_poster_transition_name)));
+
+        ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
     }
 }

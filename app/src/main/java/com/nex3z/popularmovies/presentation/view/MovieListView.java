@@ -4,13 +4,15 @@ import android.content.Context;
 
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface MovieListView extends BaseView, LoadDataView {
 
-    void renderMovieList(Collection<MovieModel> movieModels);
+    void renderMovies(List<MovieModel> movies);
 
-    void renderMovieList(Collection<MovieModel> movieModels, int start, int count);
+    void renderMovies(List<MovieModel> movies, int start, int count);
+
+    void showDetail(MovieModel movie);
 
     Context getContext();
 

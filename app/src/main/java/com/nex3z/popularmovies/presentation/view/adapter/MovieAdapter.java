@@ -14,7 +14,6 @@ import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.util.ImageUtility;
 import com.squareup.picasso.Picasso;
 
-import java.util.Collection;
 import java.util.List;
 
 import butterknife.BindView;
@@ -44,7 +43,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View contactView = inflater.inflate(R.layout.movie_item, parent, false);
+        View contactView = inflater.inflate(R.layout.item_movie, parent, false);
 
         return new ViewHolder(contactView);
     }
@@ -77,15 +76,29 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         mFavouriteListener = listener;
     }
 
-    public void setMovieCollection(Collection<MovieModel> movieCollection) {
-        validateMovieCollection(movieCollection);
-        mMovies = (List<MovieModel>) movieCollection;
+    public void setMovies(List<MovieModel> movies) {
+        validateMovies(movies);
+        mMovies = movies;
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    private void validateMovies(List<MovieModel> movies) {
+        if (movies == null) {
+            throw new IllegalArgumentException("The list cannot be null");
+        }
+    }
+
+    private void updateFavouriteButtonIcon(ImageButton favouriteButton, boolean isFavourite) {
+        if (isFavourite) {
+            favouriteButton.setImageResource(R.drawable.ic_favorite_24dp);
+        } else {
+            favouriteButton.setImageResource(R.drawable.ic_favorite_border_24dp);
+        }
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final String LOG_TAG = ViewHolder.class.getSimpleName();
-        @BindView(R.id.iv_poster) ImageView mIvPoster;
+        @BindView(R.id.iv_poster) public ImageView mIvPoster;
         @BindView(R.id.tv_title) TextView mTvTitle;
         @BindView(R.id.ibtn_favourite) ImageButton mIBtnFavourite;
 
@@ -102,20 +115,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 if (mFavouriteListener != null)
                     mFavouriteListener.onClick(getLayoutPosition(), ViewHolder.this);
             });
-        }
-    }
-
-    private void updateFavouriteButtonIcon(ImageButton favouriteButton, boolean isFavourite) {
-        if (isFavourite) {
-            favouriteButton.setImageResource(R.drawable.ic_favorite_24dp);
-        } else {
-            favouriteButton.setImageResource(R.drawable.ic_favorite_border_24dp);
-        }
-    }
-
-    private void validateMovieCollection(Collection<MovieModel> movieCollection) {
-        if (movieCollection == null) {
-            throw new IllegalArgumentException("The list cannot be null");
         }
     }
 
