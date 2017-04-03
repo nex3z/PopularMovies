@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
+import com.nex3z.popularmovies.domain.interactor.movie.AddToFavouriteUseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.DiscoverMovieUseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.view.MovieListView;
@@ -18,12 +19,15 @@ public class MovieListPresenter implements Presenter {
     private MovieListView mView;
 
     private final DiscoverMovieUseCase mDiscoverMovieUseCase;
+    private final AddToFavouriteUseCase mAddToFavouriteUseCase;
     private final List<MovieModel> mMovies = new ArrayList<>();
     private int mPage = FIRST_PAGE;
     private String mSortBy = DiscoverMovieUseCase.Params.SORT_BY_POPULARITY_DESC;
 
-    public MovieListPresenter(DiscoverMovieUseCase discoverMovieUseCase) {
+    public MovieListPresenter(DiscoverMovieUseCase discoverMovieUseCase,
+                              AddToFavouriteUseCase addToFavouriteUseCase) {
         mDiscoverMovieUseCase = discoverMovieUseCase;
+        mAddToFavouriteUseCase = addToFavouriteUseCase;
     }
 
     @Override
@@ -96,6 +100,13 @@ public class MovieListPresenter implements Presenter {
                 DiscoverMovieUseCase.Params.forPage(mPage, mSortBy));
     }
 
+    public void addToFavourite(int position) {
+        MovieModel movie = mMovies.get(position);
+        Log.v(LOG_TAG, "addToFavourite(): position = " + position + ", movie = " + movie);
+        mAddToFavouriteUseCase.execute(new AddToFavouriteObserver(),
+                AddToFavouriteUseCase.Params.forMovie(movie));
+    }
+
     private final class DiscoverMovieObserver extends DefaultObserver<List<MovieModel>> {
         @Override
         public void onNext(List<MovieModel> movieModels) {
@@ -112,6 +123,19 @@ public class MovieListPresenter implements Presenter {
         public void onError(Throwable exception) {
             mView.hideLoading();
             mView.showError(exception.getMessage());
+        }
+    }
+
+    private final class AddToFavouriteObserver extends DefaultObserver<Integer> {
+        @Override
+        public void onNext(Integer integer) {
+            Log.v(LOG_TAG, "AddToFavouriteObserver onNext(): " + integer);
+        }
+
+        @Override
+        public void onError(Throwable exception) {
+            Log.v(LOG_TAG, "AddToFavouriteObserver onError(): " + exception.getMessage());
+            exception.printStackTrace();
         }
     }
 

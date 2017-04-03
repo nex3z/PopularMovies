@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.nex3z.popularmovies.data.net.RestClient;
 
+import io.realm.Realm;
+
 public class App extends Application {
     private static Context mContext;
     private static RestClient sRestClient;
@@ -15,6 +17,7 @@ public class App extends Application {
 
         mContext = getApplicationContext();
         sRestClient = new RestClient();
+        Realm.init(this);
     }
 
     public static Context getAppContext() {

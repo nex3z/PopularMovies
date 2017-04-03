@@ -4,14 +4,18 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MovieEntity {
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
+
+public class MovieEntity extends RealmObject {
 
     @SerializedName("poster_path") private String mPosterPath;
     @SerializedName("adult") private boolean mAdult;
     @SerializedName("overview") private String mOverview;
     @SerializedName("release_date") private String mReleaseDate;
-    @SerializedName("genre_ids") private List<Integer> mGenreIds = null;
-    @SerializedName("id") private long mId;
+    @SerializedName("genre_ids") @Ignore private List<Integer> mGenreIds = null;
+    @SerializedName("id") @PrimaryKey private long mId;
     @SerializedName("original_title") private String mOriginalTitle;
     @SerializedName("original_language") private String mOriginalLanguage;
     @SerializedName("title") private String mTitle;

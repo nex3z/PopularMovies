@@ -1,15 +1,12 @@
-package com.nex3z.popularmovies.data.repository.movie;
+package com.nex3z.popularmovies.data.local;
 
-import com.nex3z.popularmovies.data.entity.movie.DiscoveryMovieRespEntity;
 import com.nex3z.popularmovies.data.entity.movie.MovieEntity;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 
-public interface MovieRepository {
-
-    Observable<DiscoveryMovieRespEntity> discoverMovies(int page, String sortBy);
+public interface LocalMovieDataStore {
 
     Observable<Integer> addToFavourite(MovieEntity movieEntity);
 

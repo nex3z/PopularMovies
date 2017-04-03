@@ -18,6 +18,7 @@ import com.nex3z.popularmovies.app.App;
 import com.nex3z.popularmovies.data.repository.movie.MovieRepository;
 import com.nex3z.popularmovies.data.repository.movie.MovieRepositoryImpl;
 import com.nex3z.popularmovies.domain.executor.JobExecutor;
+import com.nex3z.popularmovies.domain.interactor.movie.AddToFavouriteUseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.DiscoverMovieUseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.presenter.MovieListPresenter;
@@ -149,6 +150,7 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
             mPresenter.onMovieSelect(position);
         });
         mMovieAdapter.setOnFavouriteClickListener((position, vh) -> {
+            mPresenter.addToFavourite(position);
         });
         mRvMovieList.setAdapter(mMovieAdapter);
 
@@ -174,8 +176,9 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
 
     private void initPresenter() {
         MovieRepository movieRepository = new MovieRepositoryImpl(App.getRestClient());
-        DiscoverMovieUseCase useCase = new DiscoverMovieUseCase(movieRepository, new JobExecutor(), new UIThread());
-        mPresenter = new MovieListPresenter(useCase);
+        DiscoverMovieUseCase discoverMovieUseCase = new DiscoverMovieUseCase(movieRepository, new JobExecutor(), new UIThread());
+        AddToFavouriteUseCase addToFavouriteUseCase = new AddToFavouriteUseCase(movieRepository, new JobExecutor(), new UIThread());
+        mPresenter = new MovieListPresenter(discoverMovieUseCase, addToFavouriteUseCase);
         mPresenter.setView(this);
         mPresenter.init();
     }
