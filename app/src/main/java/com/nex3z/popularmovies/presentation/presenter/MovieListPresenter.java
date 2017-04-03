@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
-import com.nex3z.popularmovies.domain.interactor.movie.AddToFavouriteUseCase;
+import com.nex3z.popularmovies.domain.interactor.movie.SetFavouriteUseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.DiscoverMovieUseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.view.MovieListView;
@@ -19,13 +19,13 @@ public class MovieListPresenter implements Presenter {
     private MovieListView mView;
 
     private final DiscoverMovieUseCase mDiscoverMovieUseCase;
-    private final AddToFavouriteUseCase mAddToFavouriteUseCase;
+    private final SetFavouriteUseCase mAddToFavouriteUseCase;
     private final List<MovieModel> mMovies = new ArrayList<>();
     private int mPage = FIRST_PAGE;
     private String mSortBy = DiscoverMovieUseCase.Params.SORT_BY_POPULARITY_DESC;
 
     public MovieListPresenter(DiscoverMovieUseCase discoverMovieUseCase,
-                              AddToFavouriteUseCase addToFavouriteUseCase) {
+                              SetFavouriteUseCase addToFavouriteUseCase) {
         mDiscoverMovieUseCase = discoverMovieUseCase;
         mAddToFavouriteUseCase = addToFavouriteUseCase;
     }
@@ -100,11 +100,17 @@ public class MovieListPresenter implements Presenter {
                 DiscoverMovieUseCase.Params.forPage(mPage, mSortBy));
     }
 
-    public void addToFavourite(int position) {
+    public void swapFavourite(int position) {
         MovieModel movie = mMovies.get(position);
-        Log.v(LOG_TAG, "addToFavourite(): position = " + position + ", movie = " + movie);
-        mAddToFavouriteUseCase.execute(new AddToFavouriteObserver(),
-                AddToFavouriteUseCase.Params.forMovie(movie));
+        Log.v(LOG_TAG, "swapFavourite(): position = " + position + ", movie = " + movie);
+        mAddToFavouriteUseCase.execute(new SetFavouriteObserver(position),
+                SetFavouriteUseCase.Params.forMovie(movie, !movie.isFavourite()));
+    }
+
+    private void updateFavourite(int position, boolean isFavourite) {
+        MovieModel movie = mMovies.get(position);
+        movie.setFavourite(isFavourite);
+        mView.updateMovie(position);
     }
 
     private final class DiscoverMovieObserver extends DefaultObserver<List<MovieModel>> {
@@ -123,18 +129,26 @@ public class MovieListPresenter implements Presenter {
         public void onError(Throwable exception) {
             mView.hideLoading();
             mView.showError(exception.getMessage());
+            exception.printStackTrace();
         }
     }
 
-    private final class AddToFavouriteObserver extends DefaultObserver<Integer> {
+    private final class SetFavouriteObserver extends DefaultObserver<Boolean> {
+        private int mPosition;
+
+        SetFavouriteObserver(int position) {
+            mPosition = position;
+        }
+
         @Override
-        public void onNext(Integer integer) {
-            Log.v(LOG_TAG, "AddToFavouriteObserver onNext(): " + integer);
+        public void onNext(Boolean b) {
+            Log.v(LOG_TAG, "SetFavouriteObserver onNext(): " + b);
+            updateFavourite(mPosition, b);
         }
 
         @Override
         public void onError(Throwable exception) {
-            Log.v(LOG_TAG, "AddToFavouriteObserver onError(): " + exception.getMessage());
+            Log.v(LOG_TAG, "SetFavouriteObserver onError(): " + exception.getMessage());
             exception.printStackTrace();
         }
     }

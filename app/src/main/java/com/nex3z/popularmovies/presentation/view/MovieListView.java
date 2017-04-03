@@ -12,6 +12,8 @@ public interface MovieListView extends BaseView, LoadDataView {
 
     void renderMovies(List<MovieModel> movies, int start, int count);
 
+    void updateMovie(int position);
+
     void showDetail(MovieModel movie);
 
     Context getContext();

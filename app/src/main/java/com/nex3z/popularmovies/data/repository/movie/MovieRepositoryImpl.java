@@ -31,6 +31,11 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
+    public Observable<Integer> removeFromFavourite(long movieId) {
+        return mLocalMovieDataStore.removeFromFavourite(movieId);
+    }
+
+    @Override
     public Observable<List<MovieEntity>> getFavouriteMovies() {
         return mLocalMovieDataStore.getFavouriteMovies();
     }
@@ -40,4 +45,8 @@ public class MovieRepositoryImpl implements MovieRepository {
         return mLocalMovieDataStore.isFavourite(movieId);
     }
 
+    @Override
+    public Observable<List<Boolean>> isFavourite(List<Long> movieIds) {
+        return mLocalMovieDataStore.isFavourite(movieIds);
+    }
 }

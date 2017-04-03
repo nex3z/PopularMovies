@@ -13,8 +13,12 @@ public interface MovieRepository {
 
     Observable<Integer> addToFavourite(MovieEntity movieEntity);
 
+    Observable<Integer> removeFromFavourite(long movieId);
+
     Observable<List<MovieEntity>> getFavouriteMovies();
 
     Observable<Boolean> isFavourite(long movieId);
+
+    Observable<List<Boolean>> isFavourite(List<Long> movieIds);
 
 }
