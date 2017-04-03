@@ -82,9 +82,26 @@ public class MovieVideoFragment extends BaseFragment implements MovieVideoView {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.pause();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         mPresenter.destroy();
     }
 

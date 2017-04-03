@@ -93,6 +93,13 @@ public class MovieDetailActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SAVE_TAG_MOVIE, mMovie);
+        super.onSaveInstanceState(outState);
+    }
+
+
 
     private void init() {
         initPager();

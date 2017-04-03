@@ -79,14 +79,32 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupRecyclerView();
-        init();
+        initMovieList();
+        initPresenter();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.pause();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.destroy();
     }
 
     @Override
@@ -124,8 +142,7 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
         mListener.OnItemSelect(movie, mViewHolder);
     }
 
-    private void setupRecyclerView() {
-        Log.v(LOG_TAG, "setupRecyclerView()");
+    private void initMovieList() {
         mMovieAdapter = new MovieAdapter(mMovies);
         mMovieAdapter.setOnPosterClickListener((position, viewHolder) -> {
             mViewHolder = viewHolder;
@@ -133,7 +150,6 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
         });
         mMovieAdapter.setOnFavouriteClickListener((position, vh) -> {
         });
-
         mRvMovieList.setAdapter(mMovieAdapter);
 
         GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
@@ -149,9 +165,14 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
             }
         };
         mRvMovieList.addOnScrollListener(mEndlessScroller);
+
+        mSwipeLayout.setOnRefreshListener(() -> {
+            mEndlessScroller.reset();
+            mPresenter.refresh();
+        });
     }
 
-    private void init() {
+    private void initPresenter() {
         MovieRepository movieRepository = new MovieRepositoryImpl(App.getRestClient());
         DiscoverMovieUseCase useCase = new DiscoverMovieUseCase(movieRepository, new JobExecutor(), new UIThread());
         mPresenter = new MovieListPresenter(useCase);

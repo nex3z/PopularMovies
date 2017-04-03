@@ -82,9 +82,26 @@ public class MovieReviewFragment extends BaseFragment implements MovieReviewView
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.pause();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.pause();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         mPresenter.destroy();
     }
 
