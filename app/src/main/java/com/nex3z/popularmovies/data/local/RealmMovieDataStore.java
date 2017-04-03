@@ -4,15 +4,11 @@ import android.util.Log;
 
 import com.nex3z.popularmovies.data.entity.movie.MovieEntity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.exceptions.RealmPrimaryKeyConstraintException;
 
@@ -88,31 +84,6 @@ public class RealmMovieDataStore implements LocalMovieDataStore {
             } else {
                 emitter.onNext(false);
             }
-            realm.close();
-            emitter.onComplete();
-        });
-    }
-
-    @Override
-    public Observable<List<Boolean>> isFavourite(List<Long> movieIds) {
-        Log.v(LOG_TAG, "isFavourite(): movieIds = " + movieIds);
-        return Observable.create(emitter -> {
-            Realm realm = buildDefaultRealm();
-            RealmQuery<MovieEntity> query = realm.where(MovieEntity.class);
-            for (long id : movieIds) {
-                query.or().equalTo("mId", id);
-            }
-            RealmResults<MovieEntity> result = query.findAll();
-
-            List<Boolean> favourite = new ArrayList<>(Arrays.asList(new Boolean[movieIds.size()]));
-            Collections.fill(favourite, Boolean.FALSE);
-            for (int i = 0; i < result.size(); i++) {
-                int position = movieIds.indexOf(result.get(i).getId());
-                Log.v(LOG_TAG, "isFavourite(): id = " + result.get(i).getId() + ", position = " + position);
-                favourite.set(position, true);
-            }
-            Log.v(LOG_TAG, "isFavourite(): favourite = " + favourite);
-            emitter.onNext(favourite);
             realm.close();
             emitter.onComplete();
         });

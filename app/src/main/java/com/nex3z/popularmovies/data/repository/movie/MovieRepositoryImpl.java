@@ -45,8 +45,4 @@ public class MovieRepositoryImpl implements MovieRepository {
         return mLocalMovieDataStore.isFavourite(movieId);
     }
 
-    @Override
-    public Observable<List<Boolean>> isFavourite(List<Long> movieIds) {
-        return mLocalMovieDataStore.isFavourite(movieIds);
-    }
 }

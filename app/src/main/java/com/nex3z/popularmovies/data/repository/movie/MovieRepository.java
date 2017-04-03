@@ -19,6 +19,4 @@ public interface MovieRepository {
 
     Observable<Boolean> isFavourite(long movieId);
 
-    Observable<List<Boolean>> isFavourite(List<Long> movieIds);
-
 }

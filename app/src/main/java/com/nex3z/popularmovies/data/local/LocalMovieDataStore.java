@@ -16,6 +16,4 @@ public interface LocalMovieDataStore {
 
     Observable<Boolean> isFavourite(long movieId);
 
-    Observable<List<Boolean>> isFavourite(List<Long> movieIds);
-
 }

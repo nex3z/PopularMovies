@@ -1,7 +1,5 @@
 package com.nex3z.popularmovies.domain.interactor.movie;
 
-import android.util.Log;
-
 import com.nex3z.popularmovies.data.repository.movie.MovieRepository;
 import com.nex3z.popularmovies.domain.executor.PostExecutionThread;
 import com.nex3z.popularmovies.domain.executor.ThreadExecutor;
@@ -9,7 +7,6 @@ import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.domain.model.movie.MovieModelMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -32,25 +29,19 @@ public class DiscoverMovieUseCase extends UseCase<List<MovieModel>, DiscoverMovi
         return mMovieRepository
                 .discoverMovies(params.mPage, params.mSortBy)
                 .map(MovieModelMapper::transform)
-                .doOnNext(movieModels ->  mMovieModels = movieModels)
-                .flatMap(movieModels -> mMovieRepository.isFavourite(getMovieIds(movieModels)))
-                .map(this::update);
+                .flatMap(Observable::fromIterable)
+                .flatMap(this::isFavourite, this::update)
+                .toList()
+                .toObservable();
     }
 
-    private List<Long> getMovieIds(List<MovieModel> movieModels) {
-        List<Long> ids = new ArrayList<>(movieModels.size());
-        for (MovieModel movieModel : movieModels) {
-            ids.add(movieModel.getId());
-        }
-        Log.v(LOG_TAG, "getMovieIds(): ids = " + ids);
-        return ids;
+    private Observable<Boolean> isFavourite(MovieModel movieModel) {
+        return mMovieRepository.isFavourite(movieModel.getId());
     }
 
-    private List<MovieModel> update(List<Boolean> favourites) {
-        for (int i = 0; i < mMovieModels.size(); i++) {
-            mMovieModels.get(i).setFavourite(favourites.get(i));
-        }
-        return mMovieModels;
+    private MovieModel update(MovieModel movieModel, boolean favourite) {
+        movieModel.setFavourite(favourite);
+        return movieModel;
     }
 
     public static final class Params {
