@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
+import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.SetFavouriteUseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.DiscoverMovieUseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
@@ -18,13 +19,13 @@ public class MovieListPresenter implements Presenter {
 
     private MovieListView mView;
 
-    private final DiscoverMovieUseCase mDiscoverMovieUseCase;
+    private final UseCase mDiscoverMovieUseCase;
     private final SetFavouriteUseCase mAddToFavouriteUseCase;
     private final List<MovieModel> mMovies = new ArrayList<>();
     private int mPage = FIRST_PAGE;
     private String mSortBy = DiscoverMovieUseCase.Params.SORT_BY_POPULARITY_DESC;
 
-    public MovieListPresenter(DiscoverMovieUseCase discoverMovieUseCase,
+    public MovieListPresenter(UseCase discoverMovieUseCase,
                               SetFavouriteUseCase addToFavouriteUseCase) {
         mDiscoverMovieUseCase = discoverMovieUseCase;
         mAddToFavouriteUseCase = addToFavouriteUseCase;

@@ -18,6 +18,8 @@ import com.nex3z.popularmovies.app.App;
 import com.nex3z.popularmovies.data.repository.movie.MovieRepository;
 import com.nex3z.popularmovies.data.repository.movie.MovieRepositoryImpl;
 import com.nex3z.popularmovies.domain.executor.JobExecutor;
+import com.nex3z.popularmovies.domain.interactor.UseCase;
+import com.nex3z.popularmovies.domain.interactor.movie.GetFavouriteMovieUseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.SetFavouriteUseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.DiscoverMovieUseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
@@ -37,6 +39,9 @@ import butterknife.Unbinder;
 
 public class MovieListFragment extends BaseFragment implements MovieListView {
     private static final String LOG_TAG = MovieListFragment.class.getSimpleName();
+    private static final String ARG_LIST_TYPE = "arg_list_type";
+    public static final String DISCOVERY = "discovery";
+    public static final String FAVOURITE = "favourite";
 
     @BindView(R.id.rv_movie_list) RecyclerView mRvMovieList;
     @BindView(R.id.swipe_container) SwipeRefreshLayout mSwipeLayout;
@@ -45,6 +50,7 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
 
     private static OnItemSelectListener sDummyListener = (movie, vh) -> {};
 
+    private String mType;
     private Unbinder mUnbinder;
     private MovieListPresenter mPresenter;
     private MovieAdapter mMovieAdapter;
@@ -55,9 +61,20 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
 
     public MovieListFragment() {}
 
-    public static MovieListFragment newInstance() {
+    public static MovieListFragment newInstance(String type) {
         MovieListFragment fragment = new MovieListFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(ARG_LIST_TYPE, type);
+        fragment.setArguments(arguments);
         return fragment;
+    }
+
+    public static MovieListFragment newDiscoveryInstance() {
+        return newInstance(DISCOVERY);
+    }
+
+    public static MovieListFragment newFavouriteInstance() {
+        return newInstance(FAVOURITE);
     }
 
     @Override
@@ -67,6 +84,17 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
             throw new IllegalStateException("Activity must implement OnItemSelectListener.");
         }
         mListener = (OnItemSelectListener) context;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            if (getArguments().containsKey(ARG_LIST_TYPE)) {
+                mType = getArguments().getString(ARG_LIST_TYPE);
+                Log.v(LOG_TAG, "onCreate(): mType = " + mType);
+            }
+        }
     }
 
     @Override
@@ -168,7 +196,9 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
             @Override
             public void onLoadMore(int page) {
                 Log.v(LOG_TAG, "onLoadMore(): page = " + page);
-                mPresenter.loadMore(page);
+                if (mType.equals(DISCOVERY)) {
+                    mPresenter.loadMore(page);
+                }
             }
         };
         mRvMovieList.addOnScrollListener(mEndlessScroller);
@@ -181,9 +211,15 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
 
     private void initPresenter() {
         MovieRepository movieRepository = new MovieRepositoryImpl(App.getRestClient());
-        DiscoverMovieUseCase discoverMovieUseCase = new DiscoverMovieUseCase(movieRepository, new JobExecutor(), new UIThread());
         SetFavouriteUseCase addToFavouriteUseCase = new SetFavouriteUseCase(movieRepository, new JobExecutor(), new UIThread());
-        mPresenter = new MovieListPresenter(discoverMovieUseCase, addToFavouriteUseCase);
+        UseCase getMovieListUseCase;
+        if (mType.equals(DISCOVERY)) {
+            getMovieListUseCase = new DiscoverMovieUseCase(movieRepository, new JobExecutor(), new UIThread());
+        } else {
+            getMovieListUseCase = new GetFavouriteMovieUseCase(movieRepository, new JobExecutor(), new UIThread());
+
+        }
+        mPresenter = new MovieListPresenter(getMovieListUseCase, addToFavouriteUseCase);
         mPresenter.setView(this);
         mPresenter.init();
     }
