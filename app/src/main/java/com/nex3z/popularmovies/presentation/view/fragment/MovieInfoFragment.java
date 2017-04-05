@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.presenter.MovieInfoPresenter;
+import com.nex3z.popularmovies.presentation.util.GenreUtility;
 import com.nex3z.popularmovies.presentation.util.ImageUtility;
 import com.nex3z.popularmovies.presentation.view.MovieInfoView;
 import com.squareup.picasso.Picasso;
@@ -26,9 +27,10 @@ public class MovieInfoFragment extends BaseFragment implements MovieInfoView {
     private static final String ARG_MOVIE_INFO = "arg_movie_info";
 
     @BindView(R.id.tv_movie_title)TextView mTvMovieTitle;
-    @BindView(R.id.tv_release_date) TextView mReleaseDate;
+    @BindView(R.id.tv_release_date) TextView mTvReleaseDate;
     @BindView(R.id.iv_poster) ImageView mIvPoster;
-    @BindView(R.id.tv_overview) TextView mOverview;
+    @BindView(R.id.tv_genre) TextView mTbGenre;
+    @BindView(R.id.tv_overview) TextView mTvOverview;
 
     private Unbinder mUnbinder;
     private MovieInfoPresenter mPresenter;
@@ -97,8 +99,9 @@ public class MovieInfoFragment extends BaseFragment implements MovieInfoView {
     public void renderMovie(MovieModel movie) {
         Log.v(LOG_TAG, "renderMovie(): movie = " + movie);
         mTvMovieTitle.setText(movie.getTitle());
-        mReleaseDate.setText(movie.getReleaseDate());
-        mOverview.setText(movie.getOverview());
+        mTvReleaseDate.setText(movie.getReleaseDate());
+        mTbGenre.setText(GenreUtility.getGenre(getContext(), movie.getGenreIds()));
+        mTvOverview.setText(movie.getOverview());
 
         Picasso.with(getContext())
                 .load(ImageUtility.getPosterImageUrl(movie.getPosterPath()))
