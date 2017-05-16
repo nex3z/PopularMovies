@@ -3,7 +3,6 @@ package com.nex3z.popularmovies.presentation.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,16 +18,16 @@ import com.nex3z.popularmovies.data.repository.movie.MovieRepository;
 import com.nex3z.popularmovies.data.repository.movie.MovieRepositoryImpl;
 import com.nex3z.popularmovies.domain.executor.JobExecutor;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
+import com.nex3z.popularmovies.domain.interactor.movie.DiscoverMovieUseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.GetFavouriteMovieUseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.SetFavouriteUseCase;
-import com.nex3z.popularmovies.domain.interactor.movie.DiscoverMovieUseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.presenter.MovieListPresenter;
 import com.nex3z.popularmovies.presentation.view.MovieListView;
 import com.nex3z.popularmovies.presentation.view.UIThread;
 import com.nex3z.popularmovies.presentation.view.adapter.MovieAdapter;
-import com.nex3z.popularmovies.presentation.view.misc.EndlessRecyclerOnScrollListener;
 import com.nex3z.popularmovies.presentation.view.misc.SpacesItemDecoration;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
     public static final String FAVOURITE = "favourite";
 
     @BindView(R.id.rv_movie_list) RecyclerView mRvMovieList;
-    @BindView(R.id.swipe_container) SwipeRefreshLayout mSwipeLayout;
+    @BindView(R.id.swipe_container) SwipyRefreshLayout mSwipeLayout;
     @BindView(R.id.pb_load_movie) ProgressBar mProgressBar;
     @BindView(R.id.tv_empty_message) TextView mTvEmptyMessage;
 
@@ -56,7 +55,6 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
     private MovieAdapter mMovieAdapter;
     private List<MovieModel> mMovies = new ArrayList<>();
     private MovieAdapter.ViewHolder mViewHolder;
-    private EndlessRecyclerOnScrollListener mEndlessScroller;
     private OnItemSelectListener mListener = sDummyListener;
 
     public MovieListFragment() {}
@@ -192,20 +190,17 @@ public class MovieListFragment extends BaseFragment implements MovieListView {
         mRvMovieList.addItemDecoration(new SpacesItemDecoration(4, 4, 4, 4));
         mRvMovieList.setHasFixedSize(true);
 
-        mEndlessScroller = new EndlessRecyclerOnScrollListener(mLayoutManager) {
-            @Override
-            public void onLoadMore(int page) {
-                Log.v(LOG_TAG, "onLoadMore(): page = " + page);
-                if (mType.equals(DISCOVERY)) {
-                    mPresenter.loadMore(page);
-                }
+        mSwipeLayout.setOnRefreshListener(direction -> {
+            switch (direction) {
+                case TOP:
+                    mPresenter.refresh();
+                    break;
+                case BOTTOM:
+                    mPresenter.loadMore();
+                    break;
+                default:
+                    break;
             }
-        };
-        mRvMovieList.addOnScrollListener(mEndlessScroller);
-
-        mSwipeLayout.setOnRefreshListener(() -> {
-            mEndlessScroller.reset();
-            mPresenter.refresh();
         });
     }
 

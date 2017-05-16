@@ -11,7 +11,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-public class GetFavouriteMovieUseCase extends UseCase<List<MovieModel>, Object> {
+public class GetFavouriteMovieUseCase extends UseCase<List<MovieModel>, Void> {
 
     private final MovieRepository mMovieRepository;
 
@@ -23,7 +23,7 @@ public class GetFavouriteMovieUseCase extends UseCase<List<MovieModel>, Object> 
     }
 
     @Override
-    public Observable<List<MovieModel>> buildUseCaseObservable(Object object) {
+    public Observable<List<MovieModel>> buildUseCaseObservable(Void aVoid) {
         return mMovieRepository
                 .getFavouriteMovies()
                 .map(MovieModelMapper::transform)

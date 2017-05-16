@@ -5,8 +5,8 @@ import android.util.Log;
 
 import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
-import com.nex3z.popularmovies.domain.interactor.movie.SetFavouriteUseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.DiscoverMovieUseCase;
+import com.nex3z.popularmovies.domain.interactor.movie.SetFavouriteUseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.view.MovieListView;
 
@@ -59,10 +59,6 @@ public class MovieListPresenter implements Presenter {
         fetchMovies();
     }
 
-    public void setPage(int page) {
-        mPage = page;
-    }
-
     public void setSortBy(String sortBy) {
         mSortBy = sortBy;
     }
@@ -71,9 +67,9 @@ public class MovieListPresenter implements Presenter {
         return mMovies;
     }
 
-    public void loadMore(int page) {
-        Log.v(LOG_TAG, "loadMore(): page = " + page);
-        mPage = page;
+    public void loadMore() {
+        Log.v(LOG_TAG, "loadMore(): mPage = " + mPage);
+        mPage++;
         fetchMovies();
     }
 
@@ -118,12 +114,11 @@ public class MovieListPresenter implements Presenter {
         @Override
         public void onNext(List<MovieModel> movieModels) {
             mView.hideLoading();
-            renderMovies(movieModels);
-        }
-
-        @Override
-        public void onComplete() {
-            mView.hideLoading();
+            if (!movieModels.isEmpty()) {
+                renderMovies(movieModels);
+            } else {
+                mPage--;
+            }
         }
 
         @Override
