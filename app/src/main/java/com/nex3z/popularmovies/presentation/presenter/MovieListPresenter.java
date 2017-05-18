@@ -6,6 +6,7 @@ import android.util.Log;
 import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
 import com.nex3z.popularmovies.domain.interactor.UseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.DiscoverMovieUseCase;
+import com.nex3z.popularmovies.domain.interactor.movie.GetFavouriteMovieUseCase;
 import com.nex3z.popularmovies.domain.interactor.movie.SetFavouriteUseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.view.MovieListView;
@@ -91,10 +92,15 @@ public class MovieListPresenter implements Presenter {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void fetchMovies() {
         Log.v(LOG_TAG, "fetchMovies(): mPage = " + mPage + ", mSortBy = " + mSortBy);
-        mDiscoverMovieUseCase.execute(new DiscoverMovieObserver(),
-                DiscoverMovieUseCase.Params.forPage(mPage, mSortBy));
+        if (mDiscoverMovieUseCase instanceof DiscoverMovieUseCase) {
+            mDiscoverMovieUseCase.execute(new DiscoverMovieObserver(),
+                    DiscoverMovieUseCase.Params.forPage(mPage, mSortBy));
+        } else if (mDiscoverMovieUseCase instanceof GetFavouriteMovieUseCase) {
+            mDiscoverMovieUseCase.execute(new DiscoverMovieObserver(), null);
+        }
     }
 
     public void swapFavourite(int position) {
