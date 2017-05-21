@@ -69,6 +69,11 @@ public class MovieListPresenter implements Presenter {
     }
 
     public void loadMore() {
+        if (mDiscoverMovieUseCase instanceof GetFavouriteMovieUseCase) {
+            mView.hideLoading();
+            return;
+        }
+
         Log.v(LOG_TAG, "loadMore(): mPage = " + mPage);
         mPage++;
         fetchMovies();
