@@ -32,7 +32,7 @@ public class MovieModelMapper {
             movieModel.setPopularity(entity.getPopularity());
             movieModel.setVoteCount(entity.getVoteCount());
             movieModel.setVideo(entity.isVideo());
-            movieModel.setVoteCount(entity.getVoteCount());
+            movieModel.setVoteAverage(entity.getVoteAverage());
         }
 
         return movieModel;

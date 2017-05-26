@@ -18,6 +18,8 @@
     <string name="no_video_available">No video available for this movie.</string>
     <string name="no_review_available">No review on this movie yet.</string>
 
+    <string name="vote_average">%1$.1f/10</string>
+
     <string name="genre_action">Action</string>
     <string name="genre_adventure">Adventure</string>
     <string name="genre_animation">Animation</string>

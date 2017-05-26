@@ -24,7 +24,7 @@ public class MovieEntityMapper {
             entity.setPopularity(model.getPopularity());
             entity.setVoteCount(model.getVoteCount());
             entity.setVideo(model.isVideo());
-            entity.setVoteCount(model.getVoteCount());
+            entity.setVoteAverage(model.getVoteAverage());
         }
         
         return entity;

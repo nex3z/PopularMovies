@@ -29,7 +29,8 @@ public class MovieInfoFragment extends BaseFragment implements MovieInfoView {
     @BindView(R.id.tv_movie_title)TextView mTvMovieTitle;
     @BindView(R.id.tv_release_date) TextView mTvReleaseDate;
     @BindView(R.id.iv_poster) ImageView mIvPoster;
-    @BindView(R.id.tv_genre) TextView mTbGenre;
+    @BindView(R.id.tv_vote) TextView mTvVote;
+    @BindView(R.id.tv_genre) TextView mTvGenre;
     @BindView(R.id.tv_overview) TextView mTvOverview;
 
     private Unbinder mUnbinder;
@@ -100,7 +101,8 @@ public class MovieInfoFragment extends BaseFragment implements MovieInfoView {
         Log.v(LOG_TAG, "renderMovie(): movie = " + movie);
         mTvMovieTitle.setText(movie.getTitle());
         mTvReleaseDate.setText(movie.getReleaseDate());
-        mTbGenre.setText(GenreUtility.getGenre(getContext(), movie.getGenreIds()));
+        mTvVote.setText(String.format(getString(R.string.vote_average), movie.getVoteAverage()));
+        mTvGenre.setText(GenreUtility.getGenre(getContext(), movie.getGenreIds()));
         mTvOverview.setText(movie.getOverview());
 
         Picasso.with(getContext())
