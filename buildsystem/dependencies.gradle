@@ -1,0 +1,60 @@
+ext {
+    // Android
+    androidBuildToolsVersion = "26.0.2"
+    androidCompileSdkVersion = 26
+    androidMinSdkVersion = 16
+    androidTargetSdkVersion = 26
+
+    // Libraries
+    appcompatV7Version = '26.1.0'
+
+    okHttpVersion = '3.9.0'
+    retrofitVersion = '2.3.0'
+    gsonVersion = '2.8.2'
+    rxJavaVersion = '2.1.5'
+    rxAndroidVersion = '2.0.1'
+
+    // Testing
+    jUnitVersion = '4.12'
+    espressoVersion = '3.0.1'
+
+    dataDependencies = [
+            appcompatV7: "com.android.support:appcompat-v7:${appcompatV7Version}",
+            okHttp: "com.squareup.okhttp3:okhttp:${okHttpVersion}",
+            okHttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
+            retrofit: "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            retrofitConverterGson: "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            retrofitAdapterRxjava2: "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
+            gson: "com.google.code.gson:gson:${gsonVersion}",
+            rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+    ]
+
+    dataTestDependencies = [
+            jUnit: "junit:junit:${jUnitVersion}",
+            espressoCore: "com.android.support.test.espresso:espresso-core:${espressoVersion}",
+    ]
+
+    domainDependencies = [
+            appcompatV7: "com.android.support:appcompat-v7:${appcompatV7Version}",
+            gson: "com.google.code.gson:gson:${gsonVersion}",
+            rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            rxAndroid: "io.reactivex.rxjava2:rxjava:${rxAndroidVersion}",
+    ]
+
+    domainTestDependencies = [
+            jUnit: "junit:junit:${jUnitVersion}",
+            espressoCore: "com.android.support.test.espresso:espresso-core:${espressoVersion}",
+    ]
+
+    presentationDependencies = [
+            appcompatV7: "com.android.support:appcompat-v7:${appcompatV7Version}",
+            gson: "com.google.code.gson:gson:${gsonVersion}",
+            rxAndroid: "io.reactivex.rxjava2:rxjava:${rxAndroidVersion}",
+    ]
+
+    presentationTestDependencies = [
+            jUnit: "junit:junit:${jUnitVersion}",
+            espressoCore: "com.android.support.test.espresso:espresso-core:${espressoVersion}",
+    ]
+
+}
