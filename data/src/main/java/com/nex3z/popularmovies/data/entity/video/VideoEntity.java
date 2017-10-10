@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.data.entity.videos;
+package com.nex3z.popularmovies.data.entity.video;
 
 import com.google.gson.annotations.SerializedName;
 

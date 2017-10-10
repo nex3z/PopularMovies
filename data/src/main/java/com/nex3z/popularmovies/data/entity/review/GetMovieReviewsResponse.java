@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.data.entity.reviews;
+package com.nex3z.popularmovies.data.entity.review;
 
 import com.nex3z.popularmovies.data.entity.BasePagedResponse;
 

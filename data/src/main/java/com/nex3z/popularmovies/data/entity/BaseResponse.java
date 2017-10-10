@@ -1,6 +1,7 @@
 package com.nex3z.popularmovies.data.entity;
 
 public abstract class BaseResponse {
+
     private long id;
 
     public long getId() {
