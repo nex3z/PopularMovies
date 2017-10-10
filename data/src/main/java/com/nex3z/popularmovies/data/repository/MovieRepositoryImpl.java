@@ -7,8 +7,6 @@ import com.nex3z.popularmovies.data.entity.video.GetMovieVideosResponse;
 import com.nex3z.popularmovies.data.net.RestClient;
 import com.nex3z.popularmovies.data.net.service.MovieService;
 
-import java.util.Map;
-
 import io.reactivex.Single;
 
 public class MovieRepositoryImpl implements MovieRepository {
