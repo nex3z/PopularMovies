@@ -6,7 +6,8 @@ ext {
     androidTargetSdkVersion = 26
 
     // Libraries
-    appcompatV7Version = '26.1.0'
+    supportAppcompatV7Version = '26.1.0'
+    constraintLayoutVersion = '1.0.2'
 
     okHttpVersion = '3.9.0'
     retrofitVersion = '2.3.0'
@@ -19,7 +20,6 @@ ext {
     espressoVersion = '3.0.1'
 
     dataDependencies = [
-            appcompatV7: "com.android.support:appcompat-v7:${appcompatV7Version}",
             okHttp: "com.squareup.okhttp3:okhttp:${okHttpVersion}",
             okHttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
             retrofit: "com.squareup.retrofit2:retrofit:${retrofitVersion}",
@@ -35,10 +35,7 @@ ext {
     ]
 
     domainDependencies = [
-            appcompatV7: "com.android.support:appcompat-v7:${appcompatV7Version}",
-            gson: "com.google.code.gson:gson:${gsonVersion}",
             rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
-            rxAndroid: "io.reactivex.rxjava2:rxjava:${rxAndroidVersion}",
     ]
 
     domainTestDependencies = [
@@ -47,8 +44,9 @@ ext {
     ]
 
     presentationDependencies = [
-            appcompatV7: "com.android.support:appcompat-v7:${appcompatV7Version}",
-            gson: "com.google.code.gson:gson:${gsonVersion}",
+            supportAppcompatV7: "com.android.support:appcompat-v7:${supportAppcompatV7Version}",
+            supportDesign: "com.android.support:design:${supportAppcompatV7Version}",
+            constraintLayout: "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
             rxAndroid: "io.reactivex.rxjava2:rxjava:${rxAndroidVersion}",
     ]
 
