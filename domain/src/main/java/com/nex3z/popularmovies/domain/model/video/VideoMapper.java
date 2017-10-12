@@ -2,7 +2,7 @@ package com.nex3z.popularmovies.domain.model.video;
 
 import com.nex3z.popularmovies.data.entity.video.VideoEntity;
 import com.nex3z.popularmovies.domain.model.MapperUtil;
-import com.nex3z.popularmovies.domain.model.check.Precondition;
+import com.nex3z.popularmovies.domain.check.Precondition;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.domain.model.check;
+package com.nex3z.popularmovies.domain.check;
 
 public class Precondition {
 

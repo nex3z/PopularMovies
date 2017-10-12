@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.nex3z.popularmovies.domain.model.interactor;
+package com.nex3z.popularmovies.domain.interactor;
 
-import com.nex3z.popularmovies.domain.model.check.Precondition;
-import com.nex3z.popularmovies.domain.model.executor.PostExecutionThread;
-import com.nex3z.popularmovies.domain.model.executor.ThreadExecutor;
+import com.nex3z.popularmovies.domain.check.Precondition;
+import com.nex3z.popularmovies.domain.executor.PostExecutionThread;
+import com.nex3z.popularmovies.domain.executor.ThreadExecutor;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;

@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.domain.model.executor;
+package com.nex3z.popularmovies.domain.executor;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.nex3z.popularmovies.domain.model.executor;
+package com.nex3z.popularmovies.domain.executor;
 
 import io.reactivex.Scheduler;
 
