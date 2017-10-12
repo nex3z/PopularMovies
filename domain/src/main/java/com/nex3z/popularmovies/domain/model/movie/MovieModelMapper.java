@@ -2,6 +2,7 @@ package com.nex3z.popularmovies.domain.model.movie;
 
 import com.nex3z.popularmovies.data.entity.discover.MovieEntity;
 import com.nex3z.popularmovies.domain.model.MapperUtil;
+import com.nex3z.popularmovies.domain.model.check.Precondition;
 
 import java.util.List;
 
@@ -14,9 +15,7 @@ public class MovieModelMapper {
     }
 
     public static MovieModel transform(MovieEntity entity) {
-        if (entity == null) {
-            throw new IllegalArgumentException("Cannot transform null value");
-        }
+        Precondition.checkTransformValueNotNull(entity);
 
         final MovieModel model = new MovieModel(entity.getId());
 

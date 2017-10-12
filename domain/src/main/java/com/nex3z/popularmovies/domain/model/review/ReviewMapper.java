@@ -2,6 +2,7 @@ package com.nex3z.popularmovies.domain.model.review;
 
 import com.nex3z.popularmovies.data.entity.review.ReviewEntity;
 import com.nex3z.popularmovies.domain.model.MapperUtil;
+import com.nex3z.popularmovies.domain.model.check.Precondition;
 
 import java.util.List;
 
@@ -14,9 +15,7 @@ public class ReviewMapper {
     }
 
     public static ReviewModel transform(ReviewEntity entity) {
-        if (entity == null) {
-            throw new IllegalArgumentException("Cannot transform null value");
-        }
+        Precondition.checkTransformValueNotNull(entity);
 
         ReviewModel model = new ReviewModel(entity.getId());
 
