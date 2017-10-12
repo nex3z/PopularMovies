@@ -20,6 +20,7 @@ ext {
     espressoVersion = '3.0.1'
 
     dataDependencies = [
+            supportAnnotations: "com.android.support:support-annotations:${supportAppcompatV7Version}",
             okHttp: "com.squareup.okhttp3:okhttp:${okHttpVersion}",
             okHttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
             retrofit: "com.squareup.retrofit2:retrofit:${retrofitVersion}",

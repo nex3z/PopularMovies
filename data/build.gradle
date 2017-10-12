@@ -39,6 +39,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    implementation dataDependencies.supportAnnotations
     implementation dataDependencies.okHttp
     implementation dataDependencies.okHttpLoggingInterceptor
     implementation dataDependencies.retrofit
@@ -46,5 +47,4 @@ dependencies {
     implementation dataDependencies.retrofitAdapterRxjava2
     implementation dataDependencies.gson
     implementation dataDependencies.rxJava
-
 }
