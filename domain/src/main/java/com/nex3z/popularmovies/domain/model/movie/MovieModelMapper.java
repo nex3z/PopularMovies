@@ -1,5 +1,6 @@
 package com.nex3z.popularmovies.domain.model.movie;
 
+import com.nex3z.popularmovies.data.entity.discover.DiscoverMovieResponse;
 import com.nex3z.popularmovies.data.entity.discover.MovieEntity;
 import com.nex3z.popularmovies.domain.model.MapperUtil;
 import com.nex3z.popularmovies.domain.check.Precondition;
@@ -9,6 +10,11 @@ import java.util.List;
 public class MovieModelMapper {
 
     private MovieModelMapper() {}
+
+    public static List<MovieModel> transform(DiscoverMovieResponse response) {
+        Precondition.checkTransformValueNotNull(response);
+        return transform(response.getResults());
+    }
 
     public static List<MovieModel> transform(List<MovieEntity> entities) {
         return MapperUtil.transform(entities, MovieModelMapper::transform);

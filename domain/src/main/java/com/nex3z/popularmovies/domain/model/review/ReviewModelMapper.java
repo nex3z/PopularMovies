@@ -1,17 +1,23 @@
 package com.nex3z.popularmovies.domain.model.review;
 
+import com.nex3z.popularmovies.data.entity.review.GetMovieReviewsResponse;
 import com.nex3z.popularmovies.data.entity.review.ReviewEntity;
 import com.nex3z.popularmovies.domain.model.MapperUtil;
 import com.nex3z.popularmovies.domain.check.Precondition;
 
 import java.util.List;
 
-public class ReviewMapper {
+public class ReviewModelMapper {
 
-    private ReviewMapper() {}
+    private ReviewModelMapper() {}
+
+    public static List<ReviewModel> transform(GetMovieReviewsResponse response) {
+        Precondition.checkTransformValueNotNull(response);
+        return transform(response.getResults());
+    }
 
     public static List<ReviewModel> transform(List<ReviewEntity> entities) {
-        return MapperUtil.transform(entities, ReviewMapper::transform);
+        return MapperUtil.transform(entities, ReviewModelMapper::transform);
     }
 
     public static ReviewModel transform(ReviewEntity entity) {

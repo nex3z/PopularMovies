@@ -1,17 +1,25 @@
 package com.nex3z.popularmovies.domain.model.video;
 
+import com.nex3z.popularmovies.data.entity.review.GetMovieReviewsResponse;
+import com.nex3z.popularmovies.data.entity.video.GetMovieVideosResponse;
 import com.nex3z.popularmovies.data.entity.video.VideoEntity;
 import com.nex3z.popularmovies.domain.model.MapperUtil;
 import com.nex3z.popularmovies.domain.check.Precondition;
+import com.nex3z.popularmovies.domain.model.review.ReviewModel;
 
 import java.util.List;
 
-public class VideoMapper {
+public class VideoModelMapper {
 
-    private VideoMapper() {}
+    private VideoModelMapper() {}
+
+    public static List<VideoModel> transform(GetMovieVideosResponse response) {
+        Precondition.checkTransformValueNotNull(response);
+        return transform(response.getResults());
+    }
 
     public static List<VideoModel> transform(List<VideoEntity> entities) {
-        return MapperUtil.transform(entities, VideoMapper::transform);
+        return MapperUtil.transform(entities, VideoModelMapper::transform);
     }
 
     public static VideoModel transform(VideoEntity entity) {
