@@ -11,8 +11,8 @@ import java.lang.reflect.InvocationTargetException;
 public class PopMovieService extends Context implements UseCaseFactory {
     private static final String LOG_TAG = PopMovieService.class.getSimpleName();
 
-    public PopMovieService(MovieRepository movieRepository, PostExecutionThread postExecutionThread,
-                           ThreadExecutor threadExecutor) {
+    public PopMovieService(MovieRepository movieRepository, ThreadExecutor threadExecutor,
+                           PostExecutionThread postExecutionThread) {
         super(movieRepository, postExecutionThread, threadExecutor);
     }
 
