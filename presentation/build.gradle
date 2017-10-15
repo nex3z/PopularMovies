@@ -45,6 +45,7 @@ dependencies {
     def presentationDependencies = rootProject.ext.presentationDependencies
     def presentationTestDependencies = rootProject.ext.presentationTestDependencies
 
+
     testImplementation presentationTestDependencies.jUnit
     androidTestImplementation(presentationTestDependencies.espressoCore, {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -52,7 +53,10 @@ dependencies {
 
     implementation presentationDependencies.supportAppcompatV7
     implementation presentationDependencies.supportDesign
+    implementation presentationDependencies.recyclerView
     implementation presentationDependencies.constraintLayout
     implementation presentationDependencies.rxAndroid
-
+    implementation presentationDependencies.butterKnife
+    annotationProcessor presentationDependencies.butterKnifeCompiler
+    implementation presentationDependencies.swipy
 }

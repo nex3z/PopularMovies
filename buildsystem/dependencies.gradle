@@ -14,6 +14,8 @@ ext {
     gsonVersion = '2.8.2'
     rxJavaVersion = '2.1.5'
     rxAndroidVersion = '2.0.1'
+    butterKnifeVersion = '8.8.1'
+    swipyVersion = '1.2.3'
 
     // Testing
     jUnitVersion = '4.12'
@@ -47,8 +49,12 @@ ext {
     presentationDependencies = [
             supportAppcompatV7: "com.android.support:appcompat-v7:${supportAppcompatV7Version}",
             supportDesign: "com.android.support:design:${supportAppcompatV7Version}",
+            recyclerView: "com.android.support:recyclerview-v7:${supportAppcompatV7Version}",
             constraintLayout: "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
             rxAndroid: "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
+            butterKnife: "com.jakewharton:butterknife:${butterKnifeVersion}",
+            butterKnifeCompiler: "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+            swipy: "com.github.omadahealth:swipy:${swipyVersion}@aar",
     ]
 
     presentationTestDependencies = [

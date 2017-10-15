@@ -1,0 +1,21 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.discover.DiscoverMovieFragment">
+
+    <com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout
+        android:id="@+id/swipy_discover_movie_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srl_direction="both">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_discover_movie_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout>
+
+</FrameLayout>
