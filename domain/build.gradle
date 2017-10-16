@@ -42,5 +42,6 @@ dependencies {
     })
 
     implementation domainDependencies.rxJava
+    implementation domainDependencies.supportAnnotations
 
 }

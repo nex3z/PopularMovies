@@ -3,6 +3,7 @@ package com.nex3z.popularmovies.presentation.app;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.nex3z.popularmovies.BuildConfig;
 import com.nex3z.popularmovies.data.net.RestClient;
 import com.nex3z.popularmovies.data.repository.MovieRepository;
@@ -20,6 +21,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         sContext = getApplicationContext();
+        Fresco.initialize(this);
         initService();
     }
 
@@ -31,5 +33,9 @@ public class App extends Application {
 
     public static Context getContext() {
         return sContext;
+    }
+
+    public static PopMovieService getPopMovieService() {
+        return sService;
     }
 }

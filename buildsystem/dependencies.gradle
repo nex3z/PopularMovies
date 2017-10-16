@@ -16,6 +16,7 @@ ext {
     rxAndroidVersion = '2.0.1'
     butterKnifeVersion = '8.8.1'
     swipyVersion = '1.2.3'
+    frescoVersion = '1.5.0'
 
     // Testing
     jUnitVersion = '4.12'
@@ -38,6 +39,7 @@ ext {
     ]
 
     domainDependencies = [
+            supportAnnotations: "com.android.support:support-annotations:${supportAppcompatV7Version}",
             rxJava: "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
     ]
 
@@ -50,11 +52,13 @@ ext {
             supportAppcompatV7: "com.android.support:appcompat-v7:${supportAppcompatV7Version}",
             supportDesign: "com.android.support:design:${supportAppcompatV7Version}",
             recyclerView: "com.android.support:recyclerview-v7:${supportAppcompatV7Version}",
+            cardView: "com.android.support:cardview-v7:${supportAppcompatV7Version}",
             constraintLayout: "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
             rxAndroid: "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
             butterKnife: "com.jakewharton:butterknife:${butterKnifeVersion}",
             butterKnifeCompiler: "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
             swipy: "com.github.omadahealth:swipy:${swipyVersion}@aar",
+            fresco: "com.facebook.fresco:fresco:${frescoVersion}",
     ]
 
     presentationTestDependencies = [

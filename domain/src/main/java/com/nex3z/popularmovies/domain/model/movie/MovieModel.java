@@ -1,8 +1,27 @@
 package com.nex3z.popularmovies.domain.model.movie;
 
+import android.support.annotation.StringDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 public class MovieModel {
+    private static final String BASE_URL = "http://image.tmdb.org/t/p/";
+
+    public static final String POSTER_SIZE_W92 = "w92";
+    public static final String POSTER_SIZE_W154 = "w154";
+    public static final String POSTER_SIZE_W185 = "w185";
+    public static final String POSTER_SIZE_W342 = "w342";
+    public static final String POSTER_SIZE_W500 = "w500";
+    public static final String POSTER_SIZE_W780 = "w780";
+    public static final String POSTER_SIZE_ORIGINAL = "original";
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({POSTER_SIZE_W92, POSTER_SIZE_W154, POSTER_SIZE_W185, POSTER_SIZE_W342,
+            POSTER_SIZE_W500, POSTER_SIZE_W780, POSTER_SIZE_ORIGINAL
+    })
+    public @interface Size {}
+
 
     private int voteCount;
 
@@ -34,6 +53,10 @@ public class MovieModel {
 
     public MovieModel(long id) {
         this.id = id;
+    }
+
+    public String getPosterUrl(@Size String size) {
+        return BASE_URL + size + "/" + posterPath;
     }
 
     public int getVoteCount() {
