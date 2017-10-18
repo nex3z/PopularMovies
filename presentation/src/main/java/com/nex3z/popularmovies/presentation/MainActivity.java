@@ -1,5 +1,6 @@
 package com.nex3z.popularmovies.presentation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
+import com.nex3z.popularmovies.presentation.detail.MovieDetailActivity;
 import com.nex3z.popularmovies.presentation.discover.DiscoverMovieFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -96,7 +98,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMovieClick(MovieModel movie) {
-
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(MovieDetailActivity.ARG_MOVIE, movie);
+        startActivity(intent);
     }
 
     private void showDiscoverMovies() {

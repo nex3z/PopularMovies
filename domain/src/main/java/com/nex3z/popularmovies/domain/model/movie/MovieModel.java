@@ -1,12 +1,15 @@
 package com.nex3z.popularmovies.domain.model.movie;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MovieModel {
+public class MovieModel implements Parcelable {
     private static final String BASE_URL = "http://image.tmdb.org/t/p/";
 
     public static final String POSTER_SIZE_W92 = "w92";
@@ -20,7 +23,16 @@ public class MovieModel {
     @StringDef({POSTER_SIZE_W92, POSTER_SIZE_W154, POSTER_SIZE_W185, POSTER_SIZE_W342,
             POSTER_SIZE_W500, POSTER_SIZE_W780, POSTER_SIZE_ORIGINAL
     })
-    public @interface Size {}
+    public @interface PosterSize {}
+
+    public static final String BACKDROP_SIZE_W300 = "w300";
+    public static final String BACKDROP_SIZE_W780 = "w780";
+    public static final String BACKDROP_SIZE_W1280 = "w1280";
+    public static final String BACKDROP_SIZE_ORIGINAL = "original";
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({BACKDROP_SIZE_W300, BACKDROP_SIZE_W780, BACKDROP_SIZE_W1280, BACKDROP_SIZE_ORIGINAL
+    })
+    public @interface BackdropSize {}
 
 
     private int voteCount;
@@ -55,8 +67,12 @@ public class MovieModel {
         this.id = id;
     }
 
-    public String getPosterUrl(@Size String size) {
+    public String getPosterUrl(@PosterSize String size) {
         return BASE_URL + size + "/" + posterPath;
+    }
+
+    public String getBackdropUrl(@BackdropSize String size) {
+        return BASE_URL + size + "/" + backdropPath;
     }
 
     public int getVoteCount() {
@@ -186,4 +202,57 @@ public class MovieModel {
                 ", releaseDate='" + releaseDate + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.voteCount);
+        dest.writeLong(this.id);
+        dest.writeByte(this.video ? (byte) 1 : (byte) 0);
+        dest.writeDouble(this.voteAverage);
+        dest.writeString(this.title);
+        dest.writeDouble(this.popularity);
+        dest.writeString(this.posterPath);
+        dest.writeString(this.originalLanguage);
+        dest.writeString(this.originalTitle);
+        dest.writeList(this.genreIds);
+        dest.writeString(this.backdropPath);
+        dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
+        dest.writeString(this.overview);
+        dest.writeString(this.releaseDate);
+    }
+
+    protected MovieModel(Parcel in) {
+        this.voteCount = in.readInt();
+        this.id = in.readLong();
+        this.video = in.readByte() != 0;
+        this.voteAverage = in.readDouble();
+        this.title = in.readString();
+        this.popularity = in.readDouble();
+        this.posterPath = in.readString();
+        this.originalLanguage = in.readString();
+        this.originalTitle = in.readString();
+        this.genreIds = new ArrayList<>();
+        in.readList(this.genreIds, Integer.class.getClassLoader());
+        this.backdropPath = in.readString();
+        this.adult = in.readByte() != 0;
+        this.overview = in.readString();
+        this.releaseDate = in.readString();
+    }
+
+    public static final Parcelable.Creator<MovieModel> CREATOR = new Parcelable.Creator<MovieModel>() {
+        @Override
+        public MovieModel createFromParcel(Parcel source) {
+            return new MovieModel(source);
+        }
+
+        @Override
+        public MovieModel[] newArray(int size) {
+            return new MovieModel[size];
+        }
+    };
 }

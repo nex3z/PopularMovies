@@ -109,7 +109,9 @@ public class DiscoverMovieFragment extends Fragment {
         mMovieAdapter.setOnMovieClickListener(new MovieAdapter.OnMovieClickListener() {
             @Override
             public void onMovieClick(int position) {
-
+                if (mListener != null) {
+                    mListener.onMovieClick(mMovies.get(position));
+                }
             }
 
             @Override
