@@ -2,6 +2,7 @@ package com.nex3z.popularmovies.presentation.detail;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import android.widget.ImageButton;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
+import com.nex3z.popularmovies.presentation.detail.info.MovieInfoFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +41,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             mMovie = getIntent().getParcelableExtra(ARG_MOVIE);
+            showMovieInfo();
         } else {
             mMovie = savedInstanceState.getParcelable(ARG_MOVIE);
         }
@@ -55,6 +58,12 @@ public class MovieDetailActivity extends AppCompatActivity {
     private void renderMovie() {
         mSdvBackdrop.setImageURI(mMovie.getBackdropUrl(MovieModel.BACKDROP_SIZE_W780));
         mCtlToolBarContainer.setTitle(mMovie.getTitle());
+    }
+
+    private void showMovieInfo() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.ndv_movie_detail_container, MovieInfoFragment.newInstance(mMovie));
+        transaction.commit();
     }
 
 }
