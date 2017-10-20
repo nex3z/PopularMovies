@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
+import com.nex3z.popularmovies.presentation.util.ViewUtil;
 
 import java.util.List;
 
@@ -34,7 +35,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         MovieModel movie = mMovies.get(position);
         holder.mTvTitle.setText(movie.getTitle());
-        holder.mSdvPoster.setImageURI(movie.getPosterUrl(MovieModel.POSTER_SIZE_W342));
+        ViewUtil.loadProgressiveImage(holder.mSdvPoster,
+                movie.getPosterUrl(MovieModel.POSTER_SIZE_W342));
     }
 
     @Override

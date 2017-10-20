@@ -1,5 +1,6 @@
 package com.nex3z.popularmovies.presentation.detail.info;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,9 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
+import com.nex3z.popularmovies.presentation.util.ViewUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,8 +77,8 @@ public class MovieInfoFragment extends Fragment {
     }
 
     private void renderMovie(MovieModel movie) {
-        mSdvPoster.setImageURI(movie.getPosterUrl(MovieModel.POSTER_SIZE_W342));
         mTvTitle.setText(movie.getTitle());
         mTvOverview.setText(movie.getOverview());
+        ViewUtil.loadProgressiveImage(mSdvPoster, movie.getPosterUrl(MovieModel.POSTER_SIZE_W342));
     }
 }
