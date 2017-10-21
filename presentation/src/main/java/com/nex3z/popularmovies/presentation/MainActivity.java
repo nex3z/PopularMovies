@@ -16,9 +16,10 @@ import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.detail.MovieDetailActivity;
 import com.nex3z.popularmovies.presentation.discover.DiscoverMovieFragment;
+import com.nex3z.popularmovies.presentation.discover.MovieDetailNavigator;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DiscoverMovieFragment.OnMovieClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MovieDetailNavigator {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onMovieClick(MovieModel movie) {
+    public void navigateToDetail(MovieModel movie) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
         intent.putExtra(MovieDetailActivity.ARG_MOVIE, movie);
         startActivity(intent);
