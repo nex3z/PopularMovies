@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vg_item_video_container"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:src="@drawable/placeholder_video" />
+
+    <TextView
+        android:id="@+id/tv_item_video_title"
+        style="@style/TextTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:gravity="center_vertical"
+        tools:text="Blade Runner 2049" />
+
+</LinearLayout>

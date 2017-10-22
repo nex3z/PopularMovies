@@ -1,6 +1,7 @@
 package com.nex3z.popularmovies.domain.model.video;
 
 public class VideoModel {
+    private static final String YOUTUBE_BASE_URL = "http://www.youtube.com/watch?v=";
 
     private final String id;
 
@@ -17,6 +18,10 @@ public class VideoModel {
     private int size;
 
     private String type;
+
+    public String getVideoUrl() {
+        return YOUTUBE_BASE_URL + key;
+    }
 
     public VideoModel(String id) {
         this.id = id;

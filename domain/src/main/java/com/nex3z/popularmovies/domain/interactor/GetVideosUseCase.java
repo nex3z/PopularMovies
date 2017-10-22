@@ -29,7 +29,7 @@ public class GetVideosUseCase extends BaseUseCase<List<VideoModel>, GetVideosUse
             mMovieId = movieId;
         }
 
-        public Params forMovie(long movieId) {
+        public static Params forMovie(long movieId) {
             return new Params(movieId);
         }
     }

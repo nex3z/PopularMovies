@@ -35,7 +35,9 @@ public class DiscoverMoviePresenter extends BasePresenter<DiscoverMovieView> {
     }
 
     public void onMovieClicked(int position) {
-
+        if (position >= 0 && position < mMovies.size()) {
+            mView.renderMovieDetail(mMovies.get(position));
+        }
     }
 
     public void refreshMovie() {

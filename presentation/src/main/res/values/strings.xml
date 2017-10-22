@@ -6,7 +6,8 @@
 
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    <string name="tab_movie_detail">Detail</string>
+    <string name="tab_movie_video">Video</string>
+    <string name="tab_movie_review">Review</string>
+
 </resources>

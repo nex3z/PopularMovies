@@ -5,4 +5,5 @@
     <color name="colorAccent">#448AFF</color>
     <color name="colorTextTitle">#212121</color>
     <color name="colorTextContent">#424242</color>
+    <color name="colorDetailTabBg">#40000000</color>
 </resources>
