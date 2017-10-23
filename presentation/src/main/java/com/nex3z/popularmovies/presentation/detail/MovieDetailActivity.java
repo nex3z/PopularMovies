@@ -18,6 +18,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.detail.info.MovieInfoFragment;
+import com.nex3z.popularmovies.presentation.detail.review.MovieReviewFragment;
 import com.nex3z.popularmovies.presentation.detail.video.MovieVideoFragment;
 import com.nex3z.popularmovies.presentation.util.ViewUtil;
 
@@ -91,7 +92,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private class SectionPagerAdapter extends FragmentPagerAdapter {
-        private static final int PAGE_COUNT = 2;
+        private static final int PAGE_COUNT = 3;
 
         private String tabTitles[] = new String[]{
                 getString(R.string.tab_movie_detail),
@@ -111,6 +112,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                 case 1: {
                     return MovieVideoFragment.newInstance(mMovie);
                 }
+                case 2: {
+                    return MovieReviewFragment.newInstance(mMovie);
+                }
                 default:
                     return MovieInfoFragment.newInstance(mMovie);
             }
@@ -126,4 +130,5 @@ public class MovieDetailActivity extends AppCompatActivity {
             return tabTitles[position];
         }
     }
+
 }
