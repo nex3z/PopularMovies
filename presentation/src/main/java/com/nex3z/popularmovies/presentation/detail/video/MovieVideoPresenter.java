@@ -59,6 +59,7 @@ public class MovieVideoPresenter extends BasePresenter<MovieVideoView> {
         @Override
         public void onError(Throwable throwable) {
             super.onError(throwable);
+            mView.hideLoading();
             mView.showError(throwable.getMessage());
         }
     }
