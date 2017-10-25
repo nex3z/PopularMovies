@@ -34,7 +34,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MovieModel movie = mMovies.get(position);
-        holder.mTvTitle.setText(movie.getTitle());
+        holder.mTvVote.setText(String.valueOf(movie.getVoteAverage()));
         ViewUtil.loadProgressiveImage(holder.mSdvPoster,
                 movie.getPosterUrl(MovieModel.POSTER_SIZE_W342));
     }
@@ -55,7 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.sdv_item_movie_poster) SimpleDraweeView mSdvPoster;
-        @BindView(R.id.tv_item_movie_title) TextView mTvTitle;
+        @BindView(R.id.tv_item_movie_vote) TextView mTvVote;
         @BindView(R.id.cb_item_movie_favourite) CheckBox mCbFavourite;
 
         ViewHolder(View itemView) {

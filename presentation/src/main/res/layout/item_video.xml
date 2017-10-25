@@ -5,8 +5,8 @@
     android:id="@+id/vg_item_video_container"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -22,8 +22,10 @@
         style="@style/TextTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="16dp"
         android:gravity="center_vertical"
+        android:maxLines="2"
+        android:ellipsize="end"
         tools:text="Blade Runner 2049" />
 
 </LinearLayout>

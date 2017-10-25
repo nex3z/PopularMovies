@@ -20,6 +20,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:expandedTitleMarginBottom="56dp"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Headline"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/tb_movie_detail">
