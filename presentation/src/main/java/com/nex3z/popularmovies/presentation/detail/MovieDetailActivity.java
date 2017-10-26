@@ -134,9 +134,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         private static final int PAGE_COUNT = 3;
 
         private String tabTitles[] = new String[]{
-                getString(R.string.tab_movie_detail),
-                getString(R.string.tab_movie_video),
-                getString(R.string.tab_movie_review)};
+                getString(R.string.caption_tab_movie_detail),
+                getString(R.string.caption_tab_movie_video),
+                getString(R.string.caption_tab_movie_review)};
 
         SectionPagerAdapter(FragmentManager fm) {
             super(fm);

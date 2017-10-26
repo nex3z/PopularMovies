@@ -1,14 +1,12 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
+    <string name="caption_app_name">PopularMovies</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-
-    <string name="tab_movie_detail">Detail</string>
-    <string name="tab_movie_video">Video</string>
-    <string name="tab_movie_review">Review</string>
+    <string name="caption_settings">Settings</string>
+    <string name="caption_tab_movie_detail">Detail</string>
+    <string name="caption_tab_movie_video">Video</string>
+    <string name="caption_tab_movie_review">Review</string>
 
     <string name="caption_share">Share</string>
     <string name="caption_share_hash_tag">\u0020#PopularMovie</string>
