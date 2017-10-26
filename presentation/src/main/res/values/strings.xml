@@ -10,4 +10,7 @@
     <string name="tab_movie_video">Video</string>
     <string name="tab_movie_review">Review</string>
 
+    <string name="caption_share">Share</string>
+    <string name="caption_share_hash_tag">\u0020#PopularMovie</string>
+
 </resources>

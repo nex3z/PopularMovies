@@ -1,5 +1,6 @@
 package com.nex3z.popularmovies.presentation.detail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -7,16 +8,22 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
+import com.nex3z.popularmovies.presentation.MainActivity;
 import com.nex3z.popularmovies.presentation.detail.info.MovieInfoFragment;
 import com.nex3z.popularmovies.presentation.detail.review.MovieReviewFragment;
 import com.nex3z.popularmovies.presentation.detail.video.MovieVideoFragment;
@@ -66,6 +73,29 @@ public class MovieDetailActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
+
+        MenuItem item = menu.findItem(R.id.action_share);
+
+        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        if (mMovie != null) {
+            shareActionProvider.setShareIntent(createShareMovieIntent());
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void init() {
         initPager();
         renderMovie();
@@ -89,6 +119,15 @@ public class MovieDetailActivity extends AppCompatActivity {
                 mTabLayout.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private Intent createShareMovieIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie.getTitle() + ": " + mMovie.getOverview()
+                + getString(R.string.caption_share_hash_tag));
+        return shareIntent;
     }
 
     private class SectionPagerAdapter extends FragmentPagerAdapter {
