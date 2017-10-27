@@ -32,18 +32,61 @@
             app:layout_constraintRight_toLeftOf="@id/gl_movie_info_poster"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_movie_info_title"
-            style="@style/TextTitle"
+        <TableLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:textSize="18sp"
-            android:maxLines="3"
-            android:ellipsize="end"
-            app:layout_constraintLeft_toRightOf="@id/gl_movie_info_poster"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:text="Blade Runner 2049" />
+            android:layout_marginLeft="4dp"
+            app:layout_constraintLeft_toRightOf="@id/sdv_movie_info_poster"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TableRow>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_star_grey_24dp" />
+
+                <TextView
+                    android:id="@+id/tv_item_movie_vote_average"
+                    style="@style/TextMovieInfo"
+                    tools:text="7.6" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_date_grey_24dp" />
+
+                <TextView
+                    android:id="@+id/tv_item_movie_release_date"
+                    style="@style/TextMovieInfo"
+                    tools:text="2017-10-04" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_label_grey_24dp" />
+
+                <TextView
+                    android:id="@+id/tv_item_movie_genre"
+                    style="@style/TextMovieInfo"
+                    android:maxLines="3"
+                    tools:text="Action" />
+
+            </TableRow>
+
+        </TableLayout>
 
         <TextView
             android:id="@+id/tv_movie_info_overview"

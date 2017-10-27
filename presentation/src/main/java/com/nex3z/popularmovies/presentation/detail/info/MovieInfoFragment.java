@@ -16,6 +16,7 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
+import com.nex3z.popularmovies.presentation.util.GenreUtil;
 import com.nex3z.popularmovies.presentation.util.ViewUtil;
 
 import butterknife.BindView;
@@ -28,7 +29,9 @@ public class MovieInfoFragment extends Fragment {
     private static final String ARG_MOVIE = "arg_movie";
 
     @BindView(R.id.sdv_movie_info_poster) SimpleDraweeView mSdvPoster;
-    @BindView(R.id.tv_movie_info_title) TextView mTvTitle;
+    @BindView(R.id.tv_item_movie_vote_average) TextView mTvVoteAverage;
+    @BindView(R.id.tv_item_movie_release_date) TextView mTvReleaseDate;
+    @BindView(R.id.tv_item_movie_genre) TextView mTvGenre;
     @BindView(R.id.tv_movie_info_overview) TextView mTvOverview;
 
     private MovieModel mMovie;
@@ -77,7 +80,9 @@ public class MovieInfoFragment extends Fragment {
     }
 
     private void renderMovie(MovieModel movie) {
-        mTvTitle.setText(movie.getTitle());
+        mTvVoteAverage.setText(String.valueOf(movie.getVoteAverage()));
+        mTvReleaseDate.setText(movie.getReleaseDate());
+        mTvGenre.setText(GenreUtil.getGenre(getContext(), movie.getGenreIds()));
         mTvOverview.setText(movie.getOverview());
         ViewUtil.loadProgressiveImage(mSdvPoster, movie.getPosterUrl(MovieModel.POSTER_SIZE_W342));
     }
