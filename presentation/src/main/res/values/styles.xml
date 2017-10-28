@@ -26,6 +26,10 @@
         <item name="android:textColor">@color/colorTextTitle</item>
     </style>
 
+    <style name="TextHint" parent="TextContent">
+        <item name="android:textColor">@color/colorTextHint</item>
+    </style>
+
     <style name="TextMovieInfo" parent="TextTitle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>

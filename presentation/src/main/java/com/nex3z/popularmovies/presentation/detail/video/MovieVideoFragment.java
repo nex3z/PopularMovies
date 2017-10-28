@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
@@ -32,6 +33,7 @@ public class MovieVideoFragment extends BaseFragment
 
     @BindView(R.id.rv_movie_video_list) RecyclerView mRvVideoList;
     @BindView(R.id.pb_movie_video_loading) ProgressBar mPbLoading;
+    @BindView(R.id.tv_movie_video_empty_message) TextView mTvEmptyMessage;
 
     private MovieVideoPresenter mPresenter;
     private MovieModel mMovie;
@@ -94,6 +96,8 @@ public class MovieVideoFragment extends BaseFragment
     @Override
     public void renderVideos(List<VideoModel> videos) {
         mAdapter.setVideos(videos);
+        mTvEmptyMessage.setVisibility((videos != null && !videos.isEmpty()) ?
+                View.GONE : View.VISIBLE);
     }
 
     @Override

@@ -15,6 +15,17 @@
         android:id="@+id/pb_movie_video_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_marginTop="48dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/tv_movie_video_empty_message"
+        style="@style/TextHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/msg_nothing_here"
+        android:visibility="gone"/>
 
 </FrameLayout>
