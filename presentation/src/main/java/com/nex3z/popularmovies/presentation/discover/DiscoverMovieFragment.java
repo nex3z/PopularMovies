@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
@@ -28,6 +29,7 @@ public class DiscoverMovieFragment extends BaseFragment
 
     @BindView(R.id.swipy_discover_movie_list) SwipyRefreshLayout mSwipyMovieList;
     @BindView(R.id.rv_discover_movie_list) RecyclerView mRvMovieList;
+    @BindView(R.id.pb_discover_movie_loading) ProgressBar mPbLoading;
 
     private DiscoverMoviePresenter mPresenter;
     private MovieDetailNavigator mMovieDetailNavigator;
@@ -76,9 +78,7 @@ public class DiscoverMovieFragment extends BaseFragment
     }
 
     @Override
-    public void showLoading() {
-        mSwipyMovieList.setRefreshing(true);
-    }
+    public void showLoading() {}
 
     @Override
     public void hideLoading() {
@@ -88,6 +88,7 @@ public class DiscoverMovieFragment extends BaseFragment
     @Override
     public void renderMovies(List<MovieModel> movies) {
         mMovieAdapter.setMovies(movies);
+        mPbLoading.setVisibility(View.GONE);
     }
 
     @Override
