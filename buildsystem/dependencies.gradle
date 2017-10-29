@@ -8,6 +8,7 @@ ext {
     // Libraries
     supportAppcompatV7Version = '26.1.0'
     constraintLayoutVersion = '1.0.2'
+    roomVersion = '1.0.0-rc1'
 
     okHttpVersion = '3.9.0'
     retrofitVersion = '2.3.0'
@@ -24,6 +25,9 @@ ext {
 
     dataDependencies = [
             supportAnnotations: "com.android.support:support-annotations:${supportAppcompatV7Version}",
+            roomRuntime: "android.arch.persistence.room:runtime:${roomVersion}",
+            roomCompiler: "android.arch.persistence.room:compiler:${roomVersion}",
+            roomRxjava2: "android.arch.persistence.room:rxjava2:${roomVersion}",
             okHttp: "com.squareup.okhttp3:okhttp:${okHttpVersion}",
             okHttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
             retrofit: "com.squareup.retrofit2:retrofit:${retrofitVersion}",
