@@ -42,4 +42,27 @@ public class MovieModelMapper {
         return model;
     }
 
+    public static MovieEntity toEntity(MovieModel model) {
+        Precondition.checkTransformValueNotNull(model);
+
+        final MovieEntity entity = new MovieEntity();
+
+        entity.setId(model.getId());
+        entity.setVoteCount(model.getVoteCount());
+        entity.setVideo(model.isVideo());
+        entity.setVoteAverage(model.getVoteAverage());
+        entity.setTitle(model.getTitle());
+        entity.setPopularity(model.getPopularity());
+        entity.setPosterPath(model.getPosterPath());
+        entity.setOriginalLanguage(model.getOriginalLanguage());
+        entity.setOriginalTitle(model.getOriginalTitle());
+        entity.setGenreIds(model.getGenreIds());
+        entity.setBackdropPath(model.getBackdropPath());
+        entity.setAdult(model.isAdult());
+        entity.setOverview(model.getOverview());
+        entity.setReleaseDate(model.getReleaseDate());
+
+        return entity;
+    }
+
 }

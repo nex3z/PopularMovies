@@ -63,6 +63,8 @@ public class MovieModel implements Parcelable {
 
     private String releaseDate;
 
+    private boolean favourite;
+
     public MovieModel(long id) {
         this.id = id;
     }
@@ -181,6 +183,14 @@ public class MovieModel implements Parcelable {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
     }
 
     @Override
