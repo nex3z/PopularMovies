@@ -10,6 +10,7 @@ import com.nex3z.popularmovies.data.entity.discover.MovieEntity;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 @Dao
@@ -19,7 +20,7 @@ public interface MovieDao {
     Single<List<MovieEntity>> getMovies();
 
     @Query("SELECT * FROM movies WHERE id IS :movieId")
-    Single<List<MovieEntity>> getMovieById(long movieId);
+    Maybe<MovieEntity> getMovieById(long movieId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(MovieEntity movie);

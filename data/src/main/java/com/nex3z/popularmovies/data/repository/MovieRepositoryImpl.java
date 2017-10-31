@@ -14,11 +14,11 @@ import com.nex3z.popularmovies.data.net.service.MovieService;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public class MovieRepositoryImpl implements MovieRepository {
     private static final String LOG_TAG = MovieRepositoryImpl.class.getSimpleName();
-
     private MovieService mMovieService;
     private MovieDatabase mMovieDatabase;
 
@@ -49,14 +49,17 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public Single<List<MovieEntity>> getFavouriteMovieById(long movieId) {
+    public Maybe<MovieEntity> getFavouriteMovieById(long movieId) {
         return mMovieDatabase.movieDao().getMovieById(movieId);
     }
 
     @Override
     public Single<Boolean> isFavouriteMovie(long movieId) {
-        return mMovieDatabase.movieDao().getMovieById(movieId)
-                .map(movies -> !movies.isEmpty());
+        return mMovieDatabase.movieDao()
+                .getMovieById(movieId)
+                .map(movie -> Boolean.TRUE)
+                .switchIfEmpty(Maybe.defer(() -> Maybe.just(Boolean.FALSE)))
+                .toSingle();
     }
 
     @Override

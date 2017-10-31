@@ -8,6 +8,7 @@ import com.nex3z.popularmovies.data.entity.video.GetMovieVideosResponse;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public interface MovieRepository {
@@ -20,7 +21,7 @@ public interface MovieRepository {
 
     Single<List<MovieEntity>> getFavouriteMovies();
 
-    Single<List<MovieEntity>> getFavouriteMovieById(long movieId);
+    Maybe<MovieEntity> getFavouriteMovieById(long movieId);
 
     Single<Boolean> isFavouriteMovie(long movieId);
 
