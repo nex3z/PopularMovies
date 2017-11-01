@@ -12,6 +12,8 @@ public interface DiscoverMovieView extends BaseView, LoadDataView {
 
     void notifyMovieInserted(int position, int count);
 
+    void notifyMovieChanged(int position);
+
     void renderMovieDetail(MovieModel movie);
 
 }

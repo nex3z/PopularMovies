@@ -97,6 +97,11 @@ public class DiscoverMovieFragment extends BaseFragment
     }
 
     @Override
+    public void notifyMovieChanged(int position) {
+        mMovieAdapter.notifyItemChanged(position);
+    }
+
+    @Override
     public void renderMovieDetail(MovieModel movie) {
         mMovieDetailNavigator.navigateToDetail(movie);
     }
@@ -128,7 +133,7 @@ public class DiscoverMovieFragment extends BaseFragment
             }
             @Override
             public void onFavouriteClick(int position) {
-
+                mPresenter.toggleFavourite(position);
             }
         });
         mRvMovieList.setAdapter(mMovieAdapter);

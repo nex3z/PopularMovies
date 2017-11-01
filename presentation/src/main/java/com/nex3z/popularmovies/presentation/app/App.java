@@ -27,7 +27,7 @@ public class App extends Application {
 
     private void initService() {
         RestClient restClient = new RestClient(BuildConfig.API_KEY);
-        MovieRepository repository = new MovieRepositoryImpl(restClient);
+        MovieRepository repository = new MovieRepositoryImpl(getApplicationContext(), restClient);
         sService = new PopMovieService(repository, new JobExecutor(), UiThread.getInstance());
     }
 

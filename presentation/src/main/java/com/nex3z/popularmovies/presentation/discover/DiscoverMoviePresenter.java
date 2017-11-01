@@ -5,6 +5,7 @@ import android.util.Log;
 import com.nex3z.popularmovies.data.entity.discover.DiscoverMovieParams;
 import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
 import com.nex3z.popularmovies.domain.interactor.DiscoverMoviesUseCase;
+import com.nex3z.popularmovies.domain.interactor.SetMovieFavouriteUseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.app.App;
 import com.nex3z.popularmovies.presentation.base.BasePresenter;
@@ -16,18 +17,20 @@ public class DiscoverMoviePresenter extends BasePresenter<DiscoverMovieView> {
     private static final int FIRST_PAGE = 1;
 
     private final DiscoverMoviesUseCase mDiscoverMoviesUseCase;
+    private final SetMovieFavouriteUseCase mSetMovieFavouriteUseCase;
     private List<MovieModel> mMovies;
     private int mPage = 1;
 
     public DiscoverMoviePresenter() {
         mDiscoverMoviesUseCase = App.getPopMovieService().create(DiscoverMoviesUseCase.class);
+        mSetMovieFavouriteUseCase = App.getPopMovieService().create(SetMovieFavouriteUseCase.class);
     }
 
     @Override
     public void destroy() {
         super.destroy();
-        Log.v(LOG_TAG, "destroy()");
         mDiscoverMoviesUseCase.dispose();
+        mSetMovieFavouriteUseCase.dispose();
     }
 
     public void init() {
@@ -46,6 +49,12 @@ public class DiscoverMoviePresenter extends BasePresenter<DiscoverMovieView> {
 
     public void loadMoreMovie() {
         fetchMovies(mPage + 1);
+    }
+
+    public void toggleFavourite(int position) {
+        MovieModel movie = mMovies.get(position);
+        mSetMovieFavouriteUseCase.execute(new SetFavouriteObserver(movie, position),
+                SetMovieFavouriteUseCase.Params.forMovie(movie, !movie.isFavourite()));
     }
 
     private void fetchMovies(int page) {
@@ -92,6 +101,32 @@ public class DiscoverMoviePresenter extends BasePresenter<DiscoverMovieView> {
         public void onError(Throwable throwable) {
             super.onError(throwable);
             mView.hideLoading();
+            mView.showError(throwable.getMessage());
+        }
+    }
+
+    private class SetFavouriteObserver extends DefaultObserver<Boolean> {
+        private final MovieModel mMovie;
+        private final int mPosition;
+
+        SetFavouriteObserver(MovieModel movie, int position) {
+            mMovie = movie;
+            mPosition = position;
+        }
+
+        @Override
+        public void onNext(Boolean favourite) {
+            super.onNext(favourite);
+            mMovie.setFavourite(favourite);
+            if (mMovies != null && mMovies.size() > mPosition
+                    && mMovies.get(mPosition).getId() == mMovie.getId()) {
+                mView.notifyMovieChanged(mPosition);
+            }
+        }
+
+        @Override
+        public void onError(Throwable throwable) {
+            super.onError(throwable);
             mView.showError(throwable.getMessage());
         }
     }
