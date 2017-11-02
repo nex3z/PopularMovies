@@ -22,7 +22,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     private List<MovieModel> mMovies;
     private OnMovieClickListener mListener;
-    private int mItemHeight;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

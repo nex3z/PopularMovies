@@ -17,7 +17,7 @@ public class GetFavouriteMoviesUseCase extends BaseUseCase<List<MovieModel>, Voi
     @Override
     Observable<List<MovieModel>> buildUseCaseObservable(Void aVoid) {
         return mContext.getMovieRepository().getFavouriteMovies()
-                .map(MovieModelMapper::transform)
+                .map(MovieModelMapper::transformFavourite)
                 .toObservable();
     }
 

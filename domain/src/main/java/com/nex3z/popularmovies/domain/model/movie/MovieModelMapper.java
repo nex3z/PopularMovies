@@ -17,10 +17,14 @@ public class MovieModelMapper {
     }
 
     public static List<MovieModel> transform(List<MovieEntity> entities) {
-        return MapperUtil.transform(entities, MovieModelMapper::transform);
+        return MapperUtil.transform(entities, movieEntity -> transform(movieEntity, false));
     }
 
-    public static MovieModel transform(MovieEntity entity) {
+    public static List<MovieModel> transformFavourite(List<MovieEntity> entities) {
+        return MapperUtil.transform(entities, movieEntity -> transform(movieEntity, true));
+    }
+
+    public static MovieModel transform(MovieEntity entity, boolean isFavourite) {
         Precondition.checkTransformValueNotNull(entity);
 
         final MovieModel model = new MovieModel(entity.getId());
@@ -38,6 +42,8 @@ public class MovieModelMapper {
         model.setAdult(entity.isAdult());
         model.setOverview(entity.getOverview());
         model.setReleaseDate(entity.getReleaseDate());
+
+        model.setFavourite(isFavourite);
 
         return model;
     }
