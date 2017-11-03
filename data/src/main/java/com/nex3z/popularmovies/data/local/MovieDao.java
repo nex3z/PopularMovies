@@ -19,8 +19,11 @@ public interface MovieDao {
     @Query("SELECT * FROM movies")
     Single<List<MovieEntity>> getMovies();
 
-    @Query("SELECT * FROM movies WHERE id IS :movieId")
+    @Query("SELECT * FROM movies WHERE id = :movieId LIMIT 1")
     Maybe<MovieEntity> getMovieById(long movieId);
+
+    @Query("SELECT COUNT(*) FROM movies WHERE id = :movieId LIMIT 1")
+    Single<Integer> checkMovieById(long movieId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(MovieEntity movie);
