@@ -10,6 +10,7 @@ import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.app.App;
 import com.nex3z.popularmovies.presentation.base.BasePresenter;
 
+import java.util.Collections;
 import java.util.List;
 
 public class DiscoverMoviePresenter extends BasePresenter<DiscoverMovieView> {
@@ -44,6 +45,7 @@ public class DiscoverMoviePresenter extends BasePresenter<DiscoverMovieView> {
     }
 
     public void refreshMovie() {
+        mView.renderMovies(Collections.emptyList());
         fetchMovies(FIRST_PAGE);
     }
 

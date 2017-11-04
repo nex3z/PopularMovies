@@ -88,7 +88,9 @@ public class DiscoverMovieFragment extends BaseFragment
     @Override
     public void renderMovies(List<MovieModel> movies) {
         mMovieAdapter.setMovies(movies);
-        mPbLoading.setVisibility(View.GONE);
+        mPbLoading.setVisibility(
+                (!mSwipyMovieList.isRefreshing() && (movies == null || movies.isEmpty())) ?
+                        View.VISIBLE : View.GONE);
     }
 
     @Override
