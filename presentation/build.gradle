@@ -29,6 +29,9 @@ android {
 
     applicationVariants.all { variant ->
         variant.buildConfigField "String", "API_KEY", "\"" + getApiKey() + "\""
+        variant.outputs.all {
+            outputFileName = "PopularMovie-v${variant.versionName}.apk"
+        }
     }
 }
 
