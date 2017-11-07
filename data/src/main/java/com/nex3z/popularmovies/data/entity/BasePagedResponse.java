@@ -6,10 +6,10 @@ public class BasePagedResponse<T> extends BaseListResponse<T> {
 
     private int page;
 
-    @SerializedName("totalPages")
+    @SerializedName("total_pages")
     private int totalPages;
 
-    @SerializedName("totalResults")
+    @SerializedName("total_results")
     private int totalResults;
 
     public int getPage() {
