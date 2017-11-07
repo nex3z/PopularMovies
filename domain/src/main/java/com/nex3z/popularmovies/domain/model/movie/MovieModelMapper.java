@@ -17,10 +17,14 @@ public class MovieModelMapper {
     }
 
     public static List<MovieModel> transform(List<MovieEntity> entities) {
-        return MapperUtil.transform(entities, MovieModelMapper::transform);
+        return MapperUtil.transform(entities, movieEntity -> transform(movieEntity, false));
     }
 
-    public static MovieModel transform(MovieEntity entity) {
+    public static List<MovieModel> transformFavourite(List<MovieEntity> entities) {
+        return MapperUtil.transform(entities, movieEntity -> transform(movieEntity, true));
+    }
+
+    public static MovieModel transform(MovieEntity entity, boolean isFavourite) {
         Precondition.checkTransformValueNotNull(entity);
 
         final MovieModel model = new MovieModel(entity.getId());
@@ -39,7 +43,32 @@ public class MovieModelMapper {
         model.setOverview(entity.getOverview());
         model.setReleaseDate(entity.getReleaseDate());
 
+        model.setFavourite(isFavourite);
+
         return model;
+    }
+
+    public static MovieEntity toEntity(MovieModel model) {
+        Precondition.checkTransformValueNotNull(model);
+
+        final MovieEntity entity = new MovieEntity();
+
+        entity.setId(model.getId());
+        entity.setVoteCount(model.getVoteCount());
+        entity.setVideo(model.isVideo());
+        entity.setVoteAverage(model.getVoteAverage());
+        entity.setTitle(model.getTitle());
+        entity.setPopularity(model.getPopularity());
+        entity.setPosterPath(model.getPosterPath());
+        entity.setOriginalLanguage(model.getOriginalLanguage());
+        entity.setOriginalTitle(model.getOriginalTitle());
+        entity.setGenreIds(model.getGenreIds());
+        entity.setBackdropPath(model.getBackdropPath());
+        entity.setAdult(model.isAdult());
+        entity.setOverview(model.getOverview());
+        entity.setReleaseDate(model.getReleaseDate());
+
+        return entity;
     }
 
 }

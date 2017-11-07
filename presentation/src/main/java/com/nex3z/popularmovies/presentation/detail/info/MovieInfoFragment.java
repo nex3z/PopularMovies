@@ -1,21 +1,17 @@
 package com.nex3z.popularmovies.presentation.detail.info;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
+import com.nex3z.popularmovies.presentation.base.BaseFragment;
+import com.nex3z.popularmovies.presentation.base.HasPresenter;
 import com.nex3z.popularmovies.presentation.util.GenreUtil;
 import com.nex3z.popularmovies.presentation.util.ViewUtil;
 
@@ -23,7 +19,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MovieInfoFragment extends Fragment {
+public class MovieInfoFragment extends BaseFragment
+        implements MovieInfoView, HasPresenter<MovieInfoPresenter> {
     private static final String LOG_TAG = MovieInfoFragment.class.getSimpleName();
 
     private static final String ARG_MOVIE = "arg_movie";
@@ -34,8 +31,9 @@ public class MovieInfoFragment extends Fragment {
     @BindView(R.id.tv_item_movie_genre) TextView mTvGenre;
     @BindView(R.id.tv_movie_info_overview) TextView mTvOverview;
 
-    private MovieModel mMovie;
     private Unbinder mUnbinder;
+    private MovieModel mMovie;
+    private MovieInfoPresenter mPresenter;
 
     public MovieInfoFragment() {}
 
@@ -75,15 +73,24 @@ public class MovieInfoFragment extends Fragment {
         mUnbinder.unbind();
     }
 
-    private void init() {
-        renderMovie(mMovie);
+    @Override
+    public MovieInfoPresenter getPresenter() {
+        return mPresenter;
     }
 
-    private void renderMovie(MovieModel movie) {
+    @Override
+    public void renderMovie(MovieModel movie) {
         mTvVoteAverage.setText(String.valueOf(movie.getVoteAverage()));
         mTvReleaseDate.setText(movie.getReleaseDate());
         mTvGenre.setText(GenreUtil.getGenre(getContext(), movie.getGenreIds()));
         mTvOverview.setText(movie.getOverview());
         ViewUtil.loadProgressiveImage(mSdvPoster, movie.getPosterUrl(MovieModel.POSTER_SIZE_W342));
     }
+
+    private void init() {
+        mPresenter = new MovieInfoPresenter(mMovie);
+        mPresenter.setView(this);
+        mPresenter.init();
+    }
+
 }

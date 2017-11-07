@@ -22,7 +22,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     private List<MovieModel> mMovies;
     private OnMovieClickListener mListener;
-    private int mItemHeight;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -37,6 +36,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         holder.mTvVote.setText(String.valueOf(movie.getVoteAverage()));
         ViewUtil.loadProgressiveImage(holder.mSdvPoster,
                 movie.getPosterUrl(MovieModel.POSTER_SIZE_W342));
+        holder.mCbFavourite.setChecked(movie.isFavourite());
     }
 
     @Override

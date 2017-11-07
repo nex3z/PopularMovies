@@ -1,36 +1,32 @@
-package com.nex3z.popularmovies.presentation.discover;
+package com.nex3z.popularmovies.presentation.favourite;
 
-import android.util.Log;
-
-import com.nex3z.popularmovies.data.entity.discover.DiscoverMovieParams;
 import com.nex3z.popularmovies.domain.interactor.DefaultObserver;
-import com.nex3z.popularmovies.domain.interactor.DiscoverMoviesUseCase;
+import com.nex3z.popularmovies.domain.interactor.GetFavouriteMoviesUseCase;
 import com.nex3z.popularmovies.domain.interactor.SetMovieFavouriteUseCase;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.app.App;
 import com.nex3z.popularmovies.presentation.base.BasePresenter;
 
-import java.util.Collections;
 import java.util.List;
 
-public class DiscoverMoviePresenter extends BasePresenter<DiscoverMovieView> {
-    private static final String LOG_TAG = DiscoverMoviePresenter.class.getSimpleName();
-    private static final int FIRST_PAGE = 1;
+public class FavouriteMoviePresenter extends BasePresenter<FavouriteMovieView> {
+    private static final String LOG_TAG = FavouriteMoviePresenter.class.getSimpleName();
 
-    private final DiscoverMoviesUseCase mDiscoverMoviesUseCase;
+    private final GetFavouriteMoviesUseCase mGetFavouriteMoviesUseCase;
     private final SetMovieFavouriteUseCase mSetMovieFavouriteUseCase;
     private List<MovieModel> mMovies;
-    private int mPage = 1;
 
-    public DiscoverMoviePresenter() {
-        mDiscoverMoviesUseCase = App.getPopMovieService().create(DiscoverMoviesUseCase.class);
-        mSetMovieFavouriteUseCase = App.getPopMovieService().create(SetMovieFavouriteUseCase.class);
+    public FavouriteMoviePresenter() {
+        mGetFavouriteMoviesUseCase = App.getPopMovieService()
+                .create(GetFavouriteMoviesUseCase.class);
+        mSetMovieFavouriteUseCase = App.getPopMovieService()
+                .create(SetMovieFavouriteUseCase.class);
     }
 
     @Override
     public void destroy() {
         super.destroy();
-        mDiscoverMoviesUseCase.dispose();
+        mGetFavouriteMoviesUseCase.dispose();
         mSetMovieFavouriteUseCase.dispose();
     }
 
@@ -45,12 +41,7 @@ public class DiscoverMoviePresenter extends BasePresenter<DiscoverMovieView> {
     }
 
     public void refreshMovie() {
-        mView.renderMovies(Collections.emptyList());
-        fetchMovies(FIRST_PAGE);
-    }
-
-    public void loadMoreMovie() {
-        fetchMovies(mPage + 1);
+        fetchMovies();
     }
 
     public void toggleFavourite(int position) {
@@ -59,22 +50,11 @@ public class DiscoverMoviePresenter extends BasePresenter<DiscoverMovieView> {
                 SetMovieFavouriteUseCase.Params.forMovie(movie, !movie.isFavourite()));
     }
 
-    private void fetchMovies(int page) {
-        mDiscoverMoviesUseCase.execute(new MovieObserver(page),
-                new DiscoverMovieParams.Builder()
-                        .sortBy(DiscoverMovieParams.SORT_BY_POPULARITY_DESC)
-                        .page(page)
-                        .build()
-        );
+    private void fetchMovies() {
+        mGetFavouriteMoviesUseCase.execute(new MovieObserver(), null);
     }
 
     private class MovieObserver extends DefaultObserver<List<MovieModel>> {
-        private final int mPage;
-
-        MovieObserver(int page) {
-            mPage = page;
-        }
-
         @Override
         protected void onStart() {
             super.onStart();
@@ -84,19 +64,9 @@ public class DiscoverMoviePresenter extends BasePresenter<DiscoverMovieView> {
         @Override
         public void onNext(List<MovieModel> movies) {
             super.onNext(movies);
-            Log.v(LOG_TAG, "onNext(): mPage = " + mPage + ", size = " + movies.size());
-
-            if (mPage == FIRST_PAGE) {
-                mMovies = movies;
-                mView.renderMovies(mMovies);
-            } else {
-                int start = mMovies.size();
-                mMovies.addAll(movies);
-                mView.notifyMovieInserted(start, movies.size());
-            }
-
+            mMovies = movies;
+            mView.renderMovies(mMovies);
             mView.hideLoading();
-            DiscoverMoviePresenter.this.mPage = mPage;
         }
 
         @Override

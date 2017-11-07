@@ -1,14 +1,19 @@
 package com.nex3z.popularmovies.data.entity.discover;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity(tableName = "movies")
 public class MovieEntity {
 
     @SerializedName("vote_count")
     private int voteCount;
 
+    @PrimaryKey
     private long id;
 
     private boolean video;

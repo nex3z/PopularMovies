@@ -3,6 +3,9 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_discover">Discover</string>
+    <string name="navigation_drawer_favourite">Favourite</string>
+    <string name="navigation_drawer_settings">Settings</string>
     <string name="caption_settings">Settings</string>
     <string name="caption_tab_movie_detail">Detail</string>
     <string name="caption_tab_movie_video">Video</string>
@@ -10,7 +13,8 @@
 
     <string name="caption_share">Share</string>
     <string name="caption_share_hash_tag">\u0020#PopularMovie</string>
-    
+    <string name="msg_nothing_here">Nothing here.</string>
+
     <string name="caption_genre_action">Action</string>
     <string name="caption_genre_adventure">Adventure</string>
     <string name="caption_genre_animation">Animation</string>
@@ -30,4 +34,5 @@
     <string name="caption_genre_thriller">Thriller</string>
     <string name="caption_genre_war">War</string>
     <string name="caption_genre_western">Western</string>
+
 </resources>

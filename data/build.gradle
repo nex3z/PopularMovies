@@ -14,6 +14,11 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -40,6 +45,9 @@ dependencies {
     })
 
     implementation dataDependencies.supportAnnotations
+    implementation dataDependencies.roomRuntime
+    annotationProcessor  dataDependencies.roomCompiler
+    implementation dataDependencies.roomRxjava2
     implementation dataDependencies.okHttp
     implementation dataDependencies.okHttpLoggingInterceptor
     implementation dataDependencies.retrofit

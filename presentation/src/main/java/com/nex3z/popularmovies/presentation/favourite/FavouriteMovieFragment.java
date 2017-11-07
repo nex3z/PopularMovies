@@ -1,4 +1,4 @@
-package com.nex3z.popularmovies.presentation.discover;
+package com.nex3z.popularmovies.presentation.favourite;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,31 +14,34 @@ import com.nex3z.popularmovies.R;
 import com.nex3z.popularmovies.domain.model.movie.MovieModel;
 import com.nex3z.popularmovies.presentation.base.BaseFragment;
 import com.nex3z.popularmovies.presentation.base.HasPresenter;
+import com.nex3z.popularmovies.presentation.discover.MovieAdapter;
+import com.nex3z.popularmovies.presentation.discover.MovieDetailNavigator;
 import com.nex3z.popularmovies.presentation.misc.SpacingItemDecoration;
 import com.nex3z.popularmovies.presentation.util.ViewUtil;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DiscoverMovieFragment extends BaseFragment
-        implements DiscoverMovieView, HasPresenter<DiscoverMoviePresenter> {
-    private static final String LOG_TAG = DiscoverMovieFragment.class.getSimpleName();
+public class FavouriteMovieFragment extends BaseFragment
+        implements FavouriteMovieView, HasPresenter<FavouriteMoviePresenter> {
+    private static final String LOG_TAG = FavouriteMovieFragment.class.getSimpleName();
 
     @BindView(R.id.swipy_discover_movie_list) SwipyRefreshLayout mSwipyMovieList;
     @BindView(R.id.rv_discover_movie_list) RecyclerView mRvMovieList;
     @BindView(R.id.pb_discover_movie_loading) ProgressBar mPbLoading;
 
-    private DiscoverMoviePresenter mPresenter;
+    private FavouriteMoviePresenter mPresenter;
     private MovieDetailNavigator mMovieDetailNavigator;
     private final MovieAdapter mMovieAdapter = new MovieAdapter();
 
-    public DiscoverMovieFragment() {}
+    public FavouriteMovieFragment() {}
 
-    public static DiscoverMovieFragment newInstance() {
-        return new DiscoverMovieFragment();
+    public static FavouriteMovieFragment newInstance() {
+        return new FavouriteMovieFragment();
     }
 
     @Override
@@ -73,7 +76,7 @@ public class DiscoverMovieFragment extends BaseFragment
     }
 
     @Override
-    public DiscoverMoviePresenter getPresenter() {
+    public FavouriteMoviePresenter getPresenter() {
         return mPresenter;
     }
 
@@ -88,14 +91,7 @@ public class DiscoverMovieFragment extends BaseFragment
     @Override
     public void renderMovies(List<MovieModel> movies) {
         mMovieAdapter.setMovies(movies);
-        mPbLoading.setVisibility(
-                (!mSwipyMovieList.isRefreshing() && (movies == null || movies.isEmpty())) ?
-                        View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void notifyMovieInserted(int position, int count) {
-        mMovieAdapter.notifyItemRangeInserted(position, count);
+        mPbLoading.setVisibility(View.GONE);
     }
 
     @Override
@@ -115,13 +111,11 @@ public class DiscoverMovieFragment extends BaseFragment
     }
 
     private void initView() {
+        mSwipyMovieList.setDirection(SwipyRefreshLayoutDirection.TOP);
         mSwipyMovieList.setOnRefreshListener(direction -> {
             switch (direction) {
                 case TOP:
                     mPresenter.refreshMovie();
-                    break;
-                case BOTTOM:
-                    mPresenter.loadMoreMovie();
                     break;
                 default:
                     break;
@@ -149,7 +143,7 @@ public class DiscoverMovieFragment extends BaseFragment
     }
 
     private void initPresenter() {
-        mPresenter = new DiscoverMoviePresenter();
+        mPresenter = new FavouriteMoviePresenter();
         mPresenter.setView(this);
     }
 
