@@ -8,7 +8,7 @@ ext {
     // Libraries
     supportAppcompatV7Version = '26.1.0'
     constraintLayoutVersion = '1.0.2'
-    roomVersion = '1.0.0-rc1'
+    roomVersion = '1.0.0'
 
     okHttpVersion = '3.9.0'
     retrofitVersion = '2.3.0'
