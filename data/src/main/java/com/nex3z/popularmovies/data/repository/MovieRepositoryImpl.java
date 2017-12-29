@@ -56,8 +56,9 @@ public class MovieRepositoryImpl implements MovieRepository {
     @Override
     public Single<Boolean> isFavouriteMovie(long movieId) {
         return mMovieDatabase.movieDao()
-                .checkMovieById(movieId)
-                .map(i -> i > 0);
+                .getMovieById(movieId)
+                .map(movie-> true)
+                .switchIfEmpty(Single.defer(() -> Single.just(false)));
     }
 
     @Override
